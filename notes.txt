@@ -1,0 +1,18 @@
+//a mess of code i guess
+
+"firing" a bullet
+
+if(pad.Buttons != 0)
+{
+  if(pad.Buttons & PSP_CTRL_SQUARE)
+  {
+    /*
+    bullet.x = originX - 8;
+    bullet.y = originY - 8;
+    bullet.angle = angle;
+    */
+  }
+}
+
+//bullet.x += SPEED * cos(angleToRad(bullet.angle + 90));
+//bullet.y += SPEED * sin(angleToRad(bullet.angle + 90));
