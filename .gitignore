@@ -28,5 +28,9 @@
 *.exe
 *.out
 *.app
-*.elf #linux/ps2/psp executable
-*.pbp #psp bundled executable
+
+# PSP Stuff
+*.elf
+# linux/ps2/psp executable
+*.[PBP]
+*.[SFO]
