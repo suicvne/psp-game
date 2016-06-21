@@ -3,6 +3,8 @@
 #ifndef ___VECTOR_H___
 #define ___VECTOR_H___
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 
 typedef struct {
@@ -11,18 +13,14 @@ typedef struct {
 
 } vector_t;
 
-static inline float vector_magnitude(vector_t v)
+static inline float fastsqrt(float c)
 {
-  return sqrt((v.x * v.x) + (v.y * v.y));
-};
+  float output;
+  asm("sqrt.s %0,%1" : "=f" (output) : "f" (c));
+  return output;
+}
 
-static inline vector_t vector_add(vector_t a, vector_t b)
-{
-  vector_t value = {
-    a.x + b.x,
-    a.y + b.y
-  };
-  return value;
-};
+float vector_magnitude(vector_t v);
+vector_t vector_add(vector_t a, vector_t b);
 
 #endif //___VECTOR_H___

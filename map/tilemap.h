@@ -21,6 +21,22 @@ typedef struct {
 
 } tilemap_t;
 
+static inline int zeroize(int input)
+{
+  if(input < 0)
+    return 0;
+  else
+    return input;
+}
+
+static inline int min(int a, int b)
+{
+  if(a > b)
+    return b;
+  else
+    return a;
+}
+
 tilemap_t* tilemap_create(int width, int height);
 void tilemap_destroy(tilemap_t* map);
 

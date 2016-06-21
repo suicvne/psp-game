@@ -46,9 +46,9 @@ void tilemap_draw(tilemap_t* map, const camera_t cam, sprite_t* tileset)
 
   camera_get_index_bounds(cam, map, &min_x, &max_x, &min_y, &max_y);
 
-  for(x_iter = min_x; x_iter < max_x; x_iter++)
+  for(x_iter = zeroize(min_x); x_iter < min(max_x, map->width); x_iter++)
   {
-    for(y_iter = min_y; y_iter < max_y; y_iter++)
+    for(y_iter = zeroize(min_y); y_iter < min(max_y, map->height); y_iter++)
     {
       int index = x_iter * map->height + y_iter;
 

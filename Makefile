@@ -1,5 +1,5 @@
 TARGET = analogue
-OBJS = main.o player/player.o sprites/sprite.o serialization/serializer.o serialization/serialization_reader.o map/tilemap.o map/tile.o
+OBJS = main.o vector/vector.o player/player.o sprites/sprite.o serialization/serializer.o serialization/serialization_reader.o map/tilemap.o map/tile.o
 
 INCDIR =
 CFLAGS = -O2 -g -G0 -Wall

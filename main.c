@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include "common.h"
 #include "sprites/sprite.h"
@@ -59,7 +60,8 @@ void initialize_globals(void)
   kTileset = sprite_create("res/textures.png", SPRITE_TYPE_PNG);
   kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
   //kCamera initialized, not a pointer.
-  kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0
+  //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0
+  kMainFont = oslLoadFontFile("res/ltn0.pgf");
     oslIntraFontSetStyle(kMainFont, .4f, RGBA(255, 255, 255, 255), RGBA(0, 0, 0, 255), INTRAFONT_ALIGN_LEFT);
     oslSetFont(kMainFont);
 }
@@ -113,7 +115,6 @@ int draw_forest(int width, int height)
 
 int main(void)
 {
-  float MAX_FOREST_OFFSET = 5.0f;
   SetupCallbacks();
   initOSLib();
   initialize_globals();
@@ -124,8 +125,6 @@ int main(void)
   printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
 
   int skip = 0;
-  int forest_offset_x = 0;
-  int add = 1;
   while(1)
   {
     SceCtrlData pad;
@@ -146,7 +145,8 @@ int main(void)
     {
       if(vector_magnitude(stickInput) > DEADZONE) //LOOK_DEADZONE
       {
-        player_setlookangle(kPlayer, (radToDegree(atan2(stickInput.y, stickInput.x)) - 90));
+        int angular_value = (radToDegree(atan2(stickInput.y, stickInput.x)) - 90);
+        player_setlookangle(kPlayer, angular_value);
       }
     }
     /*
@@ -156,6 +156,7 @@ int main(void)
     /*
       Begin movement
     */
+
     if(stickInput.x != 0.0f || stickInput.y != 0.0f)
     {
       if(vector_magnitude(stickInput) < LOOK_DEADZONE) //DEADZONE
@@ -171,15 +172,17 @@ int main(void)
       kCamera.x += xtrajectory;
       kCamera.y += ytrajectory;
 
-      if(collides_with(kPlayer, kTestEntity) || tilemap_is_player_colliding(tilemap_test, kPlayer, kCamera))
+      if(collides_with(kPlayer, kTestEntity)) //|| tilemap_is_player_colliding(tilemap_test, kPlayer, kCamera))
       {
         kCamera.x -= xtrajectory;
         kCamera.y -= ytrajectory;
       }
     }
+
     /*
       End movement
     */
+
 
     // draw last
     if(!skip)
@@ -197,25 +200,15 @@ int main(void)
       sprite_draw(kPlayer->sprite); //TODO: seperate player draw?
 
       draw_forest(tilemap_test->width * 32, tilemap_test->height * 32);
-      //oslDrawStringf(10, 2, "%s", tilemap_test->map_name);
+      oslDrawStringf(10, 2, "%s", tilemap_test->map_name);
       //oslDrawFillRect(0, 0, 480, 272, RGBA(0, 0, 0, 255));
       oslEndDrawing();
     }
     oslEndFrame();
     skip = oslSyncFrame();
-
-    if(add)
-      forest_offset_x += 0.2f;
-    else
-      forest_offset_x -= 0.2f;
-
-    if(forest_offset_x > MAX_FOREST_OFFSET)
-      add = 0;
-    else if(forest_offset_x < -MAX_FOREST_OFFSET)
-      add = 1;
   }
 
-  tilemap_destroy(tilemap_test);
+  //tilemap_destroy(tilemap_test);
   oslEndGfx();
   oslQuit();
 
