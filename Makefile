@@ -3,7 +3,7 @@ OBJS = main.o vector/vector.o player/player.o sprites/sprite.o serialization/ser
 
 INCDIR =
 CFLAGS = -O2 -g -G0 -Wall
-CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
+CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti -DPSP
 ASFLAGS = $(CFLAGS)
 
 LIBDIR =

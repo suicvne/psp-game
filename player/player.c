@@ -27,8 +27,5 @@ player_t* player_create()
 
 void player_setlookangle(player_t* player, int angle)
 {
-  if(player->sprite->image != NULL)
-    player->sprite->image->angle = angle;
-  else
-    printf("ERROR: player sprite image null?\n");
+  sprite_set_angle(player->sprite, angle);
 }

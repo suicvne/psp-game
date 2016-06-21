@@ -17,6 +17,15 @@ static sprite_t* kBackgroundSprite = NULL;
 static sprite_t* kTileset = NULL;
 static sprite_t* kForest = NULL;
 static camera_t kCamera;
+
+#ifdef PSP
 static OSL_FONT* kMainFont;
+#endif
+
+#ifdef SDL_VERS
+#include <SDL2/SDL.h> //TODO: this
+
+
+#endif
 
 #endif //___GLOBALS_H___

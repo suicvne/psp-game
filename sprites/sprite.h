@@ -1,7 +1,11 @@
 #ifndef __SPRITE_H__
 #define __SPRITE_H__
 
+#ifdef PSP
 #include <oslib/oslib.h>
+#else
+#include <SDL2/SDL.h>
+#endif
 #include <assert.h>
 #include "../graphics/common.h"
 #include "../camera/camera.h"
@@ -17,8 +21,12 @@ typedef struct
   int yframeoffset;
   int frames, currentframe, frametime; //total animation frames, current frame in animation, and the time in ticks between frames.
   int elapsedticks;
+  #ifdef PSP
   OSL_IMAGE* image;
+  #else
+  SDL_Texture* image;
   int angle;
+  #endif
 } sprite_t;
 
 typedef enum {
@@ -31,6 +39,8 @@ typedef enum {
 sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type);
 
 void sprite_destroy(sprite_t* sprite);
+
+void sprite_set_angle(sprite_t* sprite, int angle);
 
 void sprite_draw(sprite_t* sprite);
 void sprite_draw_offset(sprite_t* sprite, int x_offset, int y_offset);
