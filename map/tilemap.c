@@ -106,3 +106,104 @@ void camera_get_index_bounds(const camera_t camera, tilemap_t* tilemap, int* min
     (corrected_y + SCREEN_HEIGHT) / 32
   );
 }
+
+int tilemap_write_to_file(const char* filename, tilemap_t* map)
+{
+  int total_tiles = map->width * map->height;
+  int filesize = (sizeof(char) * 2) + //header (MS)
+                  (sizeof(short)) + //VERSION
+                  strlen(map->map_name) + //map name
+                  (sizeof(int) * 2) + // two ints for width and height
+                  (sizeof(short) * total_tiles); // the tiles in this level
+
+  char* buffer = malloc(sizeof(char) * filesize);
+  int pointer = 0, i;
+  serializer_write_char(buffer, &pointer, HEADER_0);
+  serializer_write_char(buffer, &pointer, HEADER_1);
+
+  serializer_write_short(buffer, &pointer, (short)VERSION);
+
+  serializer_write_string(buffer, &pointer, map->map_name);
+
+  serializer_write_int(buffer, &pointer, map->width);
+  serializer_write_int(buffer, &pointer, map->height);
+
+  for(i = 0; i < total_tiles; i++)
+  {
+    serializer_write_short(buffer, &pointer, map->tiles[i].id);
+  }
+
+  return serializer_write_to_file(buffer, filesize, filename);
+}
+
+int tilemap_verify_header(char* buffer, short version)
+{
+  char filler[30];
+
+  if(buffer[0] == HEADER_0 && buffer[1] == HEADER_1 && version == VERSION)
+    return 1;
+  else
+  {
+    if(buffer[0] != HEADER_0 || buffer[1] != HEADER_1)
+    {
+      sprintf(filler, "Header mismatch in level file. (got %c%c; expected %c%c)",
+        buffer[0], buffer[1],
+        HEADER_0, HEADER_1
+      );
+      oslFatalError(filler);
+    }
+    else if(version != VERSION)
+    {
+      sprintf(filler, "Version mismatch in level file. (got %d; expected %d)", version, VERSION);
+      oslFatalError(filler);
+    }
+  }
+  return 0;
+}
+
+tilemap_t* tilemap_read_from_file(const char* filename)
+{
+  int file_size = serializer_get_file_size(filename);
+  if(file_size > 0)
+  {
+    char* buffer = malloc(sizeof(char) * file_size);
+    int pointer = 0, i;
+
+    serializer_read_from_file(buffer, file_size, filename);
+
+    char HEADER[2] = {0};
+    HEADER[0] = serializer_read_char(buffer, &pointer);
+    HEADER[1] = serializer_read_char(buffer, &pointer);
+    short version = serializer_read_short(buffer, &pointer);
+
+    if(tilemap_verify_header(HEADER, version))
+    {
+      char* map_name = serializer_read_string(buffer, &pointer);
+      int width, height;
+      width = serializer_read_int(buffer, &pointer);
+      height = serializer_read_int(buffer, &pointer);
+
+      tilemap_t* return_value = tilemap_create(width, height);
+      return_value->map_name = map_name;
+      int total_tiles = width * height;
+      int i = 0;
+      for(i = 0; i < total_tiles; i++)
+      {
+        //read shorts for tiles
+        short id = serializer_read_short(buffer, &pointer);
+        if(id >= 0)
+          return_value->tiles[i].id = id;
+      }
+
+      free(buffer);
+
+      return return_value;
+    }
+    else
+      return NULL;
+  }
+  else
+    return NULL; //fnf
+
+  return NULL;
+}

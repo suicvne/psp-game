@@ -6,6 +6,12 @@ void serializer_write_char(char* dest, int* pointer, char value)
   (*pointer) += 1;
 }
 
+void serializer_write_wchar(char* dest, int* pointer, char value)
+{
+  dest[(*pointer)] = value;
+  (*pointer) += 2;
+}
+
 void serializer_write_short(char* dest, int* pointer, short value)
 {
   dest[(*pointer)] = ((value >> 0) & 0xff);

@@ -10,6 +10,7 @@ typedef enum {
 } SERIALIZER_ERROR_TYPE;
 
 void serializer_write_char(char* dest, int* pointer, char value);
+void serializer_write_wchar(char* dest, int* pointer, char value);
 void serializer_write_short(char* dest, int* pointer, short value);
 void serializer_write_int(char* dest, int* pointer, int value);
 //void serializer_write_float(char* dest, int* pointer, float value);

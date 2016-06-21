@@ -6,8 +6,14 @@
 #include "../sprites/sprite.h"
 #include "../player/player.h"
 #include "../graphics/common.h"
+#include "../serialization/serializer.h"
+#include "../serialization/serialization_reader.h"
 #include <malloc.h>
 #include <assert.h>
+
+#define HEADER_0 'M'
+#define HEADER_1 'S'
+#define VERSION 01
 
 typedef struct {
 
@@ -46,4 +52,8 @@ void tilemap_draw(tilemap_t* map, const camera_t cam, sprite_t* tileset);
 void camera_get_index_bounds(const camera_t camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y);
 
 int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t camera);
+
+int tilemap_write_to_file(const char* filename, tilemap_t* map);
+int tilemap_verify_header(char* header, short version);
+tilemap_t* tilemap_read_from_file(const char* filename);
 #endif //___TILEMAP_H___

@@ -32,5 +32,5 @@
 # PSP Stuff
 *.elf
 # linux/ps2/psp executable
-*.[PBP]
+*.PBP
 *.[SFO]

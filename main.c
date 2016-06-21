@@ -61,7 +61,7 @@ void initialize_globals(void)
   kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
   //kCamera initialized, not a pointer.
   //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0
-  kMainFont = oslLoadFontFile("res/ltn0.pgf");
+  kMainFont = oslLoadFontFile("res/ltn0.pgf"); //can't find the font in ppsspp on linux?
     oslIntraFontSetStyle(kMainFont, .4f, RGBA(255, 255, 255, 255), RGBA(0, 0, 0, 255), INTRAFONT_ALIGN_LEFT);
     oslSetFont(kMainFont);
 }
@@ -113,6 +113,12 @@ int draw_forest(int width, int height)
   oslSetAlpha(OSL_FX_DEFAULT, 255);
 }
 
+tilemap_t* load_level(const char* filename)
+{
+  printf("loading file from '%s'..", filename);
+  return tilemap_read_from_file(filename);
+}
+
 int main(void)
 {
   SetupCallbacks();
@@ -121,7 +127,7 @@ int main(void)
 
   sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
 
-  tilemap_t* tilemap_test = tilemap_create(32, 32);
+  tilemap_t* tilemap_test = load_level("level.bin");
   printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
 
   int skip = 0;

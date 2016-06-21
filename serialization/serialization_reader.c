@@ -30,6 +30,13 @@ int serializer_read_from_file(char *readInto, int bufferSize, const char* filena
 char serializer_read_char(char* src, int* pointer)
 {
   char value = src[*pointer];
+  (*pointer) += 1;
+  return value;
+}
+
+char serializer_read_wchar(char* src, int* pointer)
+{
+  char value = src[*pointer];
   (*pointer) += 2;
   return value;
 }
@@ -77,12 +84,13 @@ char* serializer_read_string(char* src, int* pointer)
     short i;
     for(i = 0; i < string_length; i++)
     {
-      char read_char = serializer_read_char(src, pointer);
+      char read_char = serializer_read_wchar(src, pointer);
 
       return_value[i] = read_char;
       if(i == (string_length - 1)) //EOS
         return_value[string_length] = '\0'; //C needs this. this is my first C project tbh
     }
+    (*pointer)++;
     return return_value;
   }
   else
