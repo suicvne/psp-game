@@ -2,10 +2,14 @@
 #include <SDL2/SDL.h>
 
 #include "globals.h"
-#include "../../map/tilemap.h"
+#include "map/tilemap.h"
 
 int initialize_SDL()
 {
+  #ifdef SDL_VERS
+  printf("running SDL backend\n");
+  #endif
+
   if(SDL_Init(SDL_INIT_VIDEO) != 0)
   {
     printf("Error initializing SDL: %s\n", SDL_GetError());
@@ -32,6 +36,18 @@ int initialize_SDL()
   return 0;
 }
 
+int update_events(SDL_Event* event)
+{
+  while(SDL_PollEvent(event))
+  {
+    if(event->type == SDL_QUIT)
+    {
+      kQuit = 1;
+    }
+  }
+  return 0;
+}
+
 int shutdown_SDL()
 {
   if(kSdlRenderer != NULL)
@@ -50,12 +66,20 @@ int main(void)
     shutdown_SDL();
   }
 
-  while(1)
+  tilemap_t* map = tilemap_create(32, 32);
+  printf("map: %s (%d x %d)\n", map->map_name, map->width, map->height);
+
+  kQuit = 0;
+  SDL_Event mainEvent;
+
+  while(!kQuit)
   {
+    update_events(&mainEvent);
+
     SDL_RenderClear(kSdlRenderer);
     SDL_RenderPresent(kSdlRenderer);
-    SDL_Delay(1000);
   }
 
+  tilemap_destroy(map);
   return shutdown_SDL();
 }

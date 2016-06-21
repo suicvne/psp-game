@@ -5,5 +5,6 @@
 
 SDL_Window* kSdlWindow;
 SDL_Renderer* kSdlRenderer;
+int kQuit;
 
 #endif //___GLOBALS_H___
