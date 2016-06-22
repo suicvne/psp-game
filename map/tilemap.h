@@ -75,5 +75,4 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map);
 int tilemap_verify_header(char* header, short version);
 tilemap_t* tilemap_read_from_file(const char* directory, const char* filename);
 
-int tilemap_register_lua_functions(lua_State* L);
 #endif //___TILEMAP_H___

@@ -43,9 +43,6 @@ tilemap_t* tilemap_create(int width, int height)
 
   tilemap->map_name = "Test Map";
 
-  //tilemap->lua_state = lua_open();
-  //luaL_openlibs(tilemap->lua_state);
-
   return tilemap;
 }
 
@@ -90,7 +87,7 @@ void tilemap_update(tilemap_t* map, const camera_t cam)
       #ifdef PSP
         oslFatalError(buffer);
       #endif
-        //lua_pop(map->lua_state, 1);
+      lua_pop(map->lua_state, 1);
     }
   }
 
@@ -101,6 +98,7 @@ void tilemap_update(tilemap_t* map, const camera_t cam)
 
 void tilemap_draw(tilemap_t* map, const camera_t cam)
 {
+  //TODO: move player drawing into here for proper layering
   /*
   Get bounds for drawing
   */
@@ -126,6 +124,28 @@ void tilemap_draw(tilemap_t* map, const camera_t cam)
       }
     }
   }
+
+  /*
+  Lua
+  */
+  if(map->lua_state != NULL)
+  {
+    lua_getglobal(map->lua_state, "onDraw");
+    if(lua_isnil(map->lua_state, -1))
+    {/*Function dne*/}
+    else if(lua_pcall(map->lua_state, 0, 0, 0) != 0)
+    {
+      char buffer[50];
+      sprintf(buffer, "Fatal Error during onDraw: %s", lua_tostring(map->lua_state, -1));
+      #ifdef PSP
+        oslFatalError(buffer);
+      #endif
+      lua_pop(map->lua_state, 1);
+    }
+  }
+  /*
+  End Lua
+  */
 }
 
 int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t camera)
@@ -286,7 +306,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       }
       else
       {
-        tilemap_register_lua_functions(return_value->lua_state);
+        lua_map_register_functions(return_value->lua_state);
 
         int initError = lua_pcall(return_value->lua_state, 0, LUA_MULTRET, 0); //this call is necessary to "init" the script and index the globals i guess
         if(!initError)
@@ -320,9 +340,4 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
     return NULL; //fnf
 
   return NULL;
-}
-
-int tilemap_register_lua_functions(lua_State* L)
-{
-  lua_register(L, "print", lua_map_print);
 }
