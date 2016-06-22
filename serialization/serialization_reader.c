@@ -78,13 +78,13 @@ char* serializer_read_string(char* src, int* pointer)
   printf("length of string: %d\n", string_length);
   if(string_length > 0)
   {
-    char* return_value = malloc(sizeof(char) * string_length);
+    char* return_value = malloc(sizeof(char) * string_length + 1);
     memset(return_value, 0, string_length);
 
     short i;
     for(i = 0; i < string_length; i++)
     {
-      char read_char = serializer_read_wchar(src, pointer);
+      char read_char = serializer_read_char(src, pointer);
 
       return_value[i] = read_char;
       if(i == (string_length - 1)) //EOS

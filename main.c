@@ -103,7 +103,7 @@ int draw_forest(int width, int height)
   {
     for(y = -FOREST_SIZE; y < height + (FOREST_SIZE * 2); y += FOREST_SIZE)
     {
-      sprite_draw_camera_pointer_factor_offset(kForest, kCamera, x, y, 1.5f, 0, 0);
+      sprite_draw_camera_pointer_factor_offset(kForest, kCamera, x, y, 2.0f, 0, 0);
     }
   }
 
@@ -119,16 +119,29 @@ tilemap_t* load_level(const char* filename)
   return tilemap_read_from_file(filename);
 }
 
+int serializer_test()
+{
+  char* buffer = malloc(sizeof(char) * 16);
+  int pointer = 0;
+  serializer_write_string(buffer, &pointer, "map v2");
+  return serializer_write_to_file(buffer, 16, "str_test.bin");
+}
+
 int main(void)
 {
   SetupCallbacks();
   initOSLib();
   initialize_globals();
 
+  serializer_test();
+
   sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
 
   tilemap_t* tilemap_test = load_level("level.bin");
+  //tilemap_t* tilemap_test = tilemap_create(32, 32);
+  //tilemap_test->map_name = "Test Map v2 Format";
   printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
+  //tilemap_write_to_file("level.bin", tilemap_test);
 
   int skip = 0;
   while(1)
@@ -198,7 +211,7 @@ int main(void)
       //oslSetAlpha(OSL_FX_ALPHA | OSL_FX_COLOR, RGBA(48, 48, 48, 128));
       oslClearScreen(RGBA(0, 0, 0, 255));
       //sprite_draw_camera(kBackgroundSprite, kCamera);
-      tilemap_draw(tilemap_test, kCamera, kTileset);
+      tilemap_draw(tilemap_test, kCamera);
       if(inside_viewport(kCamera, kTestEntity))
       {
         sprite_draw_camera(kTestEntity, kCamera);

@@ -1,4 +1,4 @@
-Binary Level Format
+Binary Level Format 01
 
 First two bytes: MS (my initials)
 Short with the version: 0001
@@ -8,3 +8,13 @@ int with height in tiles: 32
 the tiles as their ids as shorts: 1010022 etc
 
 to come: differentiating between tilesets
+
+Binary Level Format 02
+
+First two bytes: MS (my initials)
+Short with the version: 0001
+string with name: 'kek'
+string with tileset filename: 'textures.png' (loads from res/ dir)
+int with width in tiles: 32
+int with height in tiles: 32
+the tiles as their ids as shorts: 1010022 etc

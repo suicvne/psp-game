@@ -1,3 +1,12 @@
+/**
+
+Level Format Abridged Changelog
+
+v1 - initial format: stores header, map_name, width, height, id of each tile in the map
+v2 - appends the tileset filename after map_name
+
+*/
+
 #ifndef ___TILEMAP_H___
 #define ___TILEMAP_H___
 
@@ -13,7 +22,7 @@
 
 #define HEADER_0 'M'
 #define HEADER_1 'S'
-#define VERSION 01
+#define VERSION 02
 
 typedef struct {
 
@@ -24,6 +33,8 @@ typedef struct {
   int width, height;
   char* map_name;
   short surrounding_tile_id;
+  char* tileset_path;
+  sprite_t* tileset;
 
 } tilemap_t;
 
@@ -47,7 +58,7 @@ tilemap_t* tilemap_create(int width, int height);
 void tilemap_destroy(tilemap_t* map);
 
 void tilemap_update(tilemap_t* map, const camera_t cam); //passing in the camera so I know what tiles I need to draw/update
-void tilemap_draw(tilemap_t* map, const camera_t cam, sprite_t* tileset);
+void tilemap_draw(tilemap_t* map, const camera_t cam);
 
 void camera_get_index_bounds(const camera_t camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y);
 

@@ -21,6 +21,11 @@ tilemap_t* tilemap_create(int width, int height)
   tilemap->width = width;
   tilemap->height = height;
 
+  tilemap->tileset_path = "textures.png";
+  char buffer[20];
+  sprintf(buffer, "res/%s", tilemap->tileset_path);
+  tilemap->tileset = sprite_create(buffer, SPRITE_TYPE_PNG);
+
   tilemap->map_name = "Test Map";
 
   return tilemap;
@@ -37,7 +42,7 @@ void tilemap_destroy(tilemap_t* map)
 void tilemap_update(tilemap_t* map, const camera_t cam)
 {/*TODO*/}
 
-void tilemap_draw(tilemap_t* map, const camera_t cam, sprite_t* tileset)
+void tilemap_draw(tilemap_t* map, const camera_t cam)
 {
   /*
   Get bounds for drawing
@@ -60,7 +65,7 @@ void tilemap_draw(tilemap_t* map, const camera_t cam, sprite_t* tileset)
       {
         tile_t tile = map->tiles[index];
         vector_t sheet_location = tile_get_location_by_id(tile.id);
-        sprite_draw_camera_source(tileset, cam, x_iter * 32, y_iter * 32, sheet_location.x, sheet_location.y, 32, 32);
+        sprite_draw_camera_source(map->tileset, cam, x_iter * 32, y_iter * 32, sheet_location.x, sheet_location.y, 32, 32);
       }
     }
   }
@@ -113,6 +118,7 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
   int filesize = (sizeof(char) * 2) + //header (MS)
                   (sizeof(short)) + //VERSION
                   strlen(map->map_name) + //map name
+                  strlen(map->tileset_path) + //tileset path
                   (sizeof(int) * 2) + // two ints for width and height
                   (sizeof(short) * total_tiles); // the tiles in this level
 
@@ -124,6 +130,7 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
   serializer_write_short(buffer, &pointer, (short)VERSION);
 
   serializer_write_string(buffer, &pointer, map->map_name);
+  serializer_write_string(buffer, &pointer, map->tileset_path);
 
   serializer_write_int(buffer, &pointer, map->width);
   serializer_write_int(buffer, &pointer, map->height);
@@ -179,12 +186,17 @@ tilemap_t* tilemap_read_from_file(const char* filename)
     if(tilemap_verify_header(HEADER, version))
     {
       char* map_name = serializer_read_string(buffer, &pointer);
+      char* tileset_path = serializer_read_string(buffer, &pointer);
+      printf("tileset: %s\n", tileset_path);
+      printf("sizeofchar: %d\n", sizeof(char));
       int width, height;
       width = serializer_read_int(buffer, &pointer);
       height = serializer_read_int(buffer, &pointer);
 
       tilemap_t* return_value = tilemap_create(width, height);
       return_value->map_name = map_name;
+      return_value->tileset_path = tileset_path;
+
       int total_tiles = width * height;
       int i = 0;
       for(i = 0; i < total_tiles; i++)
@@ -196,6 +208,10 @@ tilemap_t* tilemap_read_from_file(const char* filename)
       }
 
       free(buffer);
+
+      char temp[60];
+      sprintf(temp, "res/%s", tileset_path);
+      return_value->tileset = sprite_create(temp, SPRITE_TYPE_PNG);
 
       return return_value;
     }

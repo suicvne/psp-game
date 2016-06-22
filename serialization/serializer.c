@@ -56,7 +56,6 @@ void serializer_write_string(char* dest, int* pointer, char* value)
   {
     //dest[(*pointer) + i] = value[i];
     serializer_write_char(dest, pointer, value[i]);
-    (*pointer)++;
   }
   serializer_write_char(dest, pointer, '\0');
 }
