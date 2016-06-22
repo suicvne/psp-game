@@ -14,7 +14,6 @@ defines various global variables to be reused in the lifetime of the game.
 static player_t* kPlayer = NULL;
 static sprite_t* kTestEntity = NULL; //22x29 sprite on a 32x32 sheet
 static sprite_t* kBackgroundSprite = NULL;
-static sprite_t* kTileset = NULL;
 static sprite_t* kForest = NULL;
 static camera_t kCamera;
 

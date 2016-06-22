@@ -35,8 +35,14 @@ void tilemap_destroy(tilemap_t* map)
 {
   assert(map != NULL);
   assert(map->tiles != NULL);
+  assert(map->tileset != NULL);
+
+  #ifdef PSP
+  free(map->tileset);
   free(map->tiles);
   free(map);
+  //TODO: SDL_DestroyTexture for SDL
+  #endif
 }
 
 void tilemap_update(tilemap_t* map, const camera_t cam)

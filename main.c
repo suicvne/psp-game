@@ -57,7 +57,6 @@ void initialize_globals(void)
   kTestEntity->rectangle.h = 32;
 
   kBackgroundSprite = sprite_create("res/bg.png", SPRITE_TYPE_PNG);
-  kTileset = sprite_create("res/textures.png", SPRITE_TYPE_PNG);
   kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
   //kCamera initialized, not a pointer.
   //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0

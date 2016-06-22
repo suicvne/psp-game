@@ -21,11 +21,13 @@ typedef struct
   int yframeoffset;
   int frames, currentframe, frametime; //total animation frames, current frame in animation, and the time in ticks between frames.
   int elapsedticks;
+
   #ifdef PSP
   OSL_IMAGE* image;
   #else
   SDL_Texture* image;
   int angle;
+  SDL_Point center; //defines the centre point to rotate at
   #endif
 } sprite_t;
 
