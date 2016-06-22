@@ -17,8 +17,12 @@ v2 - appends the tileset filename after map_name
 #include "../graphics/common.h"
 #include "../serialization/serializer.h"
 #include "../serialization/serialization_reader.h"
+
 #include <malloc.h>
 #include <assert.h>
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
 
 #define HEADER_0 'M'
 #define HEADER_1 'S'
@@ -35,6 +39,7 @@ typedef struct {
   short surrounding_tile_id;
   char* tileset_path;
   sprite_t* tileset;
+  lua_State* lua_state;
 
 } tilemap_t;
 
@@ -54,6 +59,7 @@ static inline int min(int a, int b)
     return a;
 }
 
+int tilemap_load_lua_file(lua_State* L, const char* directory);
 tilemap_t* tilemap_create(int width, int height);
 void tilemap_destroy(tilemap_t* map);
 
@@ -66,5 +72,5 @@ int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t
 
 int tilemap_write_to_file(const char* filename, tilemap_t* map);
 int tilemap_verify_header(char* header, short version);
-tilemap_t* tilemap_read_from_file(const char* filename);
+tilemap_t* tilemap_read_from_file(const char* directory, const char* filename);
 #endif //___TILEMAP_H___

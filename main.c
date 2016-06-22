@@ -112,10 +112,10 @@ int draw_forest(int width, int height)
   oslSetAlpha(OSL_FX_DEFAULT, 255);
 }
 
-tilemap_t* load_level(const char* filename)
+tilemap_t* load_level(const char* dir, const char* filename)
 {
   printf("loading file from '%s'..", filename);
-  return tilemap_read_from_file(filename);
+  return tilemap_read_from_file(dir, filename);
 }
 
 int serializer_test()
@@ -136,7 +136,7 @@ int main(void)
 
   sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
 
-  tilemap_t* tilemap_test = load_level("level.bin");
+  tilemap_t* tilemap_test = load_level("./map", "level.bin");
   //tilemap_t* tilemap_test = tilemap_create(32, 32);
   //tilemap_test->map_name = "Test Map v2 Format";
   printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
@@ -148,6 +148,7 @@ int main(void)
     SceCtrlData pad;
     sceCtrlPeekBufferPositive(&pad, 1);
 
+    tilemap_update(tilemap_test, kCamera);
     /*
     Set rotation
     */
@@ -217,7 +218,7 @@ int main(void)
       }
       sprite_draw(kPlayer->sprite); //TODO: seperate player draw?
 
-      draw_forest(tilemap_test->width * 32, tilemap_test->height * 32);
+      //draw_forest(tilemap_test->width * 32, tilemap_test->height * 32);
       oslDrawStringf(10, 2, "%s", tilemap_test->map_name);
       //oslDrawFillRect(0, 0, 480, 272, RGBA(0, 0, 0, 255));
       oslEndDrawing();

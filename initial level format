@@ -18,3 +18,14 @@ string with tileset filename: 'textures.png' (loads from res/ dir)
 int with width in tiles: 32
 int with height in tiles: 32
 the tiles as their ids as shorts: 1010022 etc
+
+Lua Script Design
+
+Each level will have an optional Lua script assosciated with them that is named "script.lua".
+There will exist one single Lua state contained in the globals as there will always only be one level open
+at a time.
+
+WIP Lua Reference:
+
+function onLoad() - called when the level file is initially loaded.
+function onUpdate() - called whenever the level's `_update` function is called.

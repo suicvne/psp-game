@@ -1,5 +1,20 @@
 #include "tilemap.h"
 
+int tilemap_load_lua_file(lua_State* L, const char* directory)
+{
+  int error;
+
+  char combined_filename[30];
+  sprintf(combined_filename, "%s/%s", directory, "script.lua");
+  if(serializer_get_file_size(combined_filename) > 0)
+  {
+    error = luaL_loadfile(L, combined_filename);
+    return error;
+  }
+  else
+    return 1;
+}
+
 tilemap_t* tilemap_create(int width, int height)
 {
   tilemap_t* tilemap = malloc(sizeof(tilemap_t));
@@ -28,14 +43,24 @@ tilemap_t* tilemap_create(int width, int height)
 
   tilemap->map_name = "Test Map";
 
+  //tilemap->lua_state = lua_open();
+  //luaL_openlibs(tilemap->lua_state);
+
   return tilemap;
 }
 
 void tilemap_destroy(tilemap_t* map)
 {
+  //TODO: proper checking and handling for this. I like assert though :'/
   assert(map != NULL);
   assert(map->tiles != NULL);
   assert(map->tileset != NULL);
+  assert(map->lua_state != NULL);
+
+  if(map->lua_state != NULL)
+  {
+    lua_close(map->lua_state);
+  }
 
   #ifdef PSP
   free(map->tileset);
@@ -46,7 +71,33 @@ void tilemap_destroy(tilemap_t* map)
 }
 
 void tilemap_update(tilemap_t* map, const camera_t cam)
-{/*TODO*/}
+{
+  //TODO: regular updating.
+
+  /*
+  Lua
+  */
+
+  if(map->lua_state != NULL)
+  {
+    lua_getglobal(map->lua_state, "onUpdate");
+    if(lua_isnil(map->lua_state, -1))
+    {/*Function dne*/}
+    else if(lua_pcall(map->lua_state, 0, 0, 0) != 0)
+    {
+      char buffer[50];
+      sprintf(buffer, "Fatal Error during onUpdate: %s", lua_tostring(map->lua_state, -1));
+      #ifdef PSP
+        oslFatalError(buffer);
+      #endif
+        //lua_pop(map->lua_state, 1);
+    }
+  }
+
+  /*
+  End Lua
+  */
+}
 
 void tilemap_draw(tilemap_t* map, const camera_t cam)
 {
@@ -174,15 +225,18 @@ int tilemap_verify_header(char* buffer, short version)
   return 0;
 }
 
-tilemap_t* tilemap_read_from_file(const char* filename)
+tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
 {
-  int file_size = serializer_get_file_size(filename);
+  char combined_filename[30];
+  sprintf(combined_filename, "%s/%s", directory, filename);
+
+  int file_size = serializer_get_file_size(combined_filename);
   if(file_size > 0)
   {
     char* buffer = malloc(sizeof(char) * file_size);
     int pointer = 0, i;
 
-    serializer_read_from_file(buffer, file_size, filename);
+    serializer_read_from_file(buffer, file_size, combined_filename);
 
     char HEADER[2] = {0};
     HEADER[0] = serializer_read_char(buffer, &pointer);
@@ -219,6 +273,42 @@ tilemap_t* tilemap_read_from_file(const char* filename)
       sprintf(temp, "res/%s", tileset_path);
       return_value->tileset = sprite_create(temp, SPRITE_TYPE_PNG);
 
+      /*
+      Lua
+      */
+      return_value->lua_state = lua_open();
+      luaL_openlibs(return_value->lua_state);
+      if(tilemap_load_lua_file(return_value->lua_state, directory) != 0) //non-zero means error
+      {
+        fprintf(stderr, "No Lua script assosciated with level. Freeing lua_state\n");
+        lua_close(return_value->lua_state);
+        return_value->lua_state = NULL;
+      }
+      else
+      {
+        int initError = lua_pcall(return_value->lua_state, 0, LUA_MULTRET, 0); //this call is necessary to "init" the script and index the globals i guess
+        if(!initError)
+        {
+          lua_getglobal(return_value->lua_state, "onLoad");
+          if(lua_isnil(return_value->lua_state, -1))
+          {
+            printf("No onLoad function, skipping.\n");
+          }
+          //TODO: call
+        }
+        else
+        {
+          #ifdef PSP
+          char tempErrorBuffer[30];
+          sprintf(tempErrorBuffer, "%s", lua_tostring(return_value->lua_state, -1));
+          oslFatalError(tempErrorBuffer);
+          #endif
+          lua_pop(return_value->lua_state, 1);
+        }
+      }
+      /*
+      End Lua
+      */
       return return_value;
     }
     else
