@@ -17,6 +17,7 @@ v2 - appends the tileset filename after map_name
 #include "../graphics/common.h"
 #include "../serialization/serializer.h"
 #include "../serialization/serialization_reader.h"
+#include "lua/map_lua_functions.h"
 
 #include <malloc.h>
 #include <assert.h>
@@ -73,4 +74,6 @@ int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t
 int tilemap_write_to_file(const char* filename, tilemap_t* map);
 int tilemap_verify_header(char* header, short version);
 tilemap_t* tilemap_read_from_file(const char* directory, const char* filename);
+
+int tilemap_register_lua_functions(lua_State* L);
 #endif //___TILEMAP_H___
