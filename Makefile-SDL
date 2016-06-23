@@ -2,8 +2,8 @@
 
 TARGET = analogue-sdl
 PKGCONFIG = $(shell which pkg-config)
-CFLAGS = $(shell $(PKGCONFIG) --cflags sdl2) $(shell $(PKGCONFIG) --cflags lua5.2) -DSDL_VERS
-LIBS = $(shell $(PKGCONFIG) --libs sdl2)  $(shell $(PKGCONFIG) --libs lua5.2) -lm
+CFLAGS = $(shell $(PKGCONFIG) --cflags sdl2) $(shell $(PKGCONFIG) --cflags SDL2_image) $(shell $(PKGCONFIG) --cflags lua5.2) -DSDL_VERS
+LIBS = $(shell $(PKGCONFIG) --libs sdl2) $(shell $(PKGCONFIG) --libs SDL2_image)  $(shell $(PKGCONFIG) --libs lua5.2) -lm
 
 LOCAL_DEPS = *.c map/*.c map/lua/*.c player/*.c serialization/*.c sprites/*.c vector/*.c
 
@@ -13,4 +13,4 @@ run:
 	gen/$(TARGET)
 clean:
 	rm -rf src/*.o src/map/*.o src/player/*.o src/serialization/*.o src/sprites/*.o src/vector/*.o
-	rm gen/level-editor
+	rm gen/$(TARGET)

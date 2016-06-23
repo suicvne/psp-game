@@ -7,6 +7,7 @@
 #include <oslib/oslib.h>
 #elif SDL_VERS
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #endif
 
 #include "callback.h"
@@ -91,7 +92,7 @@ int initWindow()
   kSdlWindow = SDL_CreateWindow("Level Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
   if(kSdlWindow == NULL)
   {
-    printf("Error creating window: %s\n", SDL_GetError());
+    fprintf(stderr, "Error creating window: %s\n", SDL_GetError());
     SDL_Quit();
     return 1;
   }
@@ -102,7 +103,7 @@ int initRenderer()
   kSdlRenderer = SDL_CreateRenderer(kSdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if(kSdlRenderer == NULL)
   {
-    printf("Error creating renderer: %s\n", SDL_GetError());
+    fprintf(stderr, "Error creating renderer: %s\n", SDL_GetError());
     SDL_DestroyWindow(kSdlWindow);
     SDL_Quit();
     return 1;
@@ -131,6 +132,12 @@ int initSDL()
   initWindow();
 
   initRenderer();
+
+  if(!IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)
+  {
+    fprintf(stderr, "Error initializing SDL_Image: %s\n", SDL_GetError());
+    return 1;
+  }
 
   return 0;
 }
@@ -251,10 +258,7 @@ int draw(tilemap_t* tilemap)
     oslStartDrawing();
     oslClearScreen(RGBA(0, 0, 0, 255));
     tilemap_draw(tilemap, kCamera);
-    if(inside_viewport(kCamera, kTestEntity))
-    {
-      sprite_draw_camera(kTestEntity, kCamera);
-    }
+
     sprite_draw(kPlayer->sprite); //TODO: seperate player draw?
 
     //draw_forest(tilemap_test->width * 32, tilemap_test->height * 32);
@@ -265,13 +269,11 @@ int draw(tilemap_t* tilemap)
   //skip = oslSyncFrame();
   oslSyncFrame();
   #elif SDL_VERS
-
   SDL_RenderClear(kSdlRenderer);
 
-  //TODO: draw calls
+  tilemap_draw(tilemap, kCamera);
 
   SDL_RenderPresent(kSdlRenderer);
-
   #endif
 }
 

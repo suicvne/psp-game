@@ -15,6 +15,12 @@ sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type)
   {
     #ifdef PSP
     sprite->image = oslLoadImageFilePNG(sprite_path, OSL_IN_RAM | OSL_SWIZZLED, OSL_PF_8888);
+    #else
+    sprite->image = IMG_LoadTexture(kSdlRenderer, sprite_path);
+    if(sprite->image == NULL)
+    {
+      reportFatalError(IMG_GetError());
+    }
     #endif
     printf("png sprite with path '%s' has pointer value %p\n", sprite_path, (void*)sprite->image);
   }
@@ -27,11 +33,7 @@ sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type)
   }
   else
   {
-    #ifdef PSP
-    oslFatalError("Wrong given type!");
-    #else
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Bad Type", "Wrong given type!", NULL);
-    #endif
+    reportFatalError("Wrong given type!");
     return NULL;
   }
 
@@ -56,6 +58,16 @@ void sprite_set_angle(sprite_t* sprite, int angle)
 
 void sprite_draw(sprite_t* sprite)
 {
+  /*
+  int SDL_RenderCopyEx(SDL_Renderer*          renderer,
+                     SDL_Texture*           texture,
+                     const SDL_Rect*        srcrect,
+                     const SDL_Rect*        dstrect,
+                     const double           angle,
+                     const SDL_Point*       center,
+                     const SDL_RendererFlip flip)
+  */
+
   //src x and src y from the sheet
   int sx, sy;
   sx = (sprite->currentframe * sprite->rectangle.w);
@@ -66,6 +78,29 @@ void sprite_draw(sprite_t* sprite)
     oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
 
   oslDrawImageXY(sprite->image, sprite->rectangle.x, sprite->rectangle.y);
+  #elif SDL_VERS
+
+  SDL_Rect src_rect;
+  src_rect.x = sx;
+  src_rect.y = sy;
+  src_rect.w = sprite->rectangle.w;
+  src_rect.h = sprite->rectangle.h;
+
+  SDL_Rect dst_rect;
+  dst_rect.x = sprite->rectangle.x;
+  dst_rect.y = sprite->rectangle.y;
+  dst_rect.w = src_rect.w;
+  dst_rect.h = src_rect.h;
+
+  SDL_RenderCopyEx(kSdlRenderer,
+    sprite->image,
+    &src_rect,
+    &dst_rect,
+    sprite->angle,
+    NULL,
+    SDL_FLIP_NONE
+  );
+
   #endif
 }
 
@@ -80,6 +115,27 @@ void sprite_draw_offset(sprite_t* sprite, int x_offset, int y_offset)
     oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
 
   oslDrawImageXY(sprite->image, sprite->rectangle.x + x_offset, sprite->rectangle.y + y_offset);
+  #elif SDL_VERS
+  SDL_Rect src_rect;
+  src_rect.x = sx;
+  src_rect.y = sy;
+  src_rect.w = sprite->rectangle.w;
+  src_rect.h = sprite->rectangle.h;
+
+  SDL_Rect dst_rect;
+  dst_rect.x = sprite->rectangle.x + x_offset;
+  dst_rect.y = sprite->rectangle.y + y_offset;
+  dst_rect.w = src_rect.w;
+  dst_rect.h = src_rect.h;
+
+  SDL_RenderCopyEx(kSdlRenderer,
+    sprite->image,
+    &src_rect,
+    &dst_rect,
+    sprite->angle,
+    NULL,
+    SDL_FLIP_NONE
+  );
   #endif
 }
 
@@ -102,11 +158,33 @@ void sprite_draw_camera(sprite_t* sprite, const camera_t camera)
     sprite->rectangle.x + camera.x,
     sprite->rectangle.y + camera.y
   );
+  #elif SDL_VERS
+  SDL_Rect src_rect;
+  src_rect.x = sx;
+  src_rect.y = sy;
+  src_rect.w = sprite->rectangle.w;
+  src_rect.h = sprite->rectangle.h;
+
+  SDL_Rect dst_rect;
+  dst_rect.x = sprite->rectangle.x + camera.x;
+  dst_rect.y = sprite->rectangle.y + camera.y;
+  dst_rect.w = src_rect.w;
+  dst_rect.h = src_rect.h;
+
+  SDL_RenderCopyEx(kSdlRenderer,
+    sprite->image,
+    &src_rect,
+    &dst_rect,
+    sprite->angle,
+    NULL,
+    SDL_FLIP_NONE
+  );
   #endif
 }
 
 void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, int y, int sx, int sy, int w, int h)
 {
+  printf("sprite_draw_camera_source\n");
   #ifdef PSP
   if(sprite == NULL)
   {
@@ -118,6 +196,27 @@ void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, i
     sprite->image,
     x + camera.x,
     y + camera.y
+  );
+  #else
+  SDL_Rect src_rect;
+  src_rect.x = sx;
+  src_rect.y = sy;
+  src_rect.w = w;
+  src_rect.h = h;
+
+  SDL_Rect dst_rect;
+  dst_rect.x = sprite->rectangle.x + camera.x;
+  dst_rect.y = sprite->rectangle.y + camera.y;
+  dst_rect.w = w;
+  dst_rect.h = h;
+
+  SDL_RenderCopyEx(kSdlRenderer,
+    sprite->image,
+    &src_rect,
+    &dst_rect,
+    sprite->angle,
+    NULL,
+    SDL_FLIP_NONE
   );
   #endif
 }
@@ -140,6 +239,27 @@ void sprite_draw_camera_factor(sprite_t* sprite, const camera_t camera, float mo
     sprite->rectangle.x + (camera.x * movement_factor),
     sprite->rectangle.y + (camera.y * movement_factor)
   );
+  #elif SDL_VERS
+  SDL_Rect src_rect;
+  src_rect.x = sx;
+  src_rect.y = sy;
+  src_rect.w = sprite->rectangle.w;
+  src_rect.h = sprite->rectangle.h;
+
+  SDL_Rect dst_rect;
+  dst_rect.x = sprite->rectangle.x + (camera.x * movement_factor);
+  dst_rect.y = sprite->rectangle.y + (camera.y * movement_factor);
+  dst_rect.w = src_rect.w;
+  dst_rect.h = src_rect.h;
+
+  SDL_RenderCopyEx(kSdlRenderer,
+    sprite->image,
+    &src_rect,
+    &dst_rect,
+    sprite->angle,
+    NULL,
+    SDL_FLIP_NONE
+  );
   #endif
 }
 
@@ -158,6 +278,27 @@ void sprite_draw_camera_factor_offset(sprite_t* sprite, const camera_t camera, f
     sprite->rectangle.x + (camera.x * movement_factor) + x_offset,
     sprite->rectangle.y + (camera.y * movement_factor) + y_offset
   );
+  #elif SDL_VERS
+  SDL_Rect src_rect;
+  src_rect.x = sx;
+  src_rect.y = sy;
+  src_rect.w = sprite->rectangle.w;
+  src_rect.h = sprite->rectangle.h;
+
+  SDL_Rect dst_rect;
+  dst_rect.x = sprite->rectangle.x + (camera.x * movement_factor) + x_offset;
+  dst_rect.y = sprite->rectangle.y + (camera.y * movement_factor) + y_offset;
+  dst_rect.w = src_rect.w;
+  dst_rect.h = src_rect.h;
+
+  SDL_RenderCopyEx(kSdlRenderer,
+    sprite->image,
+    &src_rect,
+    &dst_rect,
+    sprite->angle,
+    NULL,
+    SDL_FLIP_NONE
+  );
   #endif
 }
 
@@ -174,6 +315,27 @@ void sprite_draw_camera_pointer_factor_offset(sprite_t* sprite, const camera_t c
   oslDrawImageXY(sprite->image,
     x + (camera.x * movement_factor) + x_offset,
     y + (camera.y * movement_factor) + y_offset
+  );
+  #elif SDL_VERS
+  SDL_Rect src_rect;
+  src_rect.x = sx;
+  src_rect.y = sy;
+  src_rect.w = sprite->rectangle.w;
+  src_rect.h = sprite->rectangle.h;
+
+  SDL_Rect dst_rect;
+  dst_rect.x = x + (camera.x * movement_factor) + x_offset;
+  dst_rect.y = y + (camera.y * movement_factor) + y_offset;
+  dst_rect.w = src_rect.w;
+  dst_rect.h = src_rect.h;
+
+  SDL_RenderCopyEx(kSdlRenderer,
+    sprite->image,
+    &src_rect,
+    &dst_rect,
+    sprite->angle,
+    NULL,
+    SDL_FLIP_NONE
   );
   #endif
 }

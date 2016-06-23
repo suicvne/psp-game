@@ -51,3 +51,8 @@ int inside_viewport(const camera_t camera, const sprite_t* sprite)
   rectangle_t camera_viewport = camera_get_viewport(camera);
   return rectangle_intersects(&camera_viewport, &sprite->rectangle);
 }
+
+if(inside_viewport(kCamera, kTestEntity))
+{
+  sprite_draw_camera(kTestEntity, kCamera);
+}

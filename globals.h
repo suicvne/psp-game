@@ -11,6 +11,7 @@ defines various global variables to be reused in the lifetime of the game.
 #include "player/player.h"
 #include "camera/camera.h"
 
+static int kQuit;
 static player_t* kPlayer = NULL;
 static sprite_t* kTestEntity = NULL; //22x29 sprite on a 32x32 sheet
 static sprite_t* kBackgroundSprite = NULL;
@@ -23,12 +24,9 @@ static OSL_FONT* kMainFont;
 
 #ifdef SDL_VERS
 #include <SDL2/SDL.h> //TODO: this
-
-SDL_Window* kSdlWindow;
-SDL_Renderer* kSdlRenderer;
-int kQuit;
-SDL_Event kSdlEvent;
-
+static SDL_Window* kSdlWindow;
+static SDL_Renderer* kSdlRenderer;
+static SDL_Event kSdlEvent;
 #endif
 
 #endif //___GLOBALS_H___

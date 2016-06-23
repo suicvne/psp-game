@@ -3,8 +3,9 @@
 
 #ifdef PSP
 #include <oslib/oslib.h>
-#else
+#elif SDL_VERS
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #endif
 #include <assert.h>
 #include "../graphics/common.h"
@@ -26,6 +27,8 @@ typedef struct
   #else
   SDL_Texture* image;
   int angle;
+  int center_x;
+  int center_y;
   #endif
 } sprite_t;
 
