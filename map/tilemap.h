@@ -11,6 +11,7 @@ v2 - appends the tileset filename after map_name
 #define ___TILEMAP_H___
 
 #include "tile.h"
+#include "../globals.h"
 #include "../common.h"
 #include "../camera/camera.h"
 #include "../sprites/sprite.h"
@@ -65,12 +66,12 @@ int tilemap_load_lua_file(lua_State* L, const char* directory);
 tilemap_t* tilemap_create(int width, int height);
 void tilemap_destroy(tilemap_t* map);
 
-void tilemap_update(tilemap_t* map, const camera_t cam); //passing in the camera so I know what tiles I need to draw/update
-void tilemap_draw(tilemap_t* map, const camera_t cam);
+void tilemap_update(tilemap_t* map, const camera_t* cam); //passing in the camera so I know what tiles I need to draw/update
+void tilemap_draw(tilemap_t* map, const camera_t* cam);
 
-void camera_get_index_bounds(const camera_t camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y);
+void camera_get_index_bounds(const camera_t* camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y);
 
-int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t camera);
+int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t* camera);
 
 int tilemap_write_to_file(const char* filename, tilemap_t* map);
 int tilemap_verify_header(char* header, short version);

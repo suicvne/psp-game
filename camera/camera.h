@@ -12,47 +12,18 @@
 #define ORIGIN_X 224
 #define ORIGIN_Y 120
 
-typedef struct {
+typedef struct camera_t {
 
   float x, y; //the X and Y offsets at which to draw everything else.
 
 } camera_t;
 
-static inline vector_t camera_player_to_world(const camera_t camera)
-{
-  vector_t value = {
-    -camera.x + ORIGIN_X - 16,
-    -camera.y + ORIGIN_Y - 16
-  };
+vector_t camera_player_to_world(const camera_t* camera);
 
-  return value;
-};
+rectangle_t camera_player_to_world_rectangle(const camera_t* camera);
 
-static inline rectangle_t camera_player_to_world_rectangle(const camera_t camera)
-{
-  //they can set w/h later tbh
-  rectangle_t value;
-  value.x = -camera.x + ORIGIN_X - 16;
-  value.y = -camera.y + ORIGIN_Y - 16;
+rectangle_t camera_get_viewport(const camera_t* camera);
 
-  return value;
-};
-
-static inline rectangle_t camera_get_viewport(const camera_t camera)
-{
-  rectangle_t value;
-  value.w = SCREEN_WIDTH;
-  value.h = SCREEN_HEIGHT;
-  value.x = -camera.x;
-  value.y = -camera.y;
-
-  return value;
-};
-
-static inline void camera_move(camera_t* camera, const vector_t movement_amount)
-{
-  camera->x += movement_amount.x;
-  camera->y += movement_amount.y;
-};
+void camera_move(camera_t* camera, const vector_t movement_amount);
 
 #endif //___CAMERA_H___

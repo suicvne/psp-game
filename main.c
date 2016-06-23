@@ -154,6 +154,8 @@ int initSubsystem()
 
 void initialize_globals(void)
 {
+  kCamera = malloc(sizeof(camera_t));
+
   kPlayer = player_create();
   kTestEntity = sprite_create("res/edgelord.png", SPRITE_TYPE_PNG);
 
@@ -162,7 +164,6 @@ void initialize_globals(void)
   kTestEntity->rectangle.w = 32;
   kTestEntity->rectangle.h = 32;
 
-  kBackgroundSprite = sprite_create("res/bg.png", SPRITE_TYPE_PNG);
   kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
   //kCamera initialized, not a pointer.
   //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0
@@ -234,13 +235,13 @@ int update(tilemap_t* tilemap)
     xtrajectory = -(PLAYER_SPEED * stickInput.x);
     ytrajectory = -(PLAYER_SPEED * stickInput.y);
 
-    kCamera.x += xtrajectory;
-    kCamera.y += ytrajectory;
+    kCamera->x += xtrajectory;
+    kCamera->y += ytrajectory;
 
     if(collides_with(kPlayer, kTestEntity)) //|| tilemap_is_player_colliding(tilemap_test, kPlayer, kCamera))
     {
-      kCamera.x -= xtrajectory;
-      kCamera.y -= ytrajectory;
+      kCamera->x -= xtrajectory;
+      kCamera->y -= ytrajectory;
     }
   }
 

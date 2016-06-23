@@ -67,7 +67,7 @@ void tilemap_destroy(tilemap_t* map)
   #endif
 }
 
-void tilemap_update(tilemap_t* map, const camera_t cam)
+void tilemap_update(tilemap_t* map, const camera_t* cam)
 {
   //TODO: regular updating.
 
@@ -94,7 +94,7 @@ void tilemap_update(tilemap_t* map, const camera_t cam)
   */
 }
 
-void tilemap_draw(tilemap_t* map, const camera_t cam)
+void tilemap_draw(tilemap_t* map, const camera_t* cam)
 {
   //TODO: move player drawing into here for proper layering
   /*
@@ -118,7 +118,7 @@ void tilemap_draw(tilemap_t* map, const camera_t cam)
       {
         tile_t tile = map->tiles[index];
         vector_t sheet_location = tile_get_location_by_id(tile.id);
-        sprite_draw_camera_source(map->tileset, cam, x_iter * 32, y_iter * 32, sheet_location.x, sheet_location.y, 32, 32);
+        sprite_draw_camera_source(map->tileset, *cam, x_iter * 32, y_iter * 32, sheet_location.x, sheet_location.y, 32, 32);
       }
     }
   }
@@ -144,7 +144,7 @@ void tilemap_draw(tilemap_t* map, const camera_t cam)
   */
 }
 
-int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t camera)
+int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t* camera)
 {
   rectangle_t player_hitbox = camera_player_to_world_rectangle(camera);
     player_hitbox.w = 32; player_hitbox.h = 32;
@@ -161,15 +161,15 @@ int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t
     return 1;
 }
 
-void camera_get_index_bounds(const camera_t camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y)
+void camera_get_index_bounds(const camera_t* camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y)
 {
   int half_map_width, half_map_height;
   half_map_width = ((tilemap->width * 32) / 2);
   half_map_height = ((tilemap->height * 32) / 2);
 
   float corrected_x, corrected_y;
-  corrected_x = -camera.x;
-  corrected_y = -camera.y;
+  corrected_x = -camera->x;
+  corrected_y = -camera->y;
 
   (*min_x) = floor(
     (corrected_x) / 32

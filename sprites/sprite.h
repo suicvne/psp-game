@@ -8,17 +8,20 @@
 #else
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #endif
 
 #include <assert.h>
+#include "../globals.h"
 #include "../graphics/common.h"
+#include "../common.h"
 #include "../camera/camera.h"
 
 /**
 Contains various properties for holding for sprites
 */
-typedef struct
+typedef struct sprite_t
 {
   //int x, y; //x and y positions in the world
   //int w, h; //w and height of a single frame of a sprite_t
