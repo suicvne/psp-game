@@ -41,7 +41,7 @@ int lua_map_register_functions(lua_State* L)
   lua_register(L, "draw_text", lua_map_draw_text);
 }
 
-int lua_map_push_tilemap(lua_State* L, tilemap_t* map)
+/*int lua_map_push_tilemap(lua_State* L, tilemap_t* map)
 {
-  
-}
+
+}*/

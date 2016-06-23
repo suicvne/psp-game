@@ -12,12 +12,18 @@ function onUpdate()
 end
 
 function onDraw()
-  if(counter > 100) then
-    x = (-(counter * 2 / originX));
-    draw_text("Welcome to the Jungle", x, 52);
-  else
-    draw_text("Welcome to the Jungle", originX, 52);
-  end
+  draw_text("send nudes", 10, 22);
+  draw_text("send nudes", 10, 32);
+  draw_text("send nudes", 10, 42);
+  draw_text("send nudes", 10, 52);
+  draw_text("send nudes", 10, 62);
+  draw_text("send nudes", 10, 72);
+  --if(counter > 100) then
+    --x = (-(counter * 2 / originX));
+    --draw_text("Welcome to the Jungle", x, 52);
+  --else
+--    draw_text("Welcome to the Jungle", originX, 52);
+  --end
 
-  draw_text("counter: " .. counter, 10, 22);
+  --draw_text("counter: " .. counter, 10, 22);
 end
