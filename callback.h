@@ -38,6 +38,7 @@ int SetupCallbacks(void)
 
 	return thid;
   #endif
+	return 0;
 }
 
 #endif //___CALLBACK_H___

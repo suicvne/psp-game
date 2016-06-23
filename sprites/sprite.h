@@ -2,10 +2,15 @@
 #define __SPRITE_H__
 
 #ifdef PSP
+
 #include <oslib/oslib.h>
+
 #else
+
 #include <SDL2/SDL.h>
+
 #endif
+
 #include <assert.h>
 #include "../graphics/common.h"
 #include "../camera/camera.h"

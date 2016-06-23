@@ -78,7 +78,7 @@ void sprite_draw(sprite_t* sprite)
     oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
 
   oslDrawImageXY(sprite->image, sprite->rectangle.x, sprite->rectangle.y);
-  #elif SDL_VERS
+  #else
 
   SDL_Rect src_rect;
   src_rect.x = sx;
@@ -115,7 +115,7 @@ void sprite_draw_offset(sprite_t* sprite, int x_offset, int y_offset)
     oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
 
   oslDrawImageXY(sprite->image, sprite->rectangle.x + x_offset, sprite->rectangle.y + y_offset);
-  #elif SDL_VERS
+  #else
   SDL_Rect src_rect;
   src_rect.x = sx;
   src_rect.y = sy;
@@ -158,7 +158,7 @@ void sprite_draw_camera(sprite_t* sprite, const camera_t camera)
     sprite->rectangle.x + camera.x,
     sprite->rectangle.y + camera.y
   );
-  #elif SDL_VERS
+  #else
   SDL_Rect src_rect;
   src_rect.x = sx;
   src_rect.y = sy;
@@ -184,7 +184,8 @@ void sprite_draw_camera(sprite_t* sprite, const camera_t camera)
 
 void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, int y, int sx, int sy, int w, int h)
 {
-  printf("sprite_draw_camera_source\n");
+  printf("sprite_draw_camera_source called\n");
+
   #ifdef PSP
   if(sprite == NULL)
   {
@@ -239,7 +240,7 @@ void sprite_draw_camera_factor(sprite_t* sprite, const camera_t camera, float mo
     sprite->rectangle.x + (camera.x * movement_factor),
     sprite->rectangle.y + (camera.y * movement_factor)
   );
-  #elif SDL_VERS
+  #else
   SDL_Rect src_rect;
   src_rect.x = sx;
   src_rect.y = sy;
@@ -278,7 +279,7 @@ void sprite_draw_camera_factor_offset(sprite_t* sprite, const camera_t camera, f
     sprite->rectangle.x + (camera.x * movement_factor) + x_offset,
     sprite->rectangle.y + (camera.y * movement_factor) + y_offset
   );
-  #elif SDL_VERS
+  #else
   SDL_Rect src_rect;
   src_rect.x = sx;
   src_rect.y = sy;
@@ -316,7 +317,7 @@ void sprite_draw_camera_pointer_factor_offset(sprite_t* sprite, const camera_t c
     x + (camera.x * movement_factor) + x_offset,
     y + (camera.y * movement_factor) + y_offset
   );
-  #elif SDL_VERS
+  #else
   SDL_Rect src_rect;
   src_rect.x = sx;
   src_rect.y = sy;
