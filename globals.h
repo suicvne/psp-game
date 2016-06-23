@@ -24,6 +24,10 @@ static OSL_FONT* kMainFont;
 #ifdef SDL_VERS
 #include <SDL2/SDL.h> //TODO: this
 
+SDL_Window* kSdlWindow;
+SDL_Renderer* kSdlRenderer;
+int kQuit;
+SDL_Event kSdlEvent;
 
 #endif
 

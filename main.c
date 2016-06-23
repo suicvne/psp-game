@@ -5,6 +5,8 @@
 #include <pspnet_apctl.h>
 #include <pspctrl.h>
 #include <oslib/oslib.h>
+#elif SDL_VERS
+#include <SDL2/SDL.h>
 #endif
 
 #include "callback.h"
@@ -30,6 +32,14 @@
 #define PLAYER_SPEED 2
 #define SPEED 4
 #define KNOCKBACK_SPEED 8
+
+#ifndef SCREEN_WIDTH
+#define SCREEN_WIDTH 480
+#endif
+
+#ifndef SCREEN_WIDTH
+#define SCREEN_HEIGHT 272
+#endif
 
 #ifdef PSP
 PSP_MODULE_INFO("Analogue Sample", 0, 1, 0);
@@ -75,8 +85,53 @@ vector_t get_analogue_movement()
 }
 
 #ifdef SDL_VERS
+
+int initWindow()
+{
+  kSdlWindow = SDL_CreateWindow("Level Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+  if(kSdlWindow == NULL)
+  {
+    printf("Error creating window: %s\n", SDL_GetError());
+    SDL_Quit();
+    return 1;
+  }
+}
+
+int initRenderer()
+{
+  kSdlRenderer = SDL_CreateRenderer(kSdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  if(kSdlRenderer == NULL)
+  {
+    printf("Error creating renderer: %s\n", SDL_GetError());
+    SDL_DestroyWindow(kSdlWindow);
+    SDL_Quit();
+    return 1;
+  }
+}
+
+int shutdown_SDL()
+{
+  if(kSdlRenderer != NULL)
+    SDL_DestroyRenderer(kSdlRenderer);
+
+  if(kSdlWindow != NULL)
+    SDL_DestroyWindow(kSdlWindow);
+
+  return 0;
+}
+
 int initSDL()
 {
+  if(SDL_Init(SDL_INIT_VIDEO) != 0)
+  {
+    fprintf(stderr, "Error initializing SDL: %s\n", SDL_GetError());
+    return 1;
+  }
+
+  initWindow();
+
+  initRenderer();
+
   return 0;
 }
 #endif
@@ -119,35 +174,105 @@ int collides_with(const player_t* player, const sprite_t* sprite)
   return rectangle_intersects(&player_hitbox, &sprite->rectangle);
 }
 
-int inside_viewport(const camera_t camera, const sprite_t* sprite)
-{
-  rectangle_t camera_viewport = camera_get_viewport(camera);
-  return rectangle_intersects(&camera_viewport, &sprite->rectangle);
-}
-
-vector_t calculate_knockback(int movement_angle)
-{
-  //1. invert player movement angle
-  int inverse_angle = 360 - movement_angle;
-  vector_t movement;
-  movement.x = KNOCKBACK_SPEED * cos(angleToRad(inverse_angle)); //angular movement
-  movement.y = KNOCKBACK_SPEED * sin(angleToRad(inverse_angle));
-
-  return movement;
-}
-
 tilemap_t* load_level(const char* dir, const char* filename)
 {
   printf("loading file from '%s'..", filename);
   return tilemap_read_from_file(dir, filename);
 }
 
-int serializer_test()
+int update(tilemap_t* tilemap)
 {
-  char* buffer = malloc(sizeof(char) * 16);
-  int pointer = 0;
-  serializer_write_string(buffer, &pointer, "map v2");
-  return serializer_write_to_file(buffer, 16, "str_test.bin");
+  #ifdef SDL_VERS
+  while(SDL_PollEvent(&kSdlEvent))
+  {
+    if(kSdlEvent.type == SDL_QUIT)
+    {
+      kQuit = 1;
+      shutdown_SDL();
+    }
+  }
+  #endif
+
+  tilemap_update(tilemap, kCamera);
+  /*
+  Set rotation
+  */
+  vector_t stickInput = get_analogue_movement();
+
+  if(stickInput.x != 0.0f || stickInput.y != 0.0f)
+  {
+    if(vector_magnitude(stickInput) > DEADZONE) //LOOK_DEADZONE
+    {
+      int angular_value = (radToDegree(atan2(stickInput.y, stickInput.x)) - 90);
+      player_setlookangle(kPlayer, angular_value);
+    }
+  }
+  /*
+  End Set rotation
+  */
+
+  /*
+    Begin movement
+  */
+
+  if(stickInput.x != 0.0f || stickInput.y != 0.0f)
+  {
+    if(vector_magnitude(stickInput) < LOOK_DEADZONE) //DEADZONE
+    {
+      stickInput.x = 0;
+      stickInput.y = 0;
+    }
+
+    float xtrajectory, ytrajectory;
+    xtrajectory = -(PLAYER_SPEED * stickInput.x);
+    ytrajectory = -(PLAYER_SPEED * stickInput.y);
+
+    kCamera.x += xtrajectory;
+    kCamera.y += ytrajectory;
+
+    if(collides_with(kPlayer, kTestEntity)) //|| tilemap_is_player_colliding(tilemap_test, kPlayer, kCamera))
+    {
+      kCamera.x -= xtrajectory;
+      kCamera.y -= ytrajectory;
+    }
+  }
+
+  /*
+    End movement
+  */
+}
+
+int draw(tilemap_t* tilemap)
+{
+  #ifdef PSP
+  // draw last
+  //if(!skip)
+  //{
+    oslStartDrawing();
+    oslClearScreen(RGBA(0, 0, 0, 255));
+    tilemap_draw(tilemap, kCamera);
+    if(inside_viewport(kCamera, kTestEntity))
+    {
+      sprite_draw_camera(kTestEntity, kCamera);
+    }
+    sprite_draw(kPlayer->sprite); //TODO: seperate player draw?
+
+    //draw_forest(tilemap_test->width * 32, tilemap_test->height * 32);
+    oslDrawStringf(10, 2, "%s", tilemap->map_name);
+    oslEndDrawing();
+  //}
+  oslEndFrame();
+  //skip = oslSyncFrame();
+  oslSyncFrame();
+  #elif SDL_VERS
+
+  SDL_RenderClear(kSdlRenderer);
+
+  //TODO: draw calls
+
+  SDL_RenderPresent(kSdlRenderer);
+
+  #endif
 }
 
 int main(void)
@@ -156,95 +281,23 @@ int main(void)
   initSubsystem();
   initialize_globals();
 
-  serializer_test();
-
   tilemap_t* tilemap_test = load_level("./map", "level.bin");
   printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
 
-  int skip = 0;
-  while(1)
+  kQuit = 0;
+  while(!kQuit)
   {
-    tilemap_update(tilemap_test, kCamera);
-    /*
-    Set rotation
-    */
-    vector_t stickInput = get_analogue_movement();
+    update(tilemap_test);
 
-    if(stickInput.x != 0.0f || stickInput.y != 0.0f)
-    {
-      if(vector_magnitude(stickInput) > DEADZONE) //LOOK_DEADZONE
-      {
-        int angular_value = (radToDegree(atan2(stickInput.y, stickInput.x)) - 90);
-        player_setlookangle(kPlayer, angular_value);
-      }
-    }
-    /*
-    End Set rotation
-    */
-
-    /*
-      Begin movement
-    */
-
-    if(stickInput.x != 0.0f || stickInput.y != 0.0f)
-    {
-      if(vector_magnitude(stickInput) < LOOK_DEADZONE) //DEADZONE
-      {
-        stickInput.x = 0;
-        stickInput.y = 0;
-      }
-
-      float xtrajectory, ytrajectory;
-      xtrajectory = -(PLAYER_SPEED * stickInput.x);
-      ytrajectory = -(PLAYER_SPEED * stickInput.y);
-
-      kCamera.x += xtrajectory;
-      kCamera.y += ytrajectory;
-
-      if(collides_with(kPlayer, kTestEntity)) //|| tilemap_is_player_colliding(tilemap_test, kPlayer, kCamera))
-      {
-        kCamera.x -= xtrajectory;
-        kCamera.y -= ytrajectory;
-      }
-    }
-
-    /*
-      End movement
-    */
-
-
-    // draw last
-    if(!skip)
-    {
-      #ifdef PSP
-      oslStartDrawing();
-      //oslSetAlpha(OSL_FX_DEFAULT, 255);
-      //oslSetAlpha(OSL_FX_ALPHA | OSL_FX_COLOR, RGBA(48, 48, 48, 128));
-      oslClearScreen(RGBA(0, 0, 0, 255));
-      //sprite_draw_camera(kBackgroundSprite, kCamera);
-      tilemap_draw(tilemap_test, kCamera);
-      if(inside_viewport(kCamera, kTestEntity))
-      {
-        sprite_draw_camera(kTestEntity, kCamera);
-      }
-      sprite_draw(kPlayer->sprite); //TODO: seperate player draw?
-
-      //draw_forest(tilemap_test->width * 32, tilemap_test->height * 32);
-      oslDrawStringf(10, 2, "%s", tilemap_test->map_name);
-      //oslDrawFillRect(0, 0, 480, 272, RGBA(0, 0, 0, 255));
-      oslEndDrawing();
-      #endif
-    }
-    #ifdef PSP
-    oslEndFrame();
-    skip = oslSyncFrame();
-    #endif
+    draw(tilemap_test);
   }
 
   //tilemap_destroy(tilemap_test);
   #ifdef PSP
   oslEndGfx();
   oslQuit();
+  #elif SDL_VERS
+  shutdown_SDL();
   #endif
 
   return 0;

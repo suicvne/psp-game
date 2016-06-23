@@ -33,3 +33,21 @@ int draw_forest(int width, int height)
   }
   oslSetAlpha(OSL_FX_DEFAULT, 255);
 }
+
+vector_t calculate_knockback(int movement_angle)
+{
+  //1. invert player movement angle
+  int inverse_angle = 360 - movement_angle;
+  vector_t movement;
+  movement.x = KNOCKBACK_SPEED * cos(angleToRad(inverse_angle)); //angular movement
+  movement.y = KNOCKBACK_SPEED * sin(angleToRad(inverse_angle));
+
+  return movement;
+}
+
+
+int inside_viewport(const camera_t camera, const sprite_t* sprite)
+{
+  rectangle_t camera_viewport = camera_get_viewport(camera);
+  return rectangle_intersects(&camera_viewport, &sprite->rectangle);
+}
