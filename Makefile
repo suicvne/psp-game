@@ -1,3 +1,5 @@
+#PSP MAKEFILE
+
 TARGET = analogue
 OBJS = main.o vector/vector.o player/player.o sprites/sprite.o serialization/serializer.o serialization/serialization_reader.o map/tilemap.o map/tile.o map/lua/map_lua_functions.o
 

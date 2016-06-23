@@ -16,3 +16,20 @@ if(pad.Buttons != 0)
 
 //bullet.x += SPEED * cos(angleToRad(bullet.angle + 90));
 //bullet.y += SPEED * sin(angleToRad(bullet.angle + 90));
+
+//draws the cute forest overlay
+int draw_forest(int width, int height)
+{
+  int FOREST_SIZE = 513;
+  oslSetAlpha(OSL_FX_ALPHA, 200);
+  int x, y;
+
+  for(x = -FOREST_SIZE; x < width + (FOREST_SIZE * 2); x += FOREST_SIZE)
+  {
+    for(y = -FOREST_SIZE; y < height + (FOREST_SIZE * 2); y += FOREST_SIZE)
+    {
+      sprite_draw_camera_pointer_factor_offset(kForest, kCamera, x, y, 2.0f, 0, 0);
+    }
+  }
+  oslSetAlpha(OSL_FX_DEFAULT, 255);
+}

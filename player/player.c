@@ -18,8 +18,10 @@ player_t* player_create()
 
 
   player->sprite->frames = 0; //no animation, yet
+  #ifdef PSP
   player->sprite->image->centerX = 16;
   player->sprite->image->centerY = 16; //for angling
+  #endif
   //oslSetImageTileSize(sprite, 0, 0, 32, 32);
 
   return player;

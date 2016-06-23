@@ -8,7 +8,9 @@ Defines common functions for the map's Lua interpreter.
 #define ___MAP_LUA_FUNCTIONS_H___
 
 #include "../tilemap.h"
+#ifdef PSP
 #include <oslib/oslib.h>
+#endif
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>

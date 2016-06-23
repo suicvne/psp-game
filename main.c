@@ -1,9 +1,13 @@
+#ifdef PSP
 #include <pspkernel.h>
 #include <pspnet.h>
 #include <pspnet_inet.h>
 #include <pspnet_apctl.h>
 #include <pspctrl.h>
 #include <oslib/oslib.h>
+#endif
+
+#include "callback.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,6 +31,7 @@
 #define SPEED 4
 #define KNOCKBACK_SPEED 8
 
+#ifdef PSP
 PSP_MODULE_INFO("Analogue Sample", 0, 1, 0);
 PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
 PSP_HEAP_SIZE_KB(12 * 1024);
@@ -43,7 +48,46 @@ int initOSLib()
   oslSetKeyAutorepeatInit(40);
   oslSetKeyAutorepeatInterval(10);
   oslIntraFontInit(INTRAFONT_CACHE_MED);
+  sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
   return 0;
+}
+#endif
+
+vector_t get_analogue_movement()
+{
+  #ifdef PSP
+  SceCtrlData pad;
+  sceCtrlPeekBufferPositive(&pad, 1);
+
+  float padZeroX, padZeroY;
+  padZeroX = ((pad.Lx) - 128) / 127.0f; //128 is directly in middle so i normalize it here to be closer to say unity (-1 to +1)
+  padZeroY = ((pad.Ly) - 128) / 127.0f;
+
+  vector_t return_value = {
+    padZeroX,
+    padZeroY
+  };
+  return return_value;
+  #elif SDL_VERS
+  vector_t return_value = {0.0f, 0.0f};
+  return return_value;
+  #endif
+}
+
+#ifdef SDL_VERS
+int initSDL()
+{
+  return 0;
+}
+#endif
+
+int initSubsystem()
+{
+  #ifdef PSP
+  return initOSLib();
+  #elif SDL_VERS
+  return initSDL();
+  #endif
 }
 
 void initialize_globals(void)
@@ -60,9 +104,11 @@ void initialize_globals(void)
   kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
   //kCamera initialized, not a pointer.
   //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0
+  #ifdef PSP
   kMainFont = oslLoadFontFile("res/ltn0.pgf"); //can't find the font in ppsspp on linux?
     oslIntraFontSetStyle(kMainFont, .4f, RGBA(255, 255, 255, 255), RGBA(0, 0, 0, 255), INTRAFONT_ALIGN_LEFT);
     oslSetFont(kMainFont);
+  #endif
 }
 
 int collides_with(const player_t* player, const sprite_t* sprite)
@@ -90,28 +136,6 @@ vector_t calculate_knockback(int movement_angle)
   return movement;
 }
 
-int draw_forest(int width, int height)
-{
-  int FOREST_SIZE = 513;
-  //oslSetAlpha(OSL_FX_ALPHA, 200);
-  oslSetAlpha(OSL_FX_ALPHA, 200);
-  //void sprite_draw_camera_factor_offset(sprite_t* sprite, const camera_t camera, float movement_factor, int x_offset, int y_offset)
-  int x, y;
-
-  for(x = -FOREST_SIZE; x < width + (FOREST_SIZE * 2); x += FOREST_SIZE)
-  {
-    for(y = -FOREST_SIZE; y < height + (FOREST_SIZE * 2); y += FOREST_SIZE)
-    {
-      sprite_draw_camera_pointer_factor_offset(kForest, kCamera, x, y, 2.0f, 0, 0);
-    }
-  }
-
-  //void sprite_draw_camera_pointer_factor_offset(sprite_t* sprite, const camera_t camera, int x, int y, float movement_factor, int x_offset, int y_offset);
-
-  //sprite_draw_camera_factor_offset(kForest, kCamera, 1.5f, forest_offset_x, 0);
-  oslSetAlpha(OSL_FX_DEFAULT, 255);
-}
-
 tilemap_t* load_level(const char* dir, const char* filename)
 {
   printf("loading file from '%s'..", filename);
@@ -129,36 +153,22 @@ int serializer_test()
 int main(void)
 {
   SetupCallbacks();
-  initOSLib();
+  initSubsystem();
   initialize_globals();
 
   serializer_test();
 
-  sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
-
   tilemap_t* tilemap_test = load_level("./map", "level.bin");
-  //tilemap_t* tilemap_test = tilemap_create(32, 32);
-  //tilemap_test->map_name = "Test Map v2 Format";
   printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
-  //tilemap_write_to_file("level.bin", tilemap_test);
 
   int skip = 0;
   while(1)
   {
-    SceCtrlData pad;
-    sceCtrlPeekBufferPositive(&pad, 1);
-
     tilemap_update(tilemap_test, kCamera);
     /*
     Set rotation
     */
-    float padZeroX, padZeroY;
-    padZeroX = ((pad.Lx) - 128) / 127.0f; //128 is directly in middle so i normalize it here to be closer to say unity (-1 to +1)
-    padZeroY = ((pad.Ly) - 128) / 127.0f;
-
-    vector_t stickInput;
-    stickInput.x = padZeroX;
-    stickInput.y = padZeroY;
+    vector_t stickInput = get_analogue_movement();
 
     if(stickInput.x != 0.0f || stickInput.y != 0.0f)
     {
@@ -206,6 +216,7 @@ int main(void)
     // draw last
     if(!skip)
     {
+      #ifdef PSP
       oslStartDrawing();
       //oslSetAlpha(OSL_FX_DEFAULT, 255);
       //oslSetAlpha(OSL_FX_ALPHA | OSL_FX_COLOR, RGBA(48, 48, 48, 128));
@@ -222,14 +233,19 @@ int main(void)
       oslDrawStringf(10, 2, "%s", tilemap_test->map_name);
       //oslDrawFillRect(0, 0, 480, 272, RGBA(0, 0, 0, 255));
       oslEndDrawing();
+      #endif
     }
+    #ifdef PSP
     oslEndFrame();
     skip = oslSyncFrame();
+    #endif
   }
 
   //tilemap_destroy(tilemap_test);
+  #ifdef PSP
   oslEndGfx();
   oslQuit();
+  #endif
 
   return 0;
 }

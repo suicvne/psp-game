@@ -84,9 +84,7 @@ void tilemap_update(tilemap_t* map, const camera_t cam)
     {
       char buffer[50];
       sprintf(buffer, "Fatal Error during onUpdate: %s", lua_tostring(map->lua_state, -1));
-      #ifdef PSP
-        oslFatalError(buffer);
-      #endif
+      reportFatalError(buffer);
       lua_pop(map->lua_state, 1);
     }
   }
@@ -137,9 +135,7 @@ void tilemap_draw(tilemap_t* map, const camera_t cam)
     {
       char buffer[50];
       sprintf(buffer, "Fatal Error during onDraw: %s", lua_tostring(map->lua_state, -1));
-      #ifdef PSP
-        oslFatalError(buffer);
-      #endif
+      reportFatalError(buffer);
       lua_pop(map->lua_state, 1);
     }
   }
@@ -234,12 +230,12 @@ int tilemap_verify_header(char* buffer, short version)
         buffer[0], buffer[1],
         HEADER_0, HEADER_1
       );
-      oslFatalError(filler);
+      reportFatalError(filler);
     }
     else if(version != VERSION)
     {
       sprintf(filler, "Version mismatch in level file. (got %d; expected %d)", version, VERSION);
-      oslFatalError(filler);
+      reportFatalError(filler);
     }
   }
   return 0;
@@ -296,7 +292,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       /*
       Lua
       */
-      return_value->lua_state = lua_open();
+      return_value->lua_state = luaL_newstate();
       luaL_openlibs(return_value->lua_state);
       if(tilemap_load_lua_file(return_value->lua_state, directory) != 0) //non-zero means error
       {
@@ -320,11 +316,9 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
         }
         else
         {
-          #ifdef PSP
           char tempErrorBuffer[30];
           sprintf(tempErrorBuffer, "%s", lua_tostring(return_value->lua_state, -1));
-          oslFatalError(tempErrorBuffer);
-          #endif
+          reportFatalError(tempErrorBuffer);
           lua_pop(return_value->lua_state, 1);
         }
       }

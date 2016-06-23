@@ -11,6 +11,7 @@ v2 - appends the tileset filename after map_name
 #define ___TILEMAP_H___
 
 #include "tile.h"
+#include "../common.h"
 #include "../camera/camera.h"
 #include "../sprites/sprite.h"
 #include "../player/player.h"

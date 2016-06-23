@@ -15,9 +15,13 @@ typedef struct {
 
 static inline float fastsqrt(float c)
 {
-  float output;
-  asm("sqrt.s %0,%1" : "=f" (output) : "f" (c));
-  return output;
+  #ifdef PSP
+    float output;
+    asm("sqrt.s %0,%1" : "=f" (output) : "f" (c));
+    return output;
+  #elif SDL_VERS
+    return sqrt(c);
+  #endif
 }
 
 float vector_magnitude(vector_t v);
