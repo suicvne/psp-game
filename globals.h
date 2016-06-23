@@ -14,7 +14,7 @@ extern struct sprite_t* kForest;
 extern struct camera_t* kCamera;
 
 #ifdef PSP
-extern OSL_FONT* kMainFont;
+extern struct OSL_FONT* kMainFont;
 #endif
 
 #ifdef SDL_VERS

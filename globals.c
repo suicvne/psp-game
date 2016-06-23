@@ -3,6 +3,10 @@
 #include "player/player.h"
 #include "camera/camera.h"
 
+#ifdef PSP
+#include <oslib/oslib.h>
+#endif
+
 int kQuit;
 struct player_t* kPlayer = NULL;
 struct sprite_t* kTestEntity = NULL; //22x29 sprite on a 32x32 sheet
@@ -11,7 +15,7 @@ struct sprite_t* kForest = NULL;
 struct camera_t* kCamera;
 
 #ifdef PSP
-OSL_FONT* kMainFont;
+struct OSL_FONT* kMainFont;
 #endif
 
 #ifdef SDL_VERS

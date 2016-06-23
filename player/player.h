@@ -9,7 +9,7 @@
 #define ORIGIN_X 224
 #define ORIGIN_Y 120
 
-typedef struct {
+typedef struct player_t {
 
   sprite_t* sprite;
 
