@@ -74,7 +74,6 @@ void player_update(player_t* player)
 {
   #ifdef PSP
   vector_t stickInput = player_get_analogue_movement();
-  printf("analogue values: %.2f, %.2f\n", stickInput.x, stickInput.y);
   if(stickInput.x != 0.0f || stickInput.y != 0.0f)
   {
     float magnitude = vector_magnitude(stickInput);
