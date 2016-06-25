@@ -184,7 +184,6 @@ void sprite_draw_camera(sprite_t* sprite, const camera_t camera)
 
 void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, int y, int sx, int sy, int w, int h)
 {
-  printf("sprite_draw_camera_source called\n");
 
   #ifdef PSP
   if(sprite == NULL)

@@ -7,21 +7,128 @@ void player_destroy(player_t* player)
   free(player);
 }
 
+vector_t player_get_analogue_movement()
+{
+  #ifdef PSP
+  SceCtrlData pad;
+  sceCtrlPeekBufferPositive(&pad, 1);
+
+  float padZeroX, padZeroY;
+  padZeroX = ((pad.Lx) - 128) / 127.0f; //128 is directly in middle so i normalize it here to be closer to say unity (-1 to +1)
+  padZeroY = ((pad.Ly) - 128) / 127.0f;
+
+  vector_t return_value = {
+    padZeroX,
+    padZeroY
+  };
+  return return_value;
+  #elif SDL_VERS
+  vector_t return_value = {0.0f, 0.0f};
+  return return_value;
+  #endif
+}
+
+void player_update_animation_offset(player_t* player, const vector_t* movement)
+{
+  int offset = 0;
+
+  if(movement->x > 0.0f) //right
+  {
+    offset = 4;
+  }
+  else if(movement->x < 0.0f) //left
+  {
+    offset = 3;
+  }
+
+  if(movement->y > 0.0f) //down
+  {
+    offset = 0;
+  }
+  else if(movement->y < 0.0f) //up
+  {
+    offset = 5;
+  }
+
+  if(movement->x > 0.0f && movement->y > 0.0f) //right down
+  {
+    offset = 2;
+  }
+  else if(movement->x > 0.0f && movement->y < 0.0f) //right up
+  {
+    offset = 7;
+  }
+  else if(movement->x < 0.0f && movement->y > 0.0f) //left down
+  {
+    offset = 1;
+  }
+  else if(movement->x < 0.0f && movement->y < 0.0f) //left up
+  {
+    offset = 6;
+  }
+
+  printf("offset: %d\n", offset);
+  player->sprite->yframeoffset = offset;
+}
+
+void player_update(player_t* player)
+{
+  #ifdef PSP
+  vector_t stickInput = player_get_analogue_movement();
+  if(stickInput.x != 0.0f || stickInput.y != 0.0f)
+  {
+    float magnitude = vector_magnitude(stickInput);
+
+    if(magnitude > DEADZONE)
+    {
+      player_update_animation_offset(player, &stickInput);
+    }
+
+    if(magnitude < DEADZONE)
+    {
+      stickInput.x = 0;
+      stickInput.y = 0;
+    }
+
+    float xtrajectory, ytrajectory;
+    xtrajectory = -(PLAYER_SPEED * stickInput.x);
+    ytrajectory = -(PLAYER_SPEED * stickInput.y);
+
+    kCamera->x += xtrajectory;
+    kCamera->y += ytrajectory;
+
+    if(xtrajectory != 0.0f || ytrajectory != 0.0f)
+    { sprite_update(player->sprite); }
+  }
+  #endif
+}
+
 player_t* player_create()
 {
+  //TODO: redef originx and originy
+  int orgX = ((480 / 2) - (PLAYER_WIDTH / 2));;
+  int orgY = ((272 / 2) - (PLAYER_HEIGHT / 2));; //stop
+  //int ORIGIN_X = ((480 / 2) - (PLAYER_WIDTH / 2));
+  //int ORIGIN_Y = ((272 / 2) - (PLAYER_HEIGHT / 2));
+
   player_t* player = malloc(sizeof(player_t));
-  player->sprite = sprite_create("res/edgelord.png", SPRITE_TYPE_PNG);
-  player->sprite->rectangle.x = ORIGIN_X;
-  player->sprite->rectangle.y = ORIGIN_Y;
-  player->sprite->rectangle.w = 32;
-  player->sprite->rectangle.h = 32;
+  player->sprite = sprite_create("res/ness.png", SPRITE_TYPE_PNG);
+  player->sprite->rectangle.x = orgX; //center of the screen
+  player->sprite->rectangle.y = orgY;
+  player->sprite->rectangle.w = PLAYER_WIDTH;
+  player->sprite->rectangle.h = PLAYER_HEIGHT;
 
+  player->sprite->frametime = 10;
+  player->sprite->frames = 2; //no animation, yet
 
-  player->sprite->frames = 0; //no animation, yet
   #ifdef PSP
-  player->sprite->image->centerX = 16;
-  player->sprite->image->centerY = 16; //for angling
+  oslSetImageTileSize(player->sprite->image, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
   #endif
+
+  //#ifdef PSP
+  //player->sprite->image->centerX = 16;
+  //player->sprite->image->centerY = 16; //for angling
+  //#endif
   //oslSetImageTileSize(sprite, 0, 0, 32, 32);
 
   return player;

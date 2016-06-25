@@ -1,29 +1,41 @@
-originX = 10;
-counter = 0;
+ingame_time = 0;
+kMaxTime = 24000;
+afternoon = false;
+
+--0 is 6am
+--6000 is noon (12)
+--12000 is 6pm
 
 function onLoad(map) --map contains table based metadata for the level
 end
 
+function getHour(time)
+  return (time + 6000) / 1000
+end
+
 function onUpdate()
-  --print("Hello world!");
-  if(counter < 2000) then
-    counter = counter + 1;
+  ingame_time = ingame_time + 1;
+
+  if(ingame_time == 12000) then
+    afternoon = true;
+  end
+
+  if(ingame_time == 18000) then
+    afternoon = false;
+  end
+
+  if(ingame_time == kMaxTime) then
+    ingame_time = 0;
   end
 end
 
 function onDraw()
-  draw_text("send nudes", 10, 22);
-  draw_text("send nudes", 10, 32);
-  draw_text("send nudes", 10, 42);
-  draw_text("send nudes", 10, 52);
-  draw_text("send nudes", 10, 62);
-  draw_text("send nudes", 10, 72);
-  --if(counter > 100) then
-    --x = (-(counter * 2 / originX));
-    --draw_text("Welcome to the Jungle", x, 52);
-  --else
---    draw_text("Welcome to the Jungle", originX, 52);
-  --end
+  suffix = "am";
 
-  --draw_text("counter: " .. counter, 10, 22);
+  if(afternoon == true) then
+    suffix = "pm";
+  end
+
+  message = string.format("time: %.2f %s", getHour(ingame_time), suffix);
+  draw_text(message, 10, 22);
 end

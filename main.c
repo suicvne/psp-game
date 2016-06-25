@@ -28,9 +28,6 @@
 
 #include "map/tilemap.h"
 
-#define DEADZONE 0.5
-#define LOOK_DEADZONE 0.5
-#define PLAYER_SPEED 2
 #define SPEED 4
 #define KNOCKBACK_SPEED 8
 
@@ -157,12 +154,6 @@ void initialize_globals(void)
   kCamera = malloc(sizeof(camera_t));
 
   kPlayer = player_create();
-  kTestEntity = sprite_create("res/edgelord.png", SPRITE_TYPE_PNG);
-
-  kTestEntity->rectangle.x = 100;
-  kTestEntity->rectangle.y = 100;
-  kTestEntity->rectangle.w = 32;
-  kTestEntity->rectangle.h = 32;
 
   kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
   //kCamera initialized, not a pointer.
@@ -202,52 +193,8 @@ int update(tilemap_t* tilemap)
   #endif
 
   tilemap_update(tilemap, kCamera);
-  /*
-  Set rotation
-  */
-  vector_t stickInput = get_analogue_movement();
-
-  if(stickInput.x != 0.0f || stickInput.y != 0.0f)
-  {
-    if(vector_magnitude(stickInput) > DEADZONE) //LOOK_DEADZONE
-    {
-      int angular_value = (radToDegree(atan2(stickInput.y, stickInput.x)) - 90);
-      player_setlookangle(kPlayer, angular_value);
-    }
-  }
-  /*
-  End Set rotation
-  */
-
-  /*
-    Begin movement
-  */
-
-  if(stickInput.x != 0.0f || stickInput.y != 0.0f)
-  {
-    if(vector_magnitude(stickInput) < LOOK_DEADZONE) //DEADZONE
-    {
-      stickInput.x = 0;
-      stickInput.y = 0;
-    }
-
-    float xtrajectory, ytrajectory;
-    xtrajectory = -(PLAYER_SPEED * stickInput.x);
-    ytrajectory = -(PLAYER_SPEED * stickInput.y);
-
-    kCamera->x += xtrajectory;
-    kCamera->y += ytrajectory;
-
-    if(collides_with(kPlayer, kTestEntity)) //|| tilemap_is_player_colliding(tilemap_test, kPlayer, kCamera))
-    {
-      kCamera->x -= xtrajectory;
-      kCamera->y -= ytrajectory;
-    }
-  }
-
-  /*
-    End movement
-  */
+  
+  player_update(kPlayer);
 }
 
 int draw(tilemap_t* tilemap)

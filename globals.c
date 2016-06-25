@@ -9,7 +9,7 @@
 
 int kQuit;
 struct player_t* kPlayer = NULL;
-struct sprite_t* kTestEntity = NULL; //22x29 sprite on a 32x32 sheet
+//struct sprite_t* kTestEntity = NULL; //22x29 sprite on a 32x32 sheet
 struct sprite_t* kBackgroundSprite = NULL;
 struct sprite_t* kForest = NULL;
 struct camera_t* kCamera;

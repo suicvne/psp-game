@@ -56,3 +56,21 @@ if(inside_viewport(kCamera, kTestEntity))
 {
   sprite_draw_camera(kTestEntity, kCamera);
 }
+
+kTestEntity = sprite_create("res/edgelord.png", SPRITE_TYPE_PNG);
+
+kTestEntity->rectangle.x = 100;
+kTestEntity->rectangle.y = 100;
+kTestEntity->rectangle.w = 32;
+kTestEntity->rectangle.h = 32;
+
+//COLLISION STUFF
+if(collides_with(kPlayer, kTestEntity)) //|| tilemap_is_player_colliding(tilemap_test, kPlayer, kCamera))
+{
+  kCamera->x -= xtrajectory;
+  kCamera->y -= ytrajectory;
+}
+
+rock bottom
+farm
+low
