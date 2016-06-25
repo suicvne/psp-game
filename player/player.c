@@ -32,42 +32,41 @@ void player_update_animation_offset(player_t* player, const vector_t* movement)
 {
   int offset = 0;
 
-  if(movement->x > 0.0f) //right
+  if(movement->x > 0.3f) //right
   {
     offset = 4;
   }
-  else if(movement->x < 0.0f) //left
+  else if(movement->x < -0.3f) //left
   {
     offset = 3;
   }
 
-  if(movement->y > 0.0f) //down
+  if(movement->y > 0.3f) //down
   {
     offset = 0;
   }
-  else if(movement->y < 0.0f) //up
+  else if(movement->y < -0.3f) //up
   {
     offset = 5;
   }
 
-  if(movement->x > 0.0f && movement->y > 0.0f) //right down
+  if(movement->x > 0.3f && movement->y > 0.3f) //right down
   {
     offset = 2;
   }
-  else if(movement->x > 0.0f && movement->y < 0.0f) //right up
+  else if(movement->x > 0.3f && movement->y < -0.3f) //right up
   {
     offset = 7;
   }
-  else if(movement->x < 0.0f && movement->y > 0.0f) //left down
+  else if(movement->x < -0.3f && movement->y > 0.3f) //left down
   {
     offset = 1;
   }
-  else if(movement->x < 0.0f && movement->y < 0.0f) //left up
+  else if(movement->x < -0.3f && movement->y < -0.3f) //left up
   {
     offset = 6;
   }
 
-  printf("offset: %d\n", offset);
   player->sprite->yframeoffset = offset;
 }
 
@@ -75,6 +74,7 @@ void player_update(player_t* player)
 {
   #ifdef PSP
   vector_t stickInput = player_get_analogue_movement();
+  printf("analogue values: %.2f, %.2f\n", stickInput.x, stickInput.y);
   if(stickInput.x != 0.0f || stickInput.y != 0.0f)
   {
     float magnitude = vector_magnitude(stickInput);
@@ -99,6 +99,8 @@ void player_update(player_t* player)
 
     if(xtrajectory != 0.0f || ytrajectory != 0.0f)
     { sprite_update(player->sprite); }
+    else
+      player->sprite->currentframe = 0;
   }
   #endif
 }
@@ -118,7 +120,7 @@ player_t* player_create()
   player->sprite->rectangle.w = PLAYER_WIDTH;
   player->sprite->rectangle.h = PLAYER_HEIGHT;
 
-  player->sprite->frametime = 10;
+  player->sprite->frametime = 5;
   player->sprite->frames = 2; //no animation, yet
 
   #ifdef PSP
