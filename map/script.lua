@@ -1,41 +1,63 @@
-ingame_time = 0;
-kMaxTime = 24000;
-afternoon = false;
+OSL_FX_NONE=0
+OSL_FX_FLAT = 1
+OSL_FX_ALPHA = 2
+OSL_FX_ADD = 3
+OSL_FX_SUB = 4
+OSL_FX_RGBA = 0x100
+OSL_FX_COLOR = 0x1000
 
---0 is 6am
---6000 is noon (12)
---12000 is 6pm
+kMinutesPerHour = 60;
+kHoursPerDay = 12;
+kTicksPerSecond = 1; --120
+
+hour = 0;
+minute = 0;
+ticks = 0;
+
+kMinLighting = 0.001;
+kMaxLighting = 1.0;
 
 function onLoad(map) --map contains table based metadata for the level
 end
 
-function getHour(time)
-  return (time + 6000) / 1000
+function math.clamp(value, lower, upper)
+  assert(value and lower and upper, "must have all values present for clamp.");
+  if (lower > upper) then
+    lower, upper = upper, lower
+  end
+  return math.max(lower, math.min(upper, value));
+end
+
+function calculateLighting()
+  time = (hour + (minute / kMinutesPerHour)) / kHoursPerDay;
+  light = kMaxLighting * math.sin(2 * math.pi * time);
+  return math.clamp(light, kMinLighting, kMaxLighting);
 end
 
 function onUpdate()
-  ingame_time = ingame_time + 1;
+  ticks = ticks + 1;
+  if(ticks == kTicksPerSecond) then
+    minute = minute + 1;
+    if(minute == kMinutesPerHour) then
+      hour = hour + 1;
+      minute = 0;
+    end
 
-  if(ingame_time == 12000) then
-    afternoon = true;
-  end
+    if(hour == kHoursPerDay) then
+      hour = 0;
+    end
 
-  if(ingame_time == 18000) then
-    afternoon = false;
-  end
-
-  if(ingame_time == kMaxTime) then
-    ingame_time = 0;
+    ticks = 0;
   end
 end
 
 function onDraw()
-  suffix = "am";
 
-  if(afternoon == true) then
-    suffix = "pm";
-  end
+  draw_set_alpha_color(RGBA(255, 127, 0));
 
-  message = string.format("time: %.2f %s", getHour(ingame_time), suffix);
-  draw_text(message, 10, 22);
+  draw_filled_rect(0, 0, 240, 272, RGBA(255, 255, 255, 255));
+
+  draw_set_alpha(OSL_FX_RGBA, 0);
+
+  message = string.format("time: %d:%02d", hour, minute, ticks);
 end

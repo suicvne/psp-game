@@ -17,7 +17,12 @@ Defines common functions for the map's Lua interpreter.
 
 int lua_map_print(lua_State* L);
 int lua_map_draw_text(lua_State* L);
+int lua_map_rgba(lua_State* L);
 int lua_map_register_functions(lua_State* L);
+int lua_map_draw_rect(lua_State* L);
+
+int lua_map_set_blending(lua_State* L);
+int lua_map_test_blending(lua_State* L);
 
 //int lua_map_push_tilemap(lua_State* L, tilemap_t* map);
 

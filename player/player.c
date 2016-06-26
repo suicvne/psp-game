@@ -119,7 +119,7 @@ player_t* player_create()
   player->sprite->rectangle.w = PLAYER_WIDTH;
   player->sprite->rectangle.h = PLAYER_HEIGHT;
 
-  player->sprite->frametime = 5;
+  player->sprite->frametime = PLAYER_SPEED * 2.5;
   player->sprite->frames = 2; //no animation, yet
 
   #ifdef PSP
