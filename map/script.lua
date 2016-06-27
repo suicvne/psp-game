@@ -53,11 +53,11 @@ end
 
 function onDraw()
 
-  draw_set_alpha_color(RGBA(255, 127, 0));
+  --draw_set_alpha_color(RGBA(255, 127, 0));
 
-  draw_filled_rect(0, 0, 240, 272, RGBA(255, 255, 255, 255));
+  --draw_filled_rect(0, 0, 240, 272, RGBA(255, 255, 255, 255));
 
-  draw_set_alpha(OSL_FX_RGBA, 0);
+  --draw_set_alpha(OSL_FX_COLOR, 0);
 
   message = string.format("time: %d:%02d", hour, minute, ticks);
 end

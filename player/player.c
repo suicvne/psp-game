@@ -98,9 +98,9 @@ void player_update(player_t* player)
 
     if(xtrajectory != 0.0f || ytrajectory != 0.0f)
     { sprite_update(player->sprite); }
-    else
-      player->sprite->currentframe = 0;
   }
+  else
+    player->sprite->currentframe = 0;
   #endif
 }
 

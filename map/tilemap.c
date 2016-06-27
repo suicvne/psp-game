@@ -123,6 +123,16 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
     }
   }
 
+  //oslSetAlpha(OSL_FX_ALPHA, RGBA(255, 127, 0, 255));
+  //oslSetAlpha(OSL_FX_ALPHA, 255);
+  //oslDrawFillRect(0, 0, 480, 272, RGBA(255, 255, 255, 255));
+
+  //oslDrawFillRect(20, 20, 100, 100, RGBA(255, 127, 0, 255));
+
+  //oslSetAlpha(OSL_FX_ALPHA, 255);
+
+
+
   /*
   Lua
   */
