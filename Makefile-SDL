@@ -11,6 +11,8 @@ compile:
 	gcc $(CFLAGS) -Wall $(LOCAL_DEPS) -o gen/$(TARGET) $(LIBS)
 run:
 	gen/$(TARGET)
+edit:
+	gen/$(TARGET) --level-editor
 clean:
 	rm -rf src/*.o src/map/*.o src/player/*.o src/serialization/*.o src/sprites/*.o src/vector/*.o
 	rm gen/$(TARGET)

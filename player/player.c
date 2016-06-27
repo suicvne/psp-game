@@ -68,8 +68,16 @@ void player_update(player_t* player)
     }
 
     float xtrajectory, ytrajectory;
-    xtrajectory = -(PLAYER_SPEED * stickInput.x);
-    ytrajectory = -(PLAYER_SPEED * stickInput.y);
+    if(kLevelEditorMode)
+    {
+      xtrajectory = -(PLAYER_SPEED * stickInput.x);
+      ytrajectory = -(PLAYER_SPEED * stickInput.y);
+    }
+    else
+    {
+      xtrajectory = -(PLAYER_SPEED * stickInput.x);
+      ytrajectory = -(PLAYER_SPEED * stickInput.y);
+    }
 
     kCamera->x += xtrajectory;
     kCamera->y += ytrajectory;

@@ -14,6 +14,7 @@
 
 static const float DEADZONE = 0.5f;
 static const int PLAYER_SPEED = 2;
+static const int PLAYER_SPEED_EDITOR = 4;
 static const int PLAYER_WIDTH = 15;
 static const int PLAYER_HEIGHT = 24;
 

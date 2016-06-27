@@ -2,6 +2,9 @@
 
 int tilemap_load_lua_file(lua_State* L, const char* directory)
 {
+  if(kLevelEditorMode)
+    return 0;
+
   int error;
 
   char combined_filename[30];
@@ -42,6 +45,7 @@ tilemap_t* tilemap_create(int width, int height)
   tilemap->tileset = sprite_create(buffer, SPRITE_TYPE_PNG);
 
   tilemap->map_name = "Test Map";
+  tilemap->lua_state = NULL;
 
   return tilemap;
 }
@@ -52,7 +56,6 @@ void tilemap_destroy(tilemap_t* map)
   assert(map != NULL);
   assert(map->tiles != NULL);
   assert(map->tileset != NULL);
-  assert(map->lua_state != NULL);
 
   if(map->lua_state != NULL)
   {
@@ -75,7 +78,7 @@ void tilemap_update(tilemap_t* map, const camera_t* cam)
   Lua
   */
 
-  if(map->lua_state != NULL)
+  if(map->lua_state != NULL && !kLevelEditorMode)
   {
     lua_getglobal(map->lua_state, "onUpdate");
     if(lua_isnil(map->lua_state, -1))
@@ -136,7 +139,7 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
   /*
   Lua
   */
-  if(map->lua_state != NULL)
+  if(map->lua_state != NULL && !kLevelEditorMode)
   {
     lua_getglobal(map->lua_state, "onDraw");
     if(lua_isnil(map->lua_state, -1))
@@ -302,34 +305,37 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       /*
       Lua
       */
-      return_value->lua_state = luaL_newstate();
-      luaL_openlibs(return_value->lua_state);
-      if(tilemap_load_lua_file(return_value->lua_state, directory) != 0) //non-zero means error
+      if(!kLevelEditorMode)
       {
-        fprintf(stderr, "No Lua script assosciated with level. Freeing lua_state\n");
-        lua_close(return_value->lua_state);
-        return_value->lua_state = NULL;
-      }
-      else
-      {
-        lua_map_register_functions(return_value->lua_state);
-
-        int initError = lua_pcall(return_value->lua_state, 0, LUA_MULTRET, 0); //this call is necessary to "init" the script and index the globals i guess
-        if(!initError)
+        return_value->lua_state = luaL_newstate();
+        luaL_openlibs(return_value->lua_state);
+        if(tilemap_load_lua_file(return_value->lua_state, directory) != 0) //non-zero means error
         {
-          lua_getglobal(return_value->lua_state, "onLoad");
-          if(lua_isnil(return_value->lua_state, -1))
-          {
-            printf("No onLoad function, skipping.\n");
-          }
-          //TODO: call
+          fprintf(stderr, "No Lua script assosciated with level. Freeing lua_state\n");
+          lua_close(return_value->lua_state);
+          return_value->lua_state = NULL;
         }
         else
         {
-          char tempErrorBuffer[30];
-          sprintf(tempErrorBuffer, "%s", lua_tostring(return_value->lua_state, -1));
-          reportFatalError(tempErrorBuffer);
-          lua_pop(return_value->lua_state, 1);
+          lua_map_register_functions(return_value->lua_state);
+
+          int initError = lua_pcall(return_value->lua_state, 0, LUA_MULTRET, 0); //this call is necessary to "init" the script and index the globals i guess
+          if(!initError)
+          {
+            lua_getglobal(return_value->lua_state, "onLoad");
+            if(lua_isnil(return_value->lua_state, -1))
+            {
+              printf("No onLoad function, skipping.\n");
+            }
+            //TODO: call
+          }
+          else
+          {
+            char tempErrorBuffer[30];
+            sprintf(tempErrorBuffer, "%s", lua_tostring(return_value->lua_state, -1));
+            reportFatalError(tempErrorBuffer);
+            lua_pop(return_value->lua_state, 1);
+          }
         }
       }
       /*

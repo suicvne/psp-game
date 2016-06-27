@@ -10,6 +10,34 @@ input_t* input_create()
   return return_value;
 }
 
+#ifdef SDL_VERS
+void get_scales(float* w, float* h)
+{
+  int ww, wh;
+  SDL_GetWindowSize(kSdlWindow, &ww, &wh);
+
+  *w = ww / SCREEN_WIDTH;
+  *h = wh / SCREEN_HEIGHT;
+}
+
+vector_t input_mouse_to_world(input_t* input, camera_t* camera)
+{
+  int window_width, window_height;
+  SDL_GetWindowSize(kSdlWindow, &window_width, &window_height);
+
+  float w_scale;
+  float h_scale;
+  get_scales(&w_scale, &h_scale);
+
+  vector_t value;
+  value.x = ((int)-camera->x) + (input->mouse_x) / w_scale;
+  value.y = ((int)-camera->y) + (input->mouse_y) / h_scale;
+
+  printf("coords: %.2f, %.2f\n", value.x, value.y);
+  return value;
+}
+#endif
+
 void input_destroy(input_t* input)
 {
   assert(input != NULL);
@@ -63,6 +91,9 @@ void input_update(input_t* input)
       break;
     }
   }
+
+  SDL_GetMouseState(&input->mouse_x, &input->mouse_y);
+
   #elif PSP
   SceCtrlData pad;
   sceCtrlPeekBufferPositive(&pad, 1);
@@ -70,7 +101,7 @@ void input_update(input_t* input)
   float padZeroX, padZeroY;
   padZeroX = ((pad.Lx) - 128) / 127.0f; //128 is directly in middle so i normalize it here to be closer to say unity (-1 to +1)
   padZeroY = ((pad.Ly) - 128) / 127.0f;
-  
+
   input->analogue_input.x = padZeroX;
   input->analogue_input.y = padZeroY;
   #endif

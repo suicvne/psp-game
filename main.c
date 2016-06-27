@@ -29,17 +29,6 @@
 
 #include "map/tilemap.h"
 
-#define SPEED 4
-#define KNOCKBACK_SPEED 8
-
-#ifndef SCREEN_WIDTH
-#define SCREEN_WIDTH 480
-#endif
-
-#ifndef SCREEN_WIDTH
-#define SCREEN_HEIGHT 272
-#endif
-
 #ifdef PSP
 PSP_MODULE_INFO("Analogue Sample", 0, 1, 0);
 PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
@@ -77,6 +66,7 @@ int initWindow()
     SDL_Quit();
     return 1;
   }
+  return 0;
 }
 
 int initRenderer()
@@ -90,6 +80,7 @@ int initRenderer()
     return 1;
   }
   SDL_RenderSetLogicalSize(kSdlRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+  return 0;
 }
 
 int shutdown_SDL()
@@ -115,7 +106,7 @@ int initSDL()
 
   initRenderer();
 
-  if(!IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)
+  if(!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
   {
     fprintf(stderr, "Error initializing SDL_Image: %s\n", SDL_GetError());
     return 1;
@@ -137,15 +128,12 @@ int initSubsystem()
 void initialize_globals(void)
 {
   kCamera = camera_create(0, 0);
-
   kInput = input_create();
-
   kPlayer = player_create();
-
   kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
-  //kCamera initialized, not a pointer.
-  //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0
+
   #ifdef PSP
+  //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0
   kMainFont = oslLoadFontFile("res/ltn0.pgf"); //can't find the font in ppsspp on linux?
     oslIntraFontSetStyle(kMainFont, .4f, RGBA(255, 255, 255, 255), RGBA(0, 0, 0, 255), INTRAFONT_ALIGN_LEFT);
     oslSetFont(kMainFont);
@@ -206,14 +194,49 @@ void draw(tilemap_t* tilemap)
   SDL_RenderClear(kSdlRenderer);
 
   tilemap_draw(tilemap, kCamera);
-  sprite_draw(kPlayer->sprite);
+
+  if(kLevelEditorMode)
+  {
+    vector_t location = input_mouse_to_world(kInput, kCamera);
+    SDL_Rect rect;
+
+    rect.x = ((floor(location.x / 32) * 32) + kCamera->x);
+    rect.y = ((floor(location.y / 32) * 32) + kCamera->y);
+    rect.w = 32;
+    rect.h = 32;
+
+    SDL_RenderDrawRect(kSdlRenderer, &rect);
+  }
+  else
+    sprite_draw(kPlayer->sprite);
 
   SDL_RenderPresent(kSdlRenderer);
   #endif
 }
 
-int main(void)
+int main(int argc, char** argv)
 {
+  printf("\n---Args---\n\n");
+  int i;
+  for(i = 0; i < argc; i++)
+  {
+    printf("%d: %s\n", i, argv[i]);
+    if(strcmp("--level-editor", argv[i]) != 0)
+    {
+      kLevelEditorMode = 1;
+      printf("\n!!! LEVEL EDITOR MODE !!!\n\tLua scripts will not be executed.");
+      break;
+    }
+  }
+  printf("\n---End args---\n\n");
+
+  #if PSP
+  if(kLevelEditorMode)
+  {
+    reportFatalError("How the fuck did you get level edit mode on the PSP?");
+  }
+  #endif
+
   SetupCallbacks();
   initSubsystem();
   initialize_globals();
