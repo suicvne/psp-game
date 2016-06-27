@@ -15,7 +15,7 @@ typedef enum {
 
 typedef struct {
   short id;
-  //vector_t sheet_location;
+  short angle;
   TILE_TYPE tile_type;
 } tile_t;
 

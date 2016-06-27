@@ -101,6 +101,7 @@ void editor_draw_editor(level_editor_t* editor)
   /**
   Draw Current Tile
   */
+
   vector_t sheet_location = tile_get_location_by_id(editor->current_tile_id);
   sprite_draw_source(editor->tilemap->tileset, rect.x, rect.y, sheet_location.x, sheet_location.y, 32, 32);
   /**
@@ -190,6 +191,29 @@ void editor_update(level_editor_t* editor)
       editor->current_tile_id = tile_get_id_by_location(sx, sy);
       printf("id: %d\n", editor->current_tile_id);
       editor->current_screen = EDITOR_SCREEN_EDIT;
+      SDL_Delay(200);
+      SDL_PumpEvents();
+    }
+  }
+
+  if(editor->current_screen == EDITOR_SCREEN_EDIT)
+  {
+    if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
+    {
+      vector_t location = input_mouse_to_world(kInput, kCamera);
+      int sx, sy;
+      sx = floor(location.x / 32);
+      sy = floor(location.y / 32); //to normalize
+      if(sx > 0 && sx < editor->tilemap->width * 32)
+      {
+        if(sy > 0 && sy < editor->tilemap->height * 32)
+        {
+          int index = sx * editor->tilemap->height + sy;
+          tile_t tile = editor->tilemap->tiles[index];
+          tile.id = editor->current_tile_id;
+          editor->tilemap->tiles[index] = tile;
+        }
+      }
     }
   }
 
