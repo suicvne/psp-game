@@ -66,12 +66,44 @@ void editor_destroy(level_editor_t* editor)
   free(editor);
 }
 
-int editor_load_level(level_editor_t* editor, const char* dir, const char* filename)
+int editor_load_level(level_editor_t* editor)
 {
+  const char* filters[1] = {"*.bin"};
 
+  const char* full_filename = tinyfd_openFileDialog("Open Level File", "", 1, filters, NULL, 0);
+  if(!full_filename)
+  {
+    return 1; //canceled
+  }
+
+  char filename[30];
+
+  char* match = strrchr(full_filename, '/'); //TODO: correct for Windows systems.
+  if(match != NULL)
+  {
+    //match is now /level.bin
+    strncpy(filename, match + 1, sizeof(filename) - 1);
+    puts(filename);
+  }
+
+  char* match2 = strstr(full_filename, filename);
+  if(match2 != NULL)
+  {
+    strncpy(match2, "", 30);
+    puts(full_filename);
+  }
+
+  tilemap_destroy(editor->tilemap);
+  editor->tilemap = tilemap_read_from_file(full_filename, filename); //full is now directory.
+  editor->current_screen = EDITOR_SCREEN_EDIT;
+  editor->current_tile_id = 0;
+  editor->directory = full_filename;
+  editor->filename = filename;
+  SDL_Delay(200);
+  return 0;
 }
 
-int editor_save_level(level_editor_t* editor, const char* dir, const char* filename)
+int editor_save_level(level_editor_t* editor)
 {
 
 }
@@ -163,11 +195,22 @@ void editor_draw(level_editor_t* editor)
   }
 }
 
-void editor_update(level_editor_t* editor)
+void editor_handle_input(level_editor_t* editor)
 {
-  input_update(kInput);
+  if(kSdlEvent.type == SDL_KEYDOWN)
+  {
+    const Uint8* keyboard_state;
+    keyboard_state = SDL_GetKeyboardState(NULL);
+    if(keyboard_state[SDL_SCANCODE_LCTRL] && keyboard_state[SDL_SCANCODE_O]) //open
+    {
+      editor_load_level(editor);
+    }
+    else if(keyboard_state[SDL_SCANCODE_LCTRL] && keyboard_state[SDL_SCANCODE_S]) //save
+    {
 
-  if(kSdlEvent.type == SDL_KEYUP)
+    }
+  }
+  else if(kSdlEvent.type == SDL_KEYUP)
   {
     if(kSdlEvent.key.keysym.sym == SDLK_j)
     {
@@ -216,6 +259,12 @@ void editor_update(level_editor_t* editor)
       }
     }
   }
+}
+
+void editor_update(level_editor_t* editor)
+{
+  input_update(kInput);
+  editor_handle_input(editor);
 
   tilemap_update(editor->tilemap, kCamera);
   player_update(kPlayer);

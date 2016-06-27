@@ -71,6 +71,8 @@ void tilemap_destroy(tilemap_t* map)
   free(map->tiles);
   free(map);
   //TODO: SDL_DestroyTexture for SDL
+  #else
+  SDL_DestroyTexture(map->tileset);
   #endif
 }
 
@@ -305,6 +307,11 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       char temp[60];
       sprintf(temp, "res/%s", tileset_path);
       return_value->tileset = sprite_create(temp, SPRITE_TYPE_PNG);
+      return_value->tileset->rectangle.w = 256;
+      return_value->tileset->rectangle.h = 256;
+      return_value->tileset->rectangle.x = 0;
+      return_value->tileset->rectangle.y = 0;
+
 
       /*
       Lua

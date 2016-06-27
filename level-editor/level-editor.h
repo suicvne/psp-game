@@ -39,9 +39,10 @@ typedef struct level_editor_t {
 level_editor_t* editor_create();
 void editor_destroy(level_editor_t* editor);
 
-int editor_load_level(level_editor_t* editor, const char* dir, const char* filename);
-int editor_save_level(level_editor_t* editor, const char* dir, const char* filename);
+int editor_load_level(level_editor_t* editor);
+int editor_save_level(level_editor_t* editor);
 
+void editor_handle_input(level_editor_t* editor);
 void editor_draw(level_editor_t* editor);
 void editor_update(level_editor_t* editor);
 
