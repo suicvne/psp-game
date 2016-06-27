@@ -7,27 +7,6 @@ void player_destroy(player_t* player)
   free(player);
 }
 
-vector_t player_get_analogue_movement()
-{
-  #ifdef PSP
-  SceCtrlData pad;
-  sceCtrlPeekBufferPositive(&pad, 1);
-
-  float padZeroX, padZeroY;
-  padZeroX = ((pad.Lx) - 128) / 127.0f; //128 is directly in middle so i normalize it here to be closer to say unity (-1 to +1)
-  padZeroY = ((pad.Ly) - 128) / 127.0f;
-
-  vector_t return_value = {
-    padZeroX,
-    padZeroY
-  };
-  return return_value;
-  #elif SDL_VERS
-  vector_t return_value = {0.0f, 0.0f};
-  return return_value;
-  #endif
-}
-
 void player_update_animation_offset(player_t* player, const vector_t* movement)
 {
   int offset = 0;
@@ -72,8 +51,7 @@ void player_update_animation_offset(player_t* player, const vector_t* movement)
 
 void player_update(player_t* player)
 {
-  #ifdef PSP
-  vector_t stickInput = player_get_analogue_movement();
+  vector_t stickInput = kInput->analogue_input;
   if(stickInput.x != 0.0f || stickInput.y != 0.0f)
   {
     float magnitude = vector_magnitude(stickInput);
@@ -101,7 +79,6 @@ void player_update(player_t* player)
   }
   else
     player->sprite->currentframe = 0;
-  #endif
 }
 
 player_t* player_create()

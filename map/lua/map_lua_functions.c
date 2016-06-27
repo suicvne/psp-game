@@ -115,8 +115,10 @@ int lua_map_set_blending(lua_State* L)
 
 int lua_map_test_blending(lua_State* L)
 {
+  #ifdef PSP
   int color = lua_tonumber(L, 1);
   oslSetAlpha(OSL_FX_ALPHA | OSL_FX_COLOR, color);
+  #endif
   return 0;
 }
 

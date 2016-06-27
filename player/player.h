@@ -2,6 +2,7 @@
 #define ___PLAYER_H___
 
 #include "../sprites/sprite.h"
+#include "../input/input.h"
 #include "../vector/vector.h"
 #include "../globals.h"
 #include <malloc.h>
@@ -27,6 +28,5 @@ void player_destroy(player_t* player);
 void player_setlookangle(player_t* player, int angle);
 void player_update(player_t* player);
 void player_update_animation_offset(player_t* player, const vector_t* movement);
-vector_t player_get_analogue_movement();
 
 #endif //___PLAYER_H___

@@ -22,6 +22,7 @@
 #include "vector/vector.h"
 #include "camera/camera.h"
 #include "globals.h"
+#include "input/input.h"
 
 #include "serialization/serialization_reader.h"
 #include "serialization/serializer.h"
@@ -61,32 +62,15 @@ int initOSLib()
 }
 #endif
 
-vector_t get_analogue_movement()
-{
-  #ifdef PSP
-  SceCtrlData pad;
-  sceCtrlPeekBufferPositive(&pad, 1);
-
-  float padZeroX, padZeroY;
-  padZeroX = ((pad.Lx) - 128) / 127.0f; //128 is directly in middle so i normalize it here to be closer to say unity (-1 to +1)
-  padZeroY = ((pad.Ly) - 128) / 127.0f;
-
-  vector_t return_value = {
-    padZeroX,
-    padZeroY
-  };
-  return return_value;
-  #elif SDL_VERS
-  vector_t return_value = {0.0f, 0.0f};
-  return return_value;
-  #endif
-}
-
 #ifdef SDL_VERS
 
 int initWindow()
 {
-  kSdlWindow = SDL_CreateWindow("Level Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+  kSdlWindow = SDL_CreateWindow("Level Editor",
+    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2,
+    SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
+  );
   if(kSdlWindow == NULL)
   {
     fprintf(stderr, "Error creating window: %s\n", SDL_GetError());
@@ -105,6 +89,7 @@ int initRenderer()
     SDL_Quit();
     return 1;
   }
+  SDL_RenderSetLogicalSize(kSdlRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 int shutdown_SDL()
@@ -151,7 +136,9 @@ int initSubsystem()
 
 void initialize_globals(void)
 {
-  kCamera = malloc(sizeof(camera_t));
+  kCamera = camera_create(0, 0);
+
+  kInput = input_create();
 
   kPlayer = player_create();
 
@@ -163,6 +150,14 @@ void initialize_globals(void)
     oslIntraFontSetStyle(kMainFont, .4f, RGBA(255, 255, 255, 255), RGBA(0, 0, 0, 255), INTRAFONT_ALIGN_LEFT);
     oslSetFont(kMainFont);
   #endif
+}
+
+void destroy_globals(void)
+{
+  camera_destroy(kCamera);
+  input_destroy(kInput);
+  player_destroy(kPlayer);
+  sprite_destroy(kForest);
 }
 
 int collides_with(const player_t* player, const sprite_t* sprite)
@@ -179,25 +174,16 @@ tilemap_t* load_level(const char* dir, const char* filename)
   return tilemap_read_from_file(dir, filename);
 }
 
-int update(tilemap_t* tilemap)
+void update(tilemap_t* tilemap)
 {
-  #ifdef SDL_VERS
-  while(SDL_PollEvent(&kSdlEvent))
-  {
-    if(kSdlEvent.type == SDL_QUIT)
-    {
-      kQuit = 1;
-      shutdown_SDL();
-    }
-  }
-  #endif
+  input_update(kInput);
 
   tilemap_update(tilemap, kCamera);
-  
+
   player_update(kPlayer);
 }
 
-int draw(tilemap_t* tilemap)
+void draw(tilemap_t* tilemap)
 {
   #ifdef PSP
   // draw last
@@ -220,6 +206,7 @@ int draw(tilemap_t* tilemap)
   SDL_RenderClear(kSdlRenderer);
 
   tilemap_draw(tilemap, kCamera);
+  sprite_draw(kPlayer->sprite);
 
   SDL_RenderPresent(kSdlRenderer);
   #endif
@@ -242,7 +229,9 @@ int main(void)
     draw(tilemap_test);
   }
 
-  //tilemap_destroy(tilemap_test);
+  destroy_globals();
+  tilemap_destroy(tilemap_test);
+
   #ifdef PSP
   oslEndGfx();
   oslQuit();

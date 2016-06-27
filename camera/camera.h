@@ -4,6 +4,7 @@
 #include "../vector/vector.h"
 #include "../graphics/common.h" //for rectangle_t
 #include <stdlib.h> //abs
+#include <assert.h>
 
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 272
@@ -17,6 +18,9 @@ typedef struct camera_t {
   float x, y; //the X and Y offsets at which to draw everything else.
 
 } camera_t;
+
+camera_t* camera_create(int x, int y);
+void camera_destroy(camera_t* camera);
 
 vector_t camera_player_to_world(const camera_t* camera);
 

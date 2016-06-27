@@ -5,7 +5,7 @@ PKGCONFIG = $(shell which pkg-config)
 CFLAGS = $(shell $(PKGCONFIG) --cflags sdl2) $(shell $(PKGCONFIG) --cflags SDL2_image) $(shell $(PKGCONFIG) --cflags lua5.2) -DSDL_VERS
 LIBS = $(shell $(PKGCONFIG) --libs sdl2) $(shell $(PKGCONFIG) --libs SDL2_image)  $(shell $(PKGCONFIG) --libs lua5.2) -lm
 
-LOCAL_DEPS = sprites/*.c camera/*.c map/*.c map/lua/*.c player/*.c serialization/*.c vector/*.c *.c
+LOCAL_DEPS = sprites/*.c input/*.c camera/*.c map/*.c map/lua/*.c player/*.c serialization/*.c vector/*.c *.c
 
 compile:
 	gcc $(CFLAGS) -Wall $(LOCAL_DEPS) -o gen/$(TARGET) $(LIBS)

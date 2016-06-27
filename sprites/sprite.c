@@ -37,6 +37,12 @@ sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type)
     return NULL;
   }
 
+  #ifdef SDL_VERS
+  sprite->angle = 0; //no rotation
+  sprite->center.x = 0;
+  sprite->center.y = 0; //top left
+  #endif
+
   return sprite;
 }
 
@@ -205,8 +211,8 @@ void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, i
   src_rect.h = h;
 
   SDL_Rect dst_rect;
-  dst_rect.x = sprite->rectangle.x + camera.x;
-  dst_rect.y = sprite->rectangle.y + camera.y;
+  dst_rect.x = x + camera.x;
+  dst_rect.y = y + camera.y;
   dst_rect.w = w;
   dst_rect.h = h;
 
