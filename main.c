@@ -196,20 +196,7 @@ void draw(tilemap_t* tilemap)
 
   tilemap_draw(tilemap, kCamera);
 
-  if(kLevelEditorMode)
-  {
-    vector_t location = input_mouse_to_world(kInput, kCamera);
-    SDL_Rect rect;
-
-    rect.x = ((floor(location.x / 32) * 32) + kCamera->x);
-    rect.y = ((floor(location.y / 32) * 32) + kCamera->y);
-    rect.w = 32;
-    rect.h = 32;
-
-    SDL_RenderDrawRect(kSdlRenderer, &rect);
-  }
-  else
-    sprite_draw(kPlayer->sprite);
+  sprite_draw(kPlayer->sprite);
 
   SDL_RenderPresent(kSdlRenderer);
   #endif
