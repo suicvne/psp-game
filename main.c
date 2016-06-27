@@ -23,6 +23,7 @@
 #include "camera/camera.h"
 #include "globals.h"
 #include "input/input.h"
+#include "level-editor/level-editor.h"
 
 #include "serialization/serialization_reader.h"
 #include "serialization/serializer.h"
@@ -221,7 +222,7 @@ int main(int argc, char** argv)
   for(i = 0; i < argc; i++)
   {
     printf("%d: %s\n", i, argv[i]);
-    if(strcmp("--level-editor", argv[i]) != 0)
+    if(strcmp("--level-editor", argv[i]) == 0)
     {
       kLevelEditorMode = 1;
       printf("\n!!! LEVEL EDITOR MODE !!!\n\tLua scripts will not be executed.");
@@ -241,19 +242,35 @@ int main(int argc, char** argv)
   initSubsystem();
   initialize_globals();
 
-  tilemap_t* tilemap_test = load_level("./map", "level.bin");
-  printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
-
   kQuit = 0;
-  while(!kQuit)
+
+  if(kLevelEditorMode)
   {
-    update(tilemap_test);
+    #if SDL_VERS
+    level_editor_t* editor = editor_create();
+    while(!kQuit)
+    {
+      editor_update(editor);
 
-    draw(tilemap_test);
+      editor_draw(editor);
+    }
+    #endif
   }
+  else
+  {
+    tilemap_t* tilemap_test = load_level("./map", "level.bin");
+    printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
 
+    while(!kQuit)
+    {
+      update(tilemap_test);
+
+      draw(tilemap_test);
+    }
+
+    tilemap_destroy(tilemap_test);
+  }
   destroy_globals();
-  tilemap_destroy(tilemap_test);
 
   #ifdef PSP
   oslEndGfx();

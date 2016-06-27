@@ -33,7 +33,6 @@ vector_t input_mouse_to_world(input_t* input, camera_t* camera)
   value.x = ((int)-camera->x) + (input->mouse_x) / w_scale;
   value.y = ((int)-camera->y) + (input->mouse_y) / h_scale;
 
-  printf("coords: %.2f, %.2f\n", value.x, value.y);
   return value;
 }
 #endif
