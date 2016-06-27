@@ -43,6 +43,10 @@ tilemap_t* tilemap_create(int width, int height)
   char buffer[20];
   sprintf(buffer, "res/%s", tilemap->tileset_path);
   tilemap->tileset = sprite_create(buffer, SPRITE_TYPE_PNG);
+  tilemap->tileset->rectangle.w = 256;
+  tilemap->tileset->rectangle.h = 256;
+  tilemap->tileset->rectangle.x = 0;
+  tilemap->tileset->rectangle.y = 0;
 
   tilemap->map_name = "Test Map";
   tilemap->lua_state = NULL;

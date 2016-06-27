@@ -53,6 +53,7 @@ void sprite_destroy(sprite_t* sprite);
 void sprite_set_angle(sprite_t* sprite, int angle);
 
 void sprite_draw(sprite_t* sprite);
+void sprite_draw_source(sprite_t* sprite, int x, int y, int sx, int sy, int w, int h);
 void sprite_draw_offset(sprite_t* sprite, int x_offset, int y_offset);
 void sprite_draw_camera(sprite_t* sprite, const camera_t camera);
 void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, int y, int sx, int sy, int w, int h);

@@ -227,6 +227,45 @@ void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, i
   #endif
 }
 
+void sprite_draw_source(sprite_t* sprite, int x, int y, int sx, int sy, int w, int h)
+{
+
+  #ifdef PSP
+  if(sprite == NULL)
+  {
+    oslFatalError("passed sprite was null");
+  }
+  oslSetImageTileSize(sprite->image, sx, sy, w, h);
+
+  oslDrawImageXY(
+    sprite->image,
+    x,
+    y
+  );
+  #else
+  SDL_Rect src_rect;
+  src_rect.x = sx;
+  src_rect.y = sy;
+  src_rect.w = w;
+  src_rect.h = h;
+
+  SDL_Rect dst_rect;
+  dst_rect.x = x;
+  dst_rect.y = y;
+  dst_rect.w = w;
+  dst_rect.h = h;
+
+  SDL_RenderCopyEx(kSdlRenderer,
+    sprite->image,
+    &src_rect,
+    &dst_rect,
+    sprite->angle,
+    NULL,
+    SDL_FLIP_NONE
+  );
+  #endif
+}
+
 /**
 Draws a sprite given a camera with a factor at which to move it for say, slower movement.
 */

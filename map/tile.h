@@ -20,5 +20,6 @@ typedef struct {
 } tile_t;
 
 vector_t tile_get_location_by_id(short id);
+short tile_get_id_by_location(int x, int y);
 
 #endif //___TILE_H___

@@ -21,3 +21,11 @@ vector_t tile_get_location_by_id(short id)
 
   return return_value;
 }
+
+short tile_get_id_by_location(int x, int y)
+{
+  if(x > SHEET_WIDTH || y > SHEET_WIDTH)
+    return 0;
+
+    return 0; //TODO
+}

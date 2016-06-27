@@ -30,8 +30,16 @@ vector_t input_mouse_to_world(input_t* input, camera_t* camera)
   get_scales(&w_scale, &h_scale);
 
   vector_t value;
-  value.x = ((int)-camera->x) + (input->mouse_x) / w_scale;
-  value.y = ((int)-camera->y) + (input->mouse_y) / h_scale;
+  if(camera != NULL)
+  {
+    value.x = ((int)-camera->x) + (input->mouse_x) / w_scale;
+    value.y = ((int)-camera->y) + (input->mouse_y) / h_scale;
+  }
+  else
+  {
+    value.x = (input->mouse_x) / w_scale;
+    value.y = (input->mouse_y) / h_scale;
+  }
 
   return value;
 }
