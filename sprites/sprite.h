@@ -60,6 +60,7 @@ sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type);
 void sprite_destroy(sprite_t* sprite);
 
 void sprite_set_angle(sprite_t* sprite, int angle);
+void sprite_set_center_point(sprite_t* sprite, int cx, int cy);
 
 void sprite_draw(sprite_t* sprite);
 void sprite_draw_source(sprite_t* sprite, int x, int y, int sx, int sy, int w, int h);

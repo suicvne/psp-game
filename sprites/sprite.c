@@ -62,6 +62,16 @@ void sprite_set_angle(sprite_t* sprite, int angle)
   #endif
 }
 
+void sprite_set_center_point(sprite_t* sprite, int cx, int cy)
+{
+  #ifdef PSP
+  sprite->image->centerX = cx;
+  sprite->image->centerY = cy;
+  #else
+  //TODO
+  #endif
+}
+
 void sprite_draw(sprite_t* sprite)
 {
   /*
@@ -190,12 +200,12 @@ void sprite_draw_camera(sprite_t* sprite, const camera_t camera)
 
 void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, int y, int sx, int sy, int w, int h)
 {
-
   #ifdef PSP
   if(sprite == NULL)
   {
     oslFatalError("passed sprite was null");
   }
+
   oslSetImageTileSize(sprite->image, sx, sy, w, h);
 
   oslDrawImageXY(

@@ -51,6 +51,7 @@ tilemap_t* tilemap_create(int width, int height, int allocate_texture)
     tilemap->tileset->rectangle.h = 256;
     tilemap->tileset->rectangle.x = 0;
     tilemap->tileset->rectangle.y = 0;
+    sprite_set_center_point(tilemap->tileset, 256 / 2, 256 / 2);
   }
 
   tilemap->map_name = "Test Map";
@@ -355,10 +356,12 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       char temp[60];
       sprintf(temp, "res/%s", tileset_path);
       return_value->tileset = sprite_create(temp, SPRITE_TYPE_PNG);
+      sprite_set_center_point(return_value->tileset, 256 / 2, 256 / 2);
       return_value->tileset->rectangle.w = 256;
       return_value->tileset->rectangle.h = 256;
       return_value->tileset->rectangle.x = 0;
       return_value->tileset->rectangle.y = 0;
+      //sprite_set_center_point(return_value->tileset, 256 / 2, 256 / 2);
 
 
       /*
