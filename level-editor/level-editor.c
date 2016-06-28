@@ -1,3 +1,5 @@
+#if SDL_VERS
+
 #include "level-editor.h"
 
 /**
@@ -76,6 +78,24 @@ int editor_load_level(level_editor_t* editor)
     return 1; //canceled
   }
 
+  char* directory, filename;
+
+  editor_extract_directory_from_path(full_filename, directory, filename);
+
+  tilemap_destroy(editor->tilemap);
+  editor->tilemap = tilemap_read_from_file(full_filename, filename); //full is now directory.
+  editor->current_screen = EDITOR_SCREEN_EDIT;
+  editor->current_tile_id = 0;
+  editor->directory = full_filename;
+  editor->filename = filename;
+  SDL_Delay(200); //artificial delay
+
+  return 0;
+}
+
+void editor_extract_directory_from_path(const char* full_path, char* out_directory, char* out_filename)
+{
+  //TODO: does this work?
   char filename[30];
 
   char* match = strrchr(full_filename, '/'); //TODO: correct for Windows systems.
@@ -86,21 +106,15 @@ int editor_load_level(level_editor_t* editor)
     puts(filename);
   }
 
+  out_filename = filename;
+
   char* match2 = strstr(full_filename, filename);
   if(match2 != NULL)
   {
     strncpy(match2, "", 30);
     puts(full_filename);
   }
-
-  tilemap_destroy(editor->tilemap);
-  editor->tilemap = tilemap_read_from_file(full_filename, filename); //full is now directory.
-  editor->current_screen = EDITOR_SCREEN_EDIT;
-  editor->current_tile_id = 0;
-  editor->directory = full_filename;
-  editor->filename = filename;
-  SDL_Delay(200);
-  return 0;
+  out_directory = match2;
 }
 
 int editor_save_level(level_editor_t* editor)
@@ -269,3 +283,5 @@ void editor_update(level_editor_t* editor)
   tilemap_update(editor->tilemap, kCamera);
   player_update(kPlayer);
 }
+
+#endif //SDL_VERS

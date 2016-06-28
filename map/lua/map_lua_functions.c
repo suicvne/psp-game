@@ -54,6 +54,7 @@ int lua_map_rgba(lua_State* L)
   lua_pushnumber(L, color);
   return 1;
   #endif
+  return 0;
 
   // TODO: fix weird alpha values?
   // int arg_count = lua_gettop(L);

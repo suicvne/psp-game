@@ -20,7 +20,7 @@ typedef struct input_t {
 
   vector_t analogue_input; //used to determine analogue movement/player movement
   #ifdef SDL_VERS
-  int mouse_x;
+  int mouse_x; //used in the level editor.
   int mouse_y;
   #endif
 

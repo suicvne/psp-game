@@ -4,7 +4,11 @@ Contains editor related functions.
 
 This file is meant to consolodate all level editor exclusive features together for ease of use.
 
+This should ONLY be used with the SDL Version of the game.
+
 */
+
+#if SDL_VERS
 
 #ifndef ___LEVEL_EDITOR_H___
 #define ___LEVEL_EDITOR_H___
@@ -42,6 +46,8 @@ void editor_destroy(level_editor_t* editor);
 int editor_load_level(level_editor_t* editor);
 int editor_save_level(level_editor_t* editor);
 
+void editor_extract_directory_from_path(const char* full_path, char* out_directory, char* out_filename);
+
 void editor_handle_input(level_editor_t* editor);
 void editor_draw(level_editor_t* editor);
 void editor_update(level_editor_t* editor);
@@ -51,3 +57,5 @@ void editor_draw_editor(level_editor_t* editor);
 void editor_draw_pick_tile(level_editor_t* editor);
 
 #endif //___LEVEL_EDITOR_H___
+
+#endif //SDL_VERs

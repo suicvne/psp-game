@@ -20,6 +20,9 @@
 
 /**
 Contains various properties for holding for sprites
+
+OSL_IMAGE defines many of the pieces kept seperate for SDL. Angle and center point being two of them. Hence, it is recommended
+to use standard functions for setting angle and center point as opposed to manually modifying OSL_IMAGE.
 */
 typedef struct sprite_t
 {
@@ -46,6 +49,12 @@ typedef enum {
 
 } SPRITE_TYPE;
 
+/**
+Creates a sprite pointer using the appropriate loading method given its appropriate SPRITE_TYPE.
+
+As of right now, only PNG textures are supported using the SDL backend.
+Rectangle parameters are also completely zero-ed out.
+*/
 sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type);
 
 void sprite_destroy(sprite_t* sprite);
