@@ -18,7 +18,7 @@ int tilemap_load_lua_file(lua_State* L, const char* directory)
     return 1;
 }
 
-tilemap_t* tilemap_create(int width, int height)
+tilemap_t* tilemap_create(int width, int height, int allocate_texture)
 {
   tilemap_t* tilemap = malloc(sizeof(tilemap_t));
   int total_tiles = width * height;
@@ -31,8 +31,10 @@ tilemap_t* tilemap_create(int width, int height)
   {
     for(y = 0; y < height; y++)
     {
-      tilemap->tiles[x * height + y].id = 0;
-      tilemap->tiles[x * height + y].tile_type = TILE_TYPE_PASSABLE;
+      int index = x * height + y;
+      tilemap->tiles[index].id = 0;
+      tilemap->tiles[index].angle = 0;
+      tilemap->tiles[index].tile_type = TILE_TYPE_PASSABLE;
     }
   }
 
@@ -42,11 +44,14 @@ tilemap_t* tilemap_create(int width, int height)
   tilemap->tileset_path = "textures.png";
   char buffer[20];
   sprintf(buffer, "res/%s", tilemap->tileset_path);
-  tilemap->tileset = sprite_create(buffer, SPRITE_TYPE_PNG);
-  tilemap->tileset->rectangle.w = 256;
-  tilemap->tileset->rectangle.h = 256;
-  tilemap->tileset->rectangle.x = 0;
-  tilemap->tileset->rectangle.y = 0;
+  if(allocate_texture)
+  {
+    tilemap->tileset = sprite_create(buffer, SPRITE_TYPE_PNG);
+    tilemap->tileset->rectangle.w = 256;
+    tilemap->tileset->rectangle.h = 256;
+    tilemap->tileset->rectangle.x = 0;
+    tilemap->tileset->rectangle.y = 0;
+  }
 
   tilemap->map_name = "Test Map";
   tilemap->lua_state = NULL;
@@ -127,7 +132,9 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
       {
         tile_t tile = map->tiles[index];
         vector_t sheet_location = tile_get_location_by_id(tile.id);
+        sprite_set_angle(map->tileset, tile.angle);
         sprite_draw_camera_source(map->tileset, *cam, x_iter * 32, y_iter * 32, sheet_location.x, sheet_location.y, 32, 32);
+        sprite_set_angle(map->tileset, 0);
       }
     }
   }
@@ -288,7 +295,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       width = serializer_read_int(buffer, &pointer);
       height = serializer_read_int(buffer, &pointer);
 
-      tilemap_t* return_value = tilemap_create(width, height);
+      tilemap_t* return_value = tilemap_create(width, height, 0);
       return_value->map_name = map_name;
       return_value->tileset_path = tileset_path;
 

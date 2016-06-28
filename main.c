@@ -56,7 +56,10 @@ int initOSLib()
 
 int initWindow()
 {
-  kSdlWindow = SDL_CreateWindow("Level Editor",
+  char* windowTitle = "Rock Bottom Alpha";
+  if(kLevelEditorMode)
+    windowTitle = "Rock Bottom Level Editor Mode";
+  kSdlWindow = SDL_CreateWindow(windowTitle,
     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
     SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2,
     SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE

@@ -37,8 +37,11 @@ typedef struct level_editor_t {
 
   EDITOR_SCREEN current_screen;
   short current_tile_id;
+  short current_tile_angle;
 
 } level_editor_t;
+
+extern const char* editor_dialog_filters[1];
 
 level_editor_t* editor_create();
 void editor_destroy(level_editor_t* editor);

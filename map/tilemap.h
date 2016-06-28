@@ -63,7 +63,7 @@ static inline int min(int a, int b)
 }
 
 int tilemap_load_lua_file(lua_State* L, const char* directory);
-tilemap_t* tilemap_create(int width, int height);
+tilemap_t* tilemap_create(int width, int height, int allocate_texture);
 void tilemap_destroy(tilemap_t* map);
 
 void tilemap_update(tilemap_t* map, const camera_t* cam); //passing in the camera so I know what tiles I need to draw/update
