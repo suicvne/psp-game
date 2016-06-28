@@ -7,8 +7,10 @@ input_t* input_create()
   return_value->analogue_input.x = 0.0f;
   return_value->analogue_input.y = 0.0f;
 
+  #if SDL_VERS
   return_value->button_angle_decrease = 0;
   return_value->button_angle_increase = 0;
+  #endif
 
   return return_value;
 }
