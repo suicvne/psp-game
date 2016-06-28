@@ -22,6 +22,9 @@ typedef struct input_t {
   #ifdef SDL_VERS
   int mouse_x; //used in the level editor.
   int mouse_y;
+
+  int button_angle_increase;
+  int button_angle_decrease;
   #endif
 
 } input_t;

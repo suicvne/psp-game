@@ -268,10 +268,8 @@ void editor_handle_input(level_editor_t* editor)
     }
     else if(keyboard_state[SDL_SCANCODE_LCTRL] && keyboard_state[SDL_SCANCODE_S]) //save
     {
-      SDL_PumpEvents();
       editor_save_level(editor);
     }
-
   }
   else if(kSdlEvent.type == SDL_KEYUP)
   {
@@ -283,18 +281,21 @@ void editor_handle_input(level_editor_t* editor)
     {
       editor->current_screen = EDITOR_SCREEN_PICK_TILE;
     }
-    else if(kSdlEvent.key.keysym.sym == SDLK_LEFTBRACKET) //decrease angle
-    {
-      editor->current_tile_angle -= 90;
-      if(editor->current_tile_angle < 0)
-        editor->current_tile_angle = 360;
-    }
-    else if(kSdlEvent.key.keysym.sym == SDLK_RIGHTBRACKET) //increase angle
-    {
-      editor->current_tile_angle += 90;
-      if(editor->current_tile_angle > 360)
-        editor->current_tile_angle = 0;
-    }
+  }
+
+  if(kInput->button_angle_decrease) //decrease angle
+  {
+    editor->current_tile_angle -= 90;
+    if(editor->current_tile_angle < 0)
+      editor->current_tile_angle = 360;
+    kInput->button_angle_decrease = 0;
+  }
+  else if(kInput->button_angle_increase) //increase angle
+  {
+    editor->current_tile_angle += 90;
+    if(editor->current_tile_angle > 360)
+      editor->current_tile_angle = 0;
+    kInput->button_angle_increase = 0;
   }
 
   if(editor->current_screen == EDITOR_SCREEN_PICK_TILE)
@@ -310,7 +311,7 @@ void editor_handle_input(level_editor_t* editor)
       printf("id: %d\n", editor->current_tile_id);
       editor->current_screen = EDITOR_SCREEN_EDIT;
       editor->current_tile_angle = 0;
-      SDL_Delay(50);
+      SDL_Delay(100);
       SDL_PumpEvents();
     }
   }

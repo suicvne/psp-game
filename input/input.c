@@ -7,6 +7,9 @@ input_t* input_create()
   return_value->analogue_input.x = 0.0f;
   return_value->analogue_input.y = 0.0f;
 
+  return_value->button_angle_decrease = 0;
+  return_value->button_angle_increase = 0;
+
   return return_value;
 }
 
@@ -63,6 +66,17 @@ void input_update(input_t* input)
       kQuit = 1;
       break;
     case SDL_KEYDOWN:
+      if(kSdlEvent.key.repeat == 0)
+      {
+        switch(kSdlEvent.key.keysym.sym)
+        {
+          case SDLK_LEFTBRACKET:
+            input->button_angle_decrease = 1;
+          case SDLK_RIGHTBRACKET:
+            input->button_angle_increase = 1;
+            break;
+        }
+      }
       switch(kSdlEvent.key.keysym.sym)
       {
       case SDLK_w: //up
