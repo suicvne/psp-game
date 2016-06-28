@@ -44,8 +44,7 @@ char serializer_read_wchar(char* src, int* pointer)
 short serializer_read_short(char* src, int* pointer)
 {
   short temp;
-  temp = (src[(*pointer)] << 0)
-        | (src[(*pointer) + 1] << 8);
+  temp = ((src[(*pointer)]) | (src[(*pointer) + 1] << 8));
   *pointer += 2;
   return temp;
 }

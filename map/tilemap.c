@@ -219,7 +219,8 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
                   strlen(map->map_name) + //map name
                   strlen(map->tileset_path) + //tileset path
                   (sizeof(int) * 2) + // two ints for width and height
-                  (sizeof(short) * total_tiles); // the tiles in this level
+                  (sizeof(short) * total_tiles) +
+                  (sizeof(char) * total_tiles); // the tiles in this level *2 for their rotation value too.
 
   char* buffer = malloc(sizeof(char) * filesize);
   int pointer = 0, i;
@@ -237,6 +238,24 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
   for(i = 0; i < total_tiles; i++)
   {
     serializer_write_short(buffer, &pointer, map->tiles[i].id);
+    switch(map->tiles[i].angle)
+    {
+    case 0:
+      serializer_write_char(buffer, &pointer, ((char)1));
+      break;
+    case 90:
+      serializer_write_char(buffer, &pointer, ((char)2));
+      break;
+    case 180:
+      serializer_write_char(buffer, &pointer, ((char)3));
+      break;
+    case 270:
+      serializer_write_char(buffer, &pointer, ((char)4));
+      break;
+    default:
+      serializer_write_char(buffer, &pointer, ((char)1)); //default to 0
+      break;
+    }
   }
 
   return serializer_write_to_file(buffer, filesize, filename);
@@ -305,8 +324,30 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       {
         //read shorts for tiles
         short id = serializer_read_short(buffer, &pointer);
+        short angle = 0;
+        unsigned char angle_char = serializer_read_char(buffer, &pointer);
+        switch(angle_char)
+        {
+        case 1:
+          angle = 0;
+          break;
+        case 2:
+          angle = 90;
+          break;
+        case 3:
+          angle = 180;
+          break;
+        case 4:
+          angle = 270;
+          break;
+        }
+
+        if(i == 0)
+          printf("angle: %d\n", angle);
         if(id >= 0)
           return_value->tiles[i].id = id;
+        if(angle >= 0 || angle <= 360)
+          return_value->tiles[i].angle = angle;
       }
 
       free(buffer);
