@@ -40,5 +40,12 @@ int with width in tiles: 32
 int with height in tiles: 32
 
 tiles stored as
-id, rotation (both shorts)
-instead of ids one after the other
+id, rotation
+
+Rotation is one of 3 unsigned char values representing an angle.
+
+1: 0
+2: 90
+3: 270
+
+Any angle in between will default to 0deg rotation.
