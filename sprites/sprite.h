@@ -2,10 +2,7 @@
 #define __SPRITE_H__
 
 #ifdef PSP
-
 #include <oslib/oslib.h>
-#include <oslib/vfpu.h>
-
 #else
 
 #include <SDL2/SDL.h>

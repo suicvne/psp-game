@@ -49,3 +49,15 @@ Rotation is one of 3 unsigned char values representing an angle.
 3: 270
 
 Any angle in between will default to 0deg rotation.
+
+# Binary Level Format 04
+
+Everything included in the previous formats. However,
+
+tiles are now stored as
+id, rotation, collision.
+
+Collision is an unsigned char value being either..
+
+0: passable
+1: solid

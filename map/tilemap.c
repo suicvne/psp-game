@@ -200,8 +200,8 @@ int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t
   rectangle_t theoretical_level_bounds;
   theoretical_level_bounds.x = 32;
   theoretical_level_bounds.y = 32;
-  theoretical_level_bounds.w = (map->width - 1) * 32;
-  theoretical_level_bounds.h = (map->height - 1) * 32;
+  theoretical_level_bounds.w = (map->width) * 32;
+  theoretical_level_bounds.h = (map->height) * 32;
 
   if(rectangle_intersects(&player_hitbox, &theoretical_level_bounds))
     return 0;
@@ -242,7 +242,8 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
                   strlen(map->tileset_path) + //tileset path
                   (sizeof(int) * 2) + // two ints for width and height
                   (sizeof(short) * total_tiles) +
-                  (sizeof(char) * total_tiles); // the tiles in this level *2 for their rotation value too.
+                  (sizeof(char) * total_tiles) + // the tiles in this level *2 for their rotation value too.
+                  (sizeof(char) * total_tiles); // for their collision values
 
   char* buffer = malloc(sizeof(char) * filesize);
   int pointer = 0, i;
@@ -275,9 +276,10 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
       serializer_write_char(buffer, &pointer, ((char)4));
       break;
     default:
-      serializer_write_char(buffer, &pointer, ((char)1)); //default to 0
+      serializer_write_char(buffer, &pointer, ((char)1)); //default to 0deg
       break;
     }
+    serializer_write_char(buffer, &pointer, ((char)map->tiles[i].tile_type));
   }
 
   return serializer_write_to_file(buffer, filesize, filename);
@@ -363,13 +365,19 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
           angle = 270;
           break;
         }
+        TILE_TYPE collision = ((TILE_TYPE)serializer_read_char(buffer, &pointer));
 
         if(i == 0)
+        {
           printf("angle: %d\n", angle);
+          printf("collision: %d\n", (int)collision);
+        }
         if(id >= 0)
           return_value->tiles[i].id = id;
         if(angle >= 0 || angle <= 360)
           return_value->tiles[i].angle = angle;
+
+        return_value->tiles[i].tile_type = collision;
       }
 
       free(buffer);

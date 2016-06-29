@@ -214,7 +214,7 @@ void editor_draw_editor(level_editor_t* editor)
 
 void editor_draw_pick_tile(level_editor_t* editor)
 {
-  SDL_SetRenderDrawColor(kSdlRenderer, 0, 0, 0, 255);
+  SDL_SetRenderDrawColor(kSdlRenderer, 40, 40, 40, 10);
   SDL_RenderClear(kSdlRenderer);
 
   sprite_draw(editor->tilemap->tileset);
