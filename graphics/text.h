@@ -8,6 +8,7 @@
 #include <SDL2/SDL_ttf.h>
 
 extern SDL_Color text_standard_text_color;
+extern SDL_Color text_shadow_text_color;
 
 #elif PSP
 

@@ -15,6 +15,8 @@
 
 #endif
 
+#include "graphics/text.h"
+
 #include "callback.h"
 
 #include <stdlib.h>
@@ -156,7 +158,7 @@ void initialize_globals(void)
     oslIntraFontSetStyle(kMainFont, .4f, RGBA(255, 255, 255, 255), RGBA(0, 0, 0, 255), INTRAFONT_ALIGN_LEFT);
     oslSetFont(kMainFont);
   #elif SDL_VERS
-  kSdlFont = TTF_OpenFont("res/hack.ttf", 12);
+  kSdlFont = TTF_OpenFont("res/hack.ttf", 10);
   if(kSdlFont == NULL)
   {
     char buffer[256];
@@ -210,7 +212,7 @@ void draw(tilemap_t* tilemap)
     sprite_draw(kPlayer->sprite); //TODO: seperate player draw?
 
     //draw_forest(tilemap_test->width * 32, tilemap_test->height * 32);
-    oslDrawStringf(10, 2, "%s", tilemap->map_name);
+    text_render_text(tilemap->map_name, 10, 2);
     oslEndDrawing();
   //}
   oslEndFrame();
@@ -222,6 +224,8 @@ void draw(tilemap_t* tilemap)
   tilemap_draw(tilemap, kCamera);
 
   sprite_draw(kPlayer->sprite);
+
+  text_render_text(tilemap->map_name, 10, 2);
 
   SDL_RenderPresent(kSdlRenderer);
   #endif

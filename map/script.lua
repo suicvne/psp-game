@@ -8,7 +8,7 @@ OSL_FX_COLOR = 0x1000
 
 kMinutesPerHour = 60;
 kHoursPerDay = 12;
-kTicksPerSecond = 1; --120
+kTicksPerSecond = 120; --120
 
 hour = 0;
 minute = 0;
@@ -60,7 +60,7 @@ function onDraw()
 
   --draw_set_alpha(OSL_FX_COLOR, 0);
 
-  --message = string.format("time: %d:%02d", hour, minute, ticks);
-  draw_text("Heya", 10, 32);
-  --print("hello friend");
+  message = string.format("time: %d:%02d", hour, minute, ticks);
+  draw_text(message, 10, 32);
+
 end
