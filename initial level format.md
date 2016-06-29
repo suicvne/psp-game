@@ -1,3 +1,5 @@
+levels are stored as binary files with little endian encoding.
+
 # Binary Level Format 01
 
 First two bytes: MS (my initials)

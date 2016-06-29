@@ -28,9 +28,7 @@ int lua_map_draw_text(lua_State* L)
   x = lua_tonumber(L, 2);
   y = lua_tonumber(L, 3);
 
-  #ifdef PSP
-  oslDrawStringf(x, y, text);
-  #endif
+  text_render_text(text, x, y);
 
   return 0;
 }

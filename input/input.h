@@ -19,6 +19,9 @@ Mostly created for the sake of SDL
 typedef struct input_t {
 
   vector_t analogue_input; //used to determine analogue movement/player movement
+
+  int button_interact; //1 if pressed; 0 otherwise
+
   #ifdef SDL_VERS
   int mouse_x; //used in the level editor.
   int mouse_y;

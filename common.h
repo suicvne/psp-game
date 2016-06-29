@@ -36,5 +36,6 @@ static inline void reportFatalError(const char* text)
   #elif SDL_VERS
   SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Fatal Error", text, NULL);
   #endif
+  fprintf(stderr, "Fatal Error: %s\n", text);
 }
 #endif //___COMMON_H_

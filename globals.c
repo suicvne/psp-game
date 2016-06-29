@@ -26,4 +26,5 @@ struct OSL_FONT* kMainFont;
 SDL_Window* kSdlWindow;
 SDL_Renderer* kSdlRenderer;
 SDL_Event kSdlEvent;
+TTF_Font* kSdlFont;
 #endif

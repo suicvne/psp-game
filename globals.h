@@ -21,10 +21,15 @@ extern struct OSL_FONT* kMainFont;
 #endif
 
 #ifdef SDL_VERS
-#include <SDL2/SDL.h> //TODO: this
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
 extern SDL_Window* kSdlWindow;
 extern SDL_Renderer* kSdlRenderer;
 extern SDL_Event kSdlEvent;
+extern TTF_Font* kSdlFont;
+
 #endif
 
 #endif //___GLOBALS_H___

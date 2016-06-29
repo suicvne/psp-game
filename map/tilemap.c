@@ -398,6 +398,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       */
       if(!kLevelEditorMode)
       {
+        printf("finding scripts..\n");
         return_value->lua_state = luaL_newstate();
         luaL_openlibs(return_value->lua_state);
         if(tilemap_load_lua_file(return_value->lua_state, directory) != 0) //non-zero means error
@@ -408,6 +409,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
         }
         else
         {
+          printf("Loaded script successfully!\n");
           lua_map_register_functions(return_value->lua_state);
 
           int initError = lua_pcall(return_value->lua_state, 0, LUA_MULTRET, 0); //this call is necessary to "init" the script and index the globals i guess
@@ -418,7 +420,10 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
             {
               printf("No onLoad function, skipping.\n");
             }
-            //TODO: call
+            else
+            {
+              lua_pcall(return_value->lua_state, 0, 0, 0);
+            }
           }
           else
           {

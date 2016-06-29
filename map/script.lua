@@ -18,6 +18,7 @@ kMinLighting = 0.001;
 kMaxLighting = 1.0;
 
 function onLoad(map) --map contains table based metadata for the level
+  print("Hello from inside of Lua!");
 end
 
 function math.clamp(value, lower, upper)
@@ -59,5 +60,7 @@ function onDraw()
 
   --draw_set_alpha(OSL_FX_COLOR, 0);
 
-  message = string.format("time: %d:%02d", hour, minute, ticks);
+  --message = string.format("time: %d:%02d", hour, minute, ticks);
+  draw_text("Heya", 10, 32);
+  --print("hello friend");
 end

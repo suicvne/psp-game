@@ -1,13 +1,18 @@
 #ifdef PSP
+
 #include <pspkernel.h>
 #include <pspnet.h>
 #include <pspnet_inet.h>
 #include <pspnet_apctl.h>
 #include <pspctrl.h>
 #include <oslib/oslib.h>
+
 #elif SDL_VERS
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+
 #endif
 
 #include "callback.h"
@@ -95,6 +100,10 @@ int shutdown_SDL()
   if(kSdlWindow != NULL)
     SDL_DestroyWindow(kSdlWindow);
 
+  TTF_Quit();
+  IMG_Quit();
+  SDL_Quit();
+
   return 0;
 }
 
@@ -112,10 +121,15 @@ int initSDL()
 
   if(!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
   {
-    fprintf(stderr, "Error initializing SDL_Image: %s\n", SDL_GetError());
+    fprintf(stderr, "Error initializing SDL_Image: %s\n", IMG_GetError());
     return 1;
   }
 
+  if(TTF_Init() != 0)
+  {
+    fprintf(stderr, "Error initializing SDL_TTTF: %s\n", TTF_GetError());
+    return 1;
+  }
   return 0;
 }
 #endif
@@ -141,6 +155,14 @@ void initialize_globals(void)
   kMainFont = oslLoadFontFile("res/ltn0.pgf"); //can't find the font in ppsspp on linux?
     oslIntraFontSetStyle(kMainFont, .4f, RGBA(255, 255, 255, 255), RGBA(0, 0, 0, 255), INTRAFONT_ALIGN_LEFT);
     oslSetFont(kMainFont);
+  #elif SDL_VERS
+  kSdlFont = TTF_OpenFont("res/hack.ttf", 12);
+  if(kSdlFont == NULL)
+  {
+    char buffer[256];
+    sprintf(buffer, "Could not open font for reading: %s", TTF_GetError());
+    reportFatalError(buffer);
+  }
   #endif
 }
 
