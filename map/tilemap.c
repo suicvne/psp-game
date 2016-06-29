@@ -51,7 +51,7 @@ tilemap_t* tilemap_create(int width, int height, int allocate_texture)
     tilemap->tileset->rectangle.h = 256;
     tilemap->tileset->rectangle.x = 0;
     tilemap->tileset->rectangle.y = 0;
-    sprite_set_center_point(tilemap->tileset, 256 / 2, 256 / 2);
+    //sprite_set_center_point(tilemap->tileset, 256 / 2, 256 / 2);
   }
 
   tilemap->map_name = "Test Map";
@@ -134,8 +134,29 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
         tile_t tile = map->tiles[index];
         vector_t sheet_location = tile_get_location_by_id(tile.id);
         sprite_set_angle(map->tileset, tile.angle);
+        if(tile.angle > 0)
+        {
+          int cx, cy;
+          switch(tile.angle) //...i'm..not proud of this..
+          {
+            case 90:
+            cx = 0; cy = 32;
+            break;
+            case 180:
+            cx = 32; cy = 32;
+            break;
+            case 270:
+            cx = 32; cy = 0;
+            break;
+            default:
+            cx = 0; cy = 0;
+            break;
+          }
+          sprite_set_center_point(map->tileset, cx, cy);
+        }
         sprite_draw_camera_source(map->tileset, *cam, x_iter * 32, y_iter * 32, sheet_location.x, sheet_location.y, 32, 32);
         sprite_set_angle(map->tileset, 0);
+        sprite_set_center_point(map->tileset, 0, 0);
       }
     }
   }
@@ -356,7 +377,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       char temp[60];
       sprintf(temp, "res/%s", tileset_path);
       return_value->tileset = sprite_create(temp, SPRITE_TYPE_PNG);
-      sprite_set_center_point(return_value->tileset, 256 / 2, 256 / 2);
+      //sprite_set_center_point(return_value->tileset, 256 / 2, 256 / 2);
       return_value->tileset->rectangle.w = 256;
       return_value->tileset->rectangle.h = 256;
       return_value->tileset->rectangle.x = 0;

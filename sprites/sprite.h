@@ -4,6 +4,7 @@
 #ifdef PSP
 
 #include <oslib/oslib.h>
+#include <oslib/vfpu.h>
 
 #else
 

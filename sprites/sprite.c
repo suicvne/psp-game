@@ -207,12 +207,13 @@ void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, i
   }
 
   oslSetImageTileSize(sprite->image, sx, sy, w, h);
-
   oslDrawImageXY(
     sprite->image,
     x + camera.x,
     y + camera.y
   );
+
+
   #else
   SDL_Rect src_rect;
   src_rect.x = sx;
