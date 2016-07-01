@@ -40,5 +40,6 @@ vector_t input_mouse_to_world(input_t* input, camera_t* camera);
 
 void input_destroy(input_t* input);
 void input_update(input_t* input);
+void input_begin_frame(input_t* input);
 
 #endif //___INPUT_H___

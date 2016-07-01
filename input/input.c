@@ -56,9 +56,15 @@ void input_destroy(input_t* input)
   free(input);
 }
 
+void input_begin_frame(input_t* input)
+{
+  input->button_interact = 0;
+}
+
 void input_update(input_t* input)
 {
-  //TODO: PSP input, keymapping, etc. ugh.
+  input_begin_frame(input);
+  //TODO: keymapping, etc. ugh.
   #ifdef SDL_VERS
   while(SDL_PollEvent(&kSdlEvent))
   {
@@ -122,10 +128,18 @@ void input_update(input_t* input)
   sceCtrlPeekBufferPositive(&pad, 1);
 
   float padZeroX, padZeroY;
-  padZeroX = ((pad.Lx) - 128) / 127.0f; //128 is directly in middle so i normalize it here to be closer to say unity (-1 to +1)
+  padZeroX = ((pad.Lx) - 128) / 127.0f; //128 is directly in the middle so i normalize it here to be closer to say unity (-1 to +1)
   padZeroY = ((pad.Ly) - 128) / 127.0f;
 
   input->analogue_input.x = padZeroX;
   input->analogue_input.y = padZeroY;
+
+  if(pad.Buttons != 0)
+  {
+    if(pad.Buttons & PSP_CTRL_CROSS) //x, default interact button
+    {
+      input->button_interact = 1;
+    }
+  }
   #endif
 }

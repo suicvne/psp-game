@@ -1,24 +1,11 @@
-OSL_FX_NONE=0
-OSL_FX_FLAT = 1
-OSL_FX_ALPHA = 2
-OSL_FX_ADD = 3
-OSL_FX_SUB = 4
-OSL_FX_RGBA = 0x100
-OSL_FX_COLOR = 0x1000
+package.path = "map/?.lua" --todo: map this from inside of C?
+require "time"
+require "player"
 
-kMinutesPerHour = 60;
-kHoursPerDay = 12;
-kTicksPerSecond = 120; --120
-
-hour = 0;
-minute = 0;
-ticks = 0;
-
-kMinLighting = 0.001;
-kMaxLighting = 1.0;
-
-function onLoad(map) --map contains table based metadata for the level
+function onLoad() --map contains table based metadata for the level
   print("Hello from inside of Lua!");
+  print("Map Name: " .. tilemap_get_name(_current_tilemap));
+  print("Map Size: " .. tilemap_get_width(_current_tilemap) .. " x " .. tilemap_get_height(_current_tilemap));
 end
 
 function math.clamp(value, lower, upper)
@@ -29,38 +16,26 @@ function math.clamp(value, lower, upper)
   return math.max(lower, math.min(upper, value));
 end
 
-function calculateLighting()
-  time = (hour + (minute / kMinutesPerHour)) / kHoursPerDay;
-  light = kMaxLighting * math.sin(2 * math.pi * time);
-  return math.clamp(light, kMinLighting, kMaxLighting);
-end
-
 function onUpdate()
-  ticks = ticks + 1;
-  if(ticks == kTicksPerSecond) then
-    minute = minute + 1;
-    if(minute == kMinutesPerHour) then
-      hour = hour + 1;
-      minute = 0;
-    end
-
-    if(hour == kHoursPerDay) then
-      hour = 0;
-    end
-
-    ticks = 0;
-  end
+  time_loop();
+  check_input(_current_tilemap);
 end
 
 function onDraw()
-
-  --draw_set_alpha_color(RGBA(255, 127, 0));
-
-  --draw_filled_rect(0, 0, 240, 272, RGBA(255, 255, 255, 255));
-
-  --draw_set_alpha(OSL_FX_COLOR, 0);
-
-  message = string.format("time: %d:%02d", hour, minute, ticks);
+  message = string.format("time: %d:%02d", time_hour, time_minute, time_ticks);
   draw_text(message, 10, 32);
-
+  message = string.format("player: %d, %d", player_get_x(), player_get_y());
+  draw_text(message, 10, 42);
+  message = string.format("player direction: %s", get_direction_string());
+  draw_text(message, 10, 52);
+  
+  value = input_is_button_down(BUTTON_USE);
+  if(value == 1) then
+    message = "interact: yes";
+  else
+    message = "interact: no";
+  end
+  draw_text(message, 10, 62);
+  
+  draw_selection();
 end

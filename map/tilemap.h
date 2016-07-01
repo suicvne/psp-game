@@ -31,7 +31,7 @@ v2 - appends the tileset filename after map_name
 #define HEADER_1 'S'
 #define VERSION 04
 
-typedef struct {
+typedef struct tilemap_t {
 
   //Tiles will be stored in a single dimension array.
   //You can access objects by doing

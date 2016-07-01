@@ -94,6 +94,29 @@ int lua_map_draw_rect(lua_State* L)
   return 0;
 }
 
+int lua_map_draw_rect_camera(lua_State* L)
+{
+  int arg_count = lua_gettop(L);
+  if(arg_count < 5)
+    return 0;
+
+  int x0, x1, y0, y1, color;
+
+  x0 = lua_tonumber(L, 1);
+  y0 = lua_tonumber(L, 2);
+  x1 = lua_tonumber(L, 3);
+  y1 = lua_tonumber(L, 4);
+
+  color = lua_tonumber(L, 5);
+
+  #ifdef PSP
+  oslDrawRect(x0 + kCamera->x, y0 + kCamera->y, x1 + kCamera->x, y1 + kCamera->y, color);
+  //oslDrawFillRect(10, 10, 100, 100, RGB(0, 255, 0));
+  #endif
+
+  return 0;
+}
+
 int lua_map_set_blending(lua_State* L)
 {
   #ifdef PSP
@@ -121,17 +144,128 @@ int lua_map_test_blending(lua_State* L)
   return 0;
 }
 
-int lua_map_register_functions(lua_State* L)
+
+int lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
 {
+  lua_pushlightuserdata(L, (void*)tilemap);
+  lua_setglobal(L, "_current_tilemap");
+
   lua_register(L, "print", lua_map_print);
   lua_register(L, "draw_text", lua_map_draw_text);
   lua_register(L, "RGBA", lua_map_rgba);
-  lua_register(L, "draw_filled_rect", lua_map_draw_rect);
+  lua_register(L, "draw_rect", lua_map_draw_rect);
+  lua_register(L, "draw_rect_camera", lua_map_draw_rect_camera);
   lua_register(L, "draw_set_alpha", lua_map_set_blending);
   lua_register(L, "draw_set_alpha_color", lua_map_test_blending);
+
+  //player
+  lua_register(L, "player_get_x", lua_player_get_x);
+  lua_register(L, "player_get_y", lua_player_get_y);
+  lua_register(L, "player_get_direction", lua_player_get_direction);
+  //end player
+
+  //tilemap
+  lua_register(L, "tilemap_get_name", lua_map_get_name);
+  lua_register(L, "tilemap_get_width", lua_map_get_width);
+  lua_register(L, "tilemap_get_height", lua_map_get_height);
+  lua_register(L, "tilemap_set_tile", lua_map_set_tile);
+  //end tilemap
+
+  //input
+  lua_register(L, "input_is_button_down", lua_input_is_button_pressed);
+  //end input
 }
 
-/*int lua_map_push_tilemap(lua_State* L, tilemap_t* map)
-{
 
-}*/
+/**
+Tilemap functions
+*/
+
+int lua_map_get_name(lua_State* L)
+{
+  if(lua_gettop(L) == 1)
+  {
+    tilemap_t* tilemap = (tilemap_t*)lua_touserdata(L, 1);
+    if(tilemap != NULL)
+    {
+      lua_pushstring(L, tilemap->map_name);
+      return 1;
+    }
+    else
+      return 0;
+  }
+  else
+    return 0;
+}
+
+int lua_map_get_width(lua_State* L)
+{
+  if(lua_gettop(L) == 1)
+  {
+    tilemap_t* tilemap = (tilemap_t*)lua_touserdata(L, 1);
+    if(tilemap != NULL)
+    {
+      lua_pushnumber(L, tilemap->width);
+      return 1;
+    }
+    else
+      return 0;
+  }
+  else
+    return 0;
+}
+
+int lua_map_get_height(lua_State* L)
+{
+  if(lua_gettop(L) == 1)
+  {
+    tilemap_t* tilemap = (tilemap_t*)lua_touserdata(L, 1);
+    if(tilemap != NULL)
+    {
+      lua_pushnumber(L, tilemap->height);
+      return 1;
+    }
+    else
+      return 0;
+  }
+  else
+    return 0;
+}
+
+int lua_map_set_tile(lua_State* L)
+{
+  if(lua_gettop(L) == 4)
+  {
+    tilemap_t* tilemap = (tilemap_t*)lua_touserdata(L, 1);
+    int x, y, id;
+    x = lua_tonumber(L, 2);
+    y = lua_tonumber(L, 3);
+    id = lua_tonumber(L, 4);
+
+    if(tilemap != NULL)
+    {
+      if(x >= 0 && x < tilemap->width * 32)
+      {
+        if(y >=0 && y < tilemap->height * 32)
+        {
+          int real_x, real_y;
+          real_x = floor(x / 32);
+          real_y = floor(y / 32);
+
+          int index = real_x * tilemap->height + real_y;
+          tilemap->tiles[index].id = id;
+          return 0;
+        }
+      }
+      return 0;
+    }
+    else
+      return 0;
+  }
+  else
+    return 0;
+}
+
+/**
+End tilemap functions
+*/

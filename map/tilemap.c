@@ -410,7 +410,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
         else
         {
           printf("Loaded script successfully!\n");
-          lua_map_register_functions(return_value->lua_state);
+          lua_map_register_functions(return_value->lua_state, return_value);
 
           int initError = lua_pcall(return_value->lua_state, 0, LUA_MULTRET, 0); //this call is necessary to "init" the script and index the globals i guess
           if(!initError)
