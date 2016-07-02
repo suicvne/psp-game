@@ -209,7 +209,7 @@ void draw(tilemap_t* tilemap)
     oslClearScreen(RGBA(0, 0, 0, 255));
     tilemap_draw(tilemap, kCamera);
 
-    sprite_draw(kPlayer->sprite); //TODO: seperate player draw?
+    sprite_draw(kPlayer->main_sprite); //TODO: seperate player draw.
 
     //draw_forest(tilemap_test->width * 32, tilemap_test->height * 32);
     text_render_text(tilemap->map_name, 10, 2);

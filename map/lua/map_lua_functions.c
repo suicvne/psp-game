@@ -153,6 +153,7 @@ int lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   lua_getglobal(L, "package");
   lua_getfield(L, -1, "path");
   const char* cur_path = lua_tostring(L, -1);
+  printf("lua cur_path: %s\n", cur_path);
   /*const char* to_append = ";./map/?.lua"; //what to append
   
   int combined_size = sizeof(char) * (strlen(cur_path) + strlen(to_append)) + 1;
@@ -201,6 +202,13 @@ int lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   //input
   lua_register(L, "input_is_button_down", lua_input_is_button_pressed);
   //end input
+
+  //message box
+  lua_register(L, "message_box_set_visibility", lua_message_box_set_visible);
+  lua_register(L, "message_box_is_visible", lua_message_box_is_visible);
+  lua_register(L, "message_box_set_message", lua_message_box_set_message);
+  lua_register(L, "message_box_get_message", lua_message_box_get_message);
+  //end message box
 }
 
 

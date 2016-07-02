@@ -73,6 +73,8 @@ void camera_get_index_bounds(const camera_t* camera, tilemap_t* tilemap, int* mi
 
 int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t* camera);
 
+void tilemap_report_lua_errors(lua_State* L, int status);
+
 int tilemap_write_to_file(const char* filename, tilemap_t* map);
 int tilemap_verify_header(char* header, short version);
 tilemap_t* tilemap_read_from_file(const char* directory, const char* filename);

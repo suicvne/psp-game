@@ -4,6 +4,8 @@ Defines common functions for the map's Lua interpreter.
 
 */
 
+//TODO: use Lua's boolean type when available
+
 #ifndef ___MAP_LUA_FUNCTIONS_H___
 #define ___MAP_LUA_FUNCTIONS_H___
 
@@ -14,6 +16,7 @@ Defines common functions for the map's Lua interpreter.
 #include "../../camera/camera.h"
 #include "../../globals.h"
 #include "../../string/string.h"
+#include "../../message-box/message_box.h"
 
 #ifdef PSP
 #include <oslib/oslib.h>
@@ -81,4 +84,16 @@ int lua_input_is_button_pressed(lua_State* L);
 End Input Functions
 */
 
+/**
+Message Box Functions - map_lua_functions_message_box.c
+*/
+
+int lua_message_box_is_visible(lua_State* L);
+int lua_message_box_set_visible(lua_State* L);
+int lua_message_box_set_message(lua_State* L);
+int lua_message_box_get_message(lua_State* L);
+
+/**
+End Message Box Functions
+*/
 #endif //___MAP_LUA_FUNCTIONS_H___

@@ -181,7 +181,7 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
     {/*Function dne*/}
     else if(lua_pcall(map->lua_state, 0, 0, 0) != 0)
     {
-      char buffer[50];
+      char buffer[256];
       sprintf(buffer, "Fatal Error during onDraw: %s", lua_tostring(map->lua_state, -1));
       reportFatalError(buffer);
       lua_pop(map->lua_state, 1);
@@ -308,6 +308,17 @@ int tilemap_verify_header(char* buffer, short version)
     }
   }
   return 0;
+}
+
+void tilemap_report_lua_errors(lua_State* L, int status)
+{
+  if(status != 0)
+  {
+    char buffer[256];
+    sprintf(buffer, "fatal error in Lua script: %s", lua_tostring(L, -1));
+    reportFatalError(buffer);
+    lua_pop(L, 1); //remove error from Lua stack
+  }
 }
 
 tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)

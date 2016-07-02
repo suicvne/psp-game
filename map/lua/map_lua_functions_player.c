@@ -20,6 +20,6 @@ int lua_player_get_y(lua_State* L)
 
 int lua_player_get_direction(lua_State* L)
 {
-  lua_pushnumber(L, kPlayer->sprite->yframeoffset);
+  lua_pushnumber(L, kPlayer->main_sprite->yframeoffset);
   return 1;
 }
