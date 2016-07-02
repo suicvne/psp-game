@@ -14,6 +14,9 @@ MAP_DIRT_TILE = 3;
 PLAYER_SELECTION_X = 0;
 PLAYER_SELECTION_Y = 0;
 
+player_current_energy = 100;
+PLAYER_DEPLETE_AMOUNT = 5;
+
 function get_direction()
     return player_get_direction();
 end
@@ -46,7 +49,15 @@ end
 
 function check_input(tilemap)
   if(input_is_button_down(BUTTON_USE) == 1) then
-    tilemap_set_tile(tilemap, PLAYER_SELECTION_X, PLAYER_SELECTION_Y, MAP_DIRT_TILE);
+    if(player_current_energy < 1) then
+        return; --no energy
+    end
+
+    selected_tile = tilemap_get_tile(tilemap, PLAYER_SELECTION_X, PLAYER_SELECTION_Y);
+    if(selected_tile ~= MAP_DIRT_TILE) then
+        tilemap_set_tile(tilemap, PLAYER_SELECTION_X, PLAYER_SELECTION_Y, MAP_DIRT_TILE);
+        player_current_energy = player_current_energy - PLAYER_DEPLETE_AMOUNT;
+    end
   end
 end
 

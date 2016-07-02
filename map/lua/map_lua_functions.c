@@ -195,6 +195,7 @@ int lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   lua_register(L, "tilemap_get_width", lua_map_get_width);
   lua_register(L, "tilemap_get_height", lua_map_get_height);
   lua_register(L, "tilemap_set_tile", lua_map_set_tile);
+  lua_register(L, "tilemap_get_tile", lua_map_get_tile);
   //end tilemap
 
   //input
@@ -290,6 +291,35 @@ int lua_map_set_tile(lua_State* L)
   }
   else
     return 0;
+}
+
+int lua_map_get_tile(lua_State* L) //gets the ID
+{
+  if(lua_gettop(L) == 3) //tilemap, x, y
+  {
+    tilemap_t* tilemap = (tilemap_t*)lua_touserdata(L, 1);
+    int x, y;
+    x = lua_tonumber(L, 2);
+    y = lua_tonumber(L, 3);
+
+    if(tilemap != NULL)
+    {
+      if(x >= 0 && x < tilemap->width * 32)
+      {
+        if(y >= 0 && y < tilemap->width * 32)
+        {
+          int tx, ty;
+          tx = floor(x / 32);
+          ty = floor(y / 32);
+
+          int index = tx * tilemap->height + ty;
+          lua_pushnumber(L, tilemap->tiles[index].id);
+          return 1;
+        }
+      }
+    }
+  }
+  return 0;
 }
 
 /**

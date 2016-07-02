@@ -24,10 +24,12 @@ end
 function onDraw()
   message = string.format("time: %d:%02d", time_hour, time_minute, time_ticks);
   draw_text(message, 10, 32);
-  message = string.format("player: %d, %d", player_get_x(), player_get_y());
+  message = string.format("energy: %d", player_current_energy);
   draw_text(message, 10, 42);
+  message = string.format("player: %d, %d", player_get_x(), player_get_y());
+  --draw_text(message, 10, 42);
   message = string.format("player direction: %s", get_direction_string());
-  draw_text(message, 10, 52);
+  --draw_text(message, 10, 52);
   
   value = input_is_button_down(BUTTON_USE);
   if(value == 1) then
@@ -35,7 +37,7 @@ function onDraw()
   else
     message = "interact: no";
   end
-  draw_text(message, 10, 62);
+  --draw_text(message, 10, 62);
   
   draw_selection();
 end
