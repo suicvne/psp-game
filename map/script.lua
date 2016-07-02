@@ -1,4 +1,4 @@
-package.path = "map/?.lua" --todo: map this from inside of C?
+--package.path = "map/?.lua" --todo: map this from inside of C?
 require "time"
 require "player"
 

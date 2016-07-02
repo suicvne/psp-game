@@ -20,7 +20,13 @@ static const int PLAYER_HEIGHT = 24;
 
 typedef struct player_t {
 
-  sprite_t* sprite;
+  sprite_t* main_sprite;
+  sprite_t* lift_sprite; //used for carrying something large over the player's head
+  sprite_t* hold_sprite; //used for general item/weapon(?) holding.
+
+  int use_timer; //timer used to hold the time the player has been 'using' an item
+
+  int is_using; //true if using, false if not
 
 } player_t;
 

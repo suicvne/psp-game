@@ -46,7 +46,7 @@ void player_update_animation_offset(player_t* player, const vector_t* movement)
     offset = 6;
   }
 
-  player->sprite->yframeoffset = offset;
+  player->main_sprite->yframeoffset = offset;
 }
 
 void player_update(player_t* player)
@@ -83,10 +83,10 @@ void player_update(player_t* player)
     kCamera->y += ytrajectory;
 
     if(xtrajectory != 0.0f || ytrajectory != 0.0f)
-    { sprite_update(player->sprite); }
+    { sprite_update(player->main_sprite); }
   }
   else
-    player->sprite->currentframe = 0;
+    player->main_sprite->currentframe = 0;
 }
 
 player_t* player_create()
@@ -98,29 +98,26 @@ player_t* player_create()
   //int ORIGIN_Y = ((272 / 2) - (PLAYER_HEIGHT / 2));
 
   player_t* player = malloc(sizeof(player_t));
-  player->sprite = sprite_create("res/ness.png", SPRITE_TYPE_PNG);
-  player->sprite->rectangle.x = orgX; //center of the screen
-  player->sprite->rectangle.y = orgY;
-  player->sprite->rectangle.w = PLAYER_WIDTH;
-  player->sprite->rectangle.h = PLAYER_HEIGHT;
+  player->main_sprite = sprite_create("res/ness.png", SPRITE_TYPE_PNG);
+  player->main_sprite->rectangle.x = orgX; //center of the screen
+  player->main_sprite->rectangle.y = orgY;
+  player->main_sprite->rectangle.w = PLAYER_WIDTH;
+  player->main_sprite->rectangle.h = PLAYER_HEIGHT;
 
-  player->sprite->frametime = PLAYER_SPEED * 2.5;
-  player->sprite->frames = 2; //no animation, yet
+  player->main_sprite->frametime = PLAYER_SPEED * 2.5;
+  player->main_sprite->frames = 2; //no animation, yet
+
+  player->lift_sprite = NULL; //TODO
+  player->hold_sprite = NULL; //TODO
 
   #ifdef PSP
-  oslSetImageTileSize(player->sprite->image, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
+  oslSetImageTileSize(player->main_sprite->image, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
   #endif
-
-  //#ifdef PSP
-  //player->sprite->image->centerX = 16;
-  //player->sprite->image->centerY = 16; //for angling
-  //#endif
-  //oslSetImageTileSize(sprite, 0, 0, 32, 32);
 
   return player;
 }
 
 void player_setlookangle(player_t* player, int angle)
 {
-  sprite_set_angle(player->sprite, angle);
+  sprite_set_angle(player->main_sprite, angle);
 }

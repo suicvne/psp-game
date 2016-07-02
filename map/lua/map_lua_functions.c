@@ -22,7 +22,7 @@ int lua_map_draw_text(lua_State* L)
     return -1;
 
   int x, y;
-  char* text;
+  const char* text;
 
   text = lua_tostring(L, 1);
   x = lua_tonumber(L, 2);
@@ -147,6 +147,32 @@ int lua_map_test_blending(lua_State* L)
 
 int lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
 {
+  /**
+  Setting path properly
+  */
+  lua_getglobal(L, "package");
+  lua_getfield(L, -1, "path");
+  const char* cur_path = lua_tostring(L, -1);
+  /*const char* to_append = ";./map/?.lua"; //what to append
+  
+  int combined_size = sizeof(char) * (strlen(cur_path) + strlen(to_append)) + 1;
+  char* combined_path = malloc(combined_size);
+  memset(combined_path, 0, combined_size);
+  strcat(combined_path, cur_path);
+  strcat(combined_path, to_append);
+  */
+  char* new_path = "./map/?.lua";
+  printf("lua path is now %s\n", new_path);
+  lua_pop(L, 1);
+  lua_pushstring(L, new_path);
+  lua_setfield(L, -2, "path");
+  lua_pop(L, 1);
+
+  /**
+  End Setting Path Properly
+  */
+
+
   lua_pushlightuserdata(L, (void*)tilemap);
   lua_setglobal(L, "_current_tilemap");
 

@@ -13,6 +13,7 @@ Defines common functions for the map's Lua interpreter.
 #include "../../vector/vector.h"
 #include "../../camera/camera.h"
 #include "../../globals.h"
+#include "../../string/string.h"
 
 #ifdef PSP
 #include <oslib/oslib.h>
