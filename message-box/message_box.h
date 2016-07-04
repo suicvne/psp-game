@@ -10,6 +10,7 @@ Contains various functions for in-game message boxes.
 #include <stdio.h>
 #include <string.h>
 
+#include "../sound/sound.h"
 #include "../globals.h"
 #include "../input/input.h"
 #include "../graphics/rectangle.h"

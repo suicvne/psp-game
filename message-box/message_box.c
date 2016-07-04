@@ -92,6 +92,8 @@ void message_box_update()
             message_box_text_index++;
             if(message_box_text_index > strlen(message_box_message))
                 message_box_text_index--;
+            else
+                sound_play(SOUND_EFFECT_TEXT);
 
             if(message_box_text_index >= (strlen(message_box_message) - 1) && input_is_button_just_pressed(INPUT_BUTTON_INTERACT)) //dismiss the message
             {

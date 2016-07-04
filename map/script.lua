@@ -2,6 +2,8 @@
 require "time"
 require "player"
 
+framecount = 0;
+
 function onLoad() --map contains table based metadata for the level
   print("Hello from inside of Lua!");
   print("Map Name: " .. tilemap_get_name(_current_tilemap));
@@ -19,12 +21,18 @@ function math.clamp(value, lower, upper)
 end
 
 function onUpdate()
-  time_loop();
-  --check_input(_current_tilemap);
-
-  if(input_is_button_down(BUTTON_USE) == 1) then
+  framecount = framecount + 1;
+  
+  if(framecount == 1) then
+    message_box_set_message("Welcome to the Rock Bottom alpha!\nYou can't do much, sorry!");
+    message_box_set_visibility(true);
+  elseif(framecount == 2) then
+    message_box_set_message("There is, however, a test of changing tiles. :)")
     message_box_set_visibility(true);
   end
+
+  time_loop();
+  check_input(_current_tilemap);
 end
 
 function onDraw()

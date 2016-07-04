@@ -99,7 +99,7 @@ void tilemap_update(tilemap_t* map, const camera_t* cam)
     {
       char buffer[50];
       sprintf(buffer, "Fatal Error during onUpdate: %s", lua_tostring(map->lua_state, -1));
-      reportFatalError(buffer);
+      report_fatal_error(buffer);
       lua_pop(map->lua_state, 1);
     }
   }
@@ -183,7 +183,7 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
     {
       char buffer[256];
       sprintf(buffer, "Fatal Error during onDraw: %s", lua_tostring(map->lua_state, -1));
-      reportFatalError(buffer);
+      report_fatal_error(buffer);
       lua_pop(map->lua_state, 1);
     }
   }
@@ -299,12 +299,12 @@ int tilemap_verify_header(char* buffer, short version)
         buffer[0], buffer[1],
         HEADER_0, HEADER_1
       );
-      reportFatalError(filler);
+      report_fatal_error(filler);
     }
     else if(version != VERSION)
     {
       sprintf(filler, "Version mismatch in level file. (got %d; expected %d)", version, VERSION);
-      reportFatalError(filler);
+      report_fatal_error(filler);
     }
   }
   return 0;
@@ -316,7 +316,7 @@ void tilemap_report_lua_errors(lua_State* L, int status)
   {
     char buffer[256];
     sprintf(buffer, "fatal error in Lua script: %s", lua_tostring(L, -1));
-    reportFatalError(buffer);
+    report_fatal_error(buffer);
     lua_pop(L, 1); //remove error from Lua stack
   }
 }
@@ -440,7 +440,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
           {
             char tempErrorBuffer[30];
             sprintf(tempErrorBuffer, "%s", lua_tostring(return_value->lua_state, -1));
-            reportFatalError(tempErrorBuffer);
+            report_fatal_error(tempErrorBuffer);
             lua_pop(return_value->lua_state, 1);
           }
         }

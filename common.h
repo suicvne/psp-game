@@ -29,7 +29,7 @@ static inline float radToDegree(float rad)
   return (int)((rad * 180) / GU_PI);
 }
 
-static inline void reportFatalError(const char* text)
+static inline void report_fatal_error(const char* text)
 {
   #ifdef PSP
   oslFatalError(text);

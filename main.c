@@ -18,6 +18,8 @@
 #include "graphics/rectangle.h"
 #include "graphics/text.h"
 
+#include "sound/sound.h"
+
 #include "message-box/message_box.h"
 
 #include "callback.h" //for PSP
@@ -48,7 +50,7 @@ PSP_HEAP_SIZE_KB(12 * 1024);
 /**
 Initializes OSLib so i can't start doing stuff with my life
 */
-int initOSLib()
+int init_OSLib()
 {
   oslInit(0);
   oslInitGfx(OSL_PF_8888, 1);
@@ -64,7 +66,7 @@ int initOSLib()
 
 #if SDL_VERS
 
-int initWindow()
+int init_window()
 {
   char* windowTitle = "Rock Bottom Alpha";
   if(kLevelEditorMode)
@@ -83,7 +85,7 @@ int initWindow()
   return 0;
 }
 
-int initRenderer()
+int init_renderer()
 {
   kSdlRenderer = SDL_CreateRenderer(kSdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if(kSdlRenderer == NULL)
@@ -112,7 +114,7 @@ int shutdown_SDL()
   return 0;
 }
 
-int initSDL()
+int init_SDL()
 {
   if(SDL_Init(SDL_INIT_VIDEO) != 0)
   {
@@ -120,9 +122,9 @@ int initSDL()
     return 1;
   }
 
-  initWindow();
+  init_window();
 
-  initRenderer();
+  init_renderer();
 
   if(!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
   {
@@ -139,17 +141,19 @@ int initSDL()
 }
 #endif
 
-int initSubsystem()
+int init_subsystem()
 {
   #if PSP
-  return initOSLib();
+  return init_OSLib();
   #elif SDL_VERS
-  return initSDL();
+  return init_SDL();
   #endif
 }
 
 void initialize_globals(void)
 {
+  sound_initialize(); //not a global but all of my other initialization is done here sooooo
+
   kCamera = camera_create(0, 0);
   kPlayer = player_create();
   kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
@@ -165,7 +169,7 @@ void initialize_globals(void)
   {
     char buffer[256];
     sprintf(buffer, "Could not open font for reading: %s", TTF_GetError());
-    reportFatalError(buffer);
+    report_fatal_error(buffer);
   }
   #endif
 }
@@ -249,12 +253,12 @@ int main(int argc, char** argv)
   #if PSP
   if(kLevelEditorMode)
   {
-    reportFatalError("How the fuck did you get level edit mode on the PSP?");
+    report_fatal_error("How the fuck did you get level edit mode on the PSP?");
   }
   #endif
 
-  SetupCallbacks();
-  initSubsystem();
+  psp_setup_callbacks();
+  init_subsystem();
   initialize_globals();
 
   kQuit = 0;

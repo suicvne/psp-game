@@ -25,7 +25,7 @@ int CallbackThread(SceSize args, void *argp)
 #endif
 
 /* Sets up the callback thread and returns its thread id */
-int SetupCallbacks(void)
+int psp_setup_callbacks(void)
 {
   #ifdef PSP
 	int thid = 0;
