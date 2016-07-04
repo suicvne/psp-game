@@ -37,6 +37,4 @@ OSL_SOUND* sound;
 void sound_initialize(); //inits and loads sound effects
 void sound_play(SOUND_EFFECT_TYPE sound);
 
-int sound_is_playing(SOUND_EFFECT_TYPE sound);
-
 #endif //___SOUND_H____

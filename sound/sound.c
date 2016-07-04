@@ -39,11 +39,3 @@ void sound_play(SOUND_EFFECT_TYPE sound)
     //TODO
     #endif
 }
-
-int sound_is_playing(SOUND_EFFECT_TYPE sound)
-{
-    #if PSP
-
-    #elif SDL_VERS
-    #endif
-}
