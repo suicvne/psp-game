@@ -49,3 +49,12 @@ int text_render_text(const char* text, int x, int y)
 
   return 0;
 }
+
+int text_get_width(const char* text)
+{
+  #if PSP
+  return oslGetStringWidth(text);
+  #elif SDL_VERS
+  return 0; //TODO
+  #endif
+}

@@ -2,7 +2,6 @@
 #define ___CAMERA_H___
 
 #include "../vector/vector.h"
-#include "../graphics/common.h" //for rectangle_t
 #include <stdlib.h> //abs
 #include <assert.h>
 
@@ -23,10 +22,6 @@ camera_t* camera_create(int x, int y);
 void camera_destroy(camera_t* camera);
 
 vector_t camera_player_to_world(const camera_t* camera);
-
-rectangle_t camera_player_to_world_rectangle(const camera_t* camera);
-
-rectangle_t camera_get_viewport(const camera_t* camera);
 
 void camera_move(camera_t* camera, const vector_t movement_amount);
 

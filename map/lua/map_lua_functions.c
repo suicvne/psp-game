@@ -107,12 +107,15 @@ int lua_map_draw_rect_camera(lua_State* L)
   x1 = lua_tonumber(L, 3);
   y1 = lua_tonumber(L, 4);
 
+  rectangle_t rectangle;
+  rectangle.x = x0;
+  rectangle.y = y0;
+  rectangle.w = x1 - x0;
+  rectangle.h = y1 - y0;
+
   color = lua_tonumber(L, 5);
 
-  #ifdef PSP
-  oslDrawRect(x0 + kCamera->x, y0 + kCamera->y, x1 + kCamera->x, y1 + kCamera->y, color);
-  //oslDrawFillRect(10, 10, 100, 100, RGB(0, 255, 0));
-  #endif
+  rectangle_draw_camera(&rectangle, color, kCamera);
 
   return 0;
 }

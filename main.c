@@ -15,9 +15,12 @@
 
 #endif
 
+#include "graphics/rectangle.h"
 #include "graphics/text.h"
 
-#include "callback.h"
+#include "message-box/message_box.h"
+
+#include "callback.h" //for PSP
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -37,7 +40,7 @@
 
 #include "map/tilemap.h"
 
-#ifdef PSP
+#if PSP
 PSP_MODULE_INFO("Analogue Sample", 0, 1, 0);
 PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
 PSP_HEAP_SIZE_KB(12 * 1024);
@@ -59,7 +62,7 @@ int initOSLib()
 }
 #endif
 
-#ifdef SDL_VERS
+#if SDL_VERS
 
 int initWindow()
 {
@@ -138,7 +141,7 @@ int initSDL()
 
 int initSubsystem()
 {
-  #ifdef PSP
+  #if PSP
   return initOSLib();
   #elif SDL_VERS
   return initSDL();
@@ -197,36 +200,32 @@ void update(tilemap_t* tilemap)
   tilemap_update(tilemap, kCamera);
 
   player_update(kPlayer);
+
+  message_box_update();
 }
 
 void draw(tilemap_t* tilemap)
 {
-  #ifdef PSP
-  // draw last
-  //if(!skip)
-  //{
-    oslStartDrawing();
-    oslClearScreen(RGBA(0, 0, 0, 255));
-    tilemap_draw(tilemap, kCamera);
-
-    sprite_draw(kPlayer->main_sprite); //TODO: seperate player draw.
-
-    //draw_forest(tilemap_test->width * 32, tilemap_test->height * 32);
-    text_render_text(tilemap->map_name, 10, 2);
-    oslEndDrawing();
-  //}
-  oslEndFrame();
-  //skip = oslSyncFrame();
-  oslSyncFrame();
+  #if PSP //step 1: clear screen
+  oslStartDrawing();
+  oslClearScreen(RGBA(0, 0, 0, 255));
   #elif SDL_VERS
   SDL_RenderClear(kSdlRenderer);
+  #endif
+
+  //Do drawing in here
 
   tilemap_draw(tilemap, kCamera);
-
-  sprite_draw(kPlayer->sprite);
-
+  sprite_draw(kPlayer->main_sprite);
   text_render_text(tilemap->map_name, 10, 2);
+  message_box_draw();
 
+  //End do drawing in here
+
+  #if PSP //present
+  oslEndDrawing();
+  oslSyncFrame();
+  #elif SDL_VERS
   SDL_RenderPresent(kSdlRenderer);
   #endif
 }
@@ -288,7 +287,7 @@ int main(int argc, char** argv)
   }
   destroy_globals();
 
-  #ifdef PSP
+  #if PSP
   oslEndGfx();
   oslQuit();
   #elif SDL_VERS

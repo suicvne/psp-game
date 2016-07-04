@@ -11,12 +11,12 @@ v2 - appends the tileset filename after map_name
 #define ___TILEMAP_H___
 
 #include "tile.h"
+#include "../graphics/rectangle.h"
 #include "../globals.h"
 #include "../common.h"
 #include "../camera/camera.h"
 #include "../sprites/sprite.h"
 #include "../player/player.h"
-#include "../graphics/common.h"
 #include "../serialization/serializer.h"
 #include "../serialization/serialization_reader.h"
 #include "lua/map_lua_functions.h"

@@ -7,7 +7,7 @@ function onLoad() --map contains table based metadata for the level
   print("Map Name: " .. tilemap_get_name(_current_tilemap));
   print("Map Size: " .. tilemap_get_width(_current_tilemap) .. " x " .. tilemap_get_height(_current_tilemap));
 
-  message_box_set_message("top kek!");
+  message_box_set_message("This is a much longer message detailing a quest\nor something that you have to do for some\nperson.");
 end
 
 function math.clamp(value, lower, upper)
@@ -20,7 +20,11 @@ end
 
 function onUpdate()
   time_loop();
-  check_input(_current_tilemap);
+  --check_input(_current_tilemap);
+
+  if(input_is_button_down(BUTTON_USE) == 1) then
+    message_box_set_visibility(true);
+  end
 end
 
 function onDraw()
@@ -28,12 +32,8 @@ function onDraw()
   draw_text(message, 10, 32);
   message = string.format("energy: %d", player_current_energy);
   draw_text(message, 10, 42);
-  message = string.format("message: %s", message_box_get_message());
-  draw_text(message, 10, 52);
-  message = string.format("player: %d, %d", player_get_x(), player_get_y());
-  --draw_text(message, 10, 42);
-  message = string.format("player direction: %s", get_direction_string());
-  --draw_text(message, 10, 52);
+  
+  get_direction_string(); --why is this necessary
   
   value = input_is_button_down(BUTTON_USE);
   if(value == 1) then
@@ -41,7 +41,6 @@ function onDraw()
   else
     message = "interact: no";
   end
-  --draw_text(message, 10, 62);
   
   draw_selection();
 end

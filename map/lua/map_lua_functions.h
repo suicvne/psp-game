@@ -10,6 +10,7 @@ Defines common functions for the map's Lua interpreter.
 #define ___MAP_LUA_FUNCTIONS_H___
 
 #include "../tilemap.h"
+#include "../../graphics/rectangle.h"
 #include "../../graphics/text.h"
 #include "../../player/player.h"
 #include "../../vector/vector.h"

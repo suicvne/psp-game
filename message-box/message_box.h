@@ -10,6 +10,9 @@ Contains various functions for in-game message boxes.
 #include <stdio.h>
 #include <string.h>
 
+#include "../graphics/rectangle.h"
+#include "../graphics/text.h"
+
 extern const int MESSAGE_BOX_MAX_CHAR_LENGTH; //maximum characters per line for a message
 extern const int MESSAGE_BOX_MAX_LINES; //maximum lines per single message box
 extern const int MESSAGE_BOX_MAX_WIDTH; //maximum width in pixels that the message box should be.
@@ -21,8 +24,7 @@ extern const int MESSAGE_BOX_ORIGIN_Y; //where the message box is to start drawi
 extern int message_box_framecount;
 extern int message_box_is_visible;
 
-extern int message_box_current_width;
-extern int message_box_current_height;
+extern rectangle_t message_box_rectangle;
 
 extern char* message_box_message;
 
