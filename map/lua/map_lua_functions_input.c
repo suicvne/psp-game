@@ -18,7 +18,7 @@ int lua_input_is_button_pressed(lua_State* L)
   switch(button_id)
   {
   case BUTTON_USE:
-    lua_pushnumber(L, kInput->button_interact);
+    lua_pushnumber(L, input_is_button_just_pressed(INPUT_BUTTON_INTERACT));
     break;
   default:
     lua_pushnumber(L, 0);

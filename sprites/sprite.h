@@ -12,7 +12,7 @@
 
 #include <assert.h>
 #include "../globals.h"
-#include "../graphics/common.h"
+#include "../graphics/rectangle.h"
 #include "../common.h"
 #include "../camera/camera.h"
 

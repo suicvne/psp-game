@@ -51,7 +51,7 @@ void player_update_animation_offset(player_t* player, const vector_t* movement)
 
 void player_update(player_t* player)
 {
-  vector_t stickInput = kInput->analogue_input;
+  vector_t stickInput = input_current_frame.analogue_input;
   if(stickInput.x != 0.0f || stickInput.y != 0.0f)
   {
     float magnitude = vector_magnitude(stickInput);

@@ -38,6 +38,12 @@ void message_box_set_visibility(int visible)
         message_box_rectangle.y = MESSAGE_BOX_ORIGIN_Y;
         message_box_rectangle.w = MESSAGE_BOX_MAX_WIDTH;
         message_box_rectangle.h = MESSAGE_BOX_MAX_HEIGHT;
+        kUpdate = 0; //no update
+    }
+    else
+    {
+        message_box_text_index = 0;
+        kUpdate = 1;
     }
 }
 
@@ -54,7 +60,13 @@ void message_box_draw()
             char c = message_box_message[i];
             int draw_x = MESSAGE_BOX_ORIGIN_X + 3 + (id * 6);
             
-            if(draw_x > (MESSAGE_BOX_MAX_WIDTH + MESSAGE_BOX_ORIGIN_X) - 8 || c == '\n')
+            if(c == '\n')
+            {
+                message_box_y_offset += 12;
+                id = 0;
+                continue;
+            }
+            if(draw_x > (MESSAGE_BOX_MAX_WIDTH + MESSAGE_BOX_ORIGIN_X) - 8)
             {
                 message_box_y_offset += 12;
                 id = 0;
@@ -71,12 +83,20 @@ void message_box_update()
     if(message_box_is_visible) //why use extra cycles if it's not visible?'
     {
         message_box_framecount++;
-        if(message_box_framecount > 5)
+        int frame_mod = 5;
+        if(input_current_frame.button_interact)
+            frame_mod = 1;
+        if(message_box_framecount > frame_mod)
         {
             message_box_framecount = 0;
             message_box_text_index++;
             if(message_box_text_index > strlen(message_box_message))
                 message_box_text_index--;
+
+            if(message_box_text_index >= (strlen(message_box_message) - 1) && input_is_button_just_pressed(INPUT_BUTTON_INTERACT)) //dismiss the message
+            {
+                message_box_set_visibility(0); //dismiss
+            }
         }
     }
 }

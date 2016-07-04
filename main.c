@@ -151,13 +151,12 @@ int initSubsystem()
 void initialize_globals(void)
 {
   kCamera = camera_create(0, 0);
-  kInput = input_create();
   kPlayer = player_create();
   kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
 
   #ifdef PSP
   //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0
-  kMainFont = oslLoadFontFile("res/ltn0.pgf"); //can't find the font in ppsspp on linux?
+  kMainFont = oslLoadFontFile("res/hack.pgf"); //can't find the font in ppsspp on linux?
     oslIntraFontSetStyle(kMainFont, .4f, RGBA(255, 255, 255, 255), RGBA(0, 0, 0, 255), INTRAFONT_ALIGN_LEFT);
     oslSetFont(kMainFont);
   #elif SDL_VERS
@@ -174,7 +173,6 @@ void initialize_globals(void)
 void destroy_globals(void)
 {
   camera_destroy(kCamera);
-  input_destroy(kInput);
   player_destroy(kPlayer);
   sprite_destroy(kForest);
 }
@@ -195,13 +193,15 @@ tilemap_t* load_level(const char* dir, const char* filename)
 
 void update(tilemap_t* tilemap)
 {
-  input_update(kInput);
+  input_update();
 
-  tilemap_update(tilemap, kCamera);
+  if(kUpdate)
+  {
+    tilemap_update(tilemap, kCamera);
+    player_update(kPlayer);
+  }
 
-  player_update(kPlayer);
-
-  message_box_update();
+  message_box_update(); //always update message boxes to maintain consitency
 }
 
 void draw(tilemap_t* tilemap)

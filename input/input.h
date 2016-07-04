@@ -32,14 +32,25 @@ typedef struct input_t {
 
 } input_t;
 
-input_t* input_create();
+typedef enum INPUT_BUTTON_TYPES {
+
+  INPUT_BUTTON_INTERACT = 0 //default (X) on PSP
+
+} INPUT_BUTTON_TYPES;
+
+extern input_t input_current_frame;
+extern input_t input_last_frame;
+
+//input_t* input_create();
+void input_initialize();
 
 #ifdef SDL_VERS
-vector_t input_mouse_to_world(input_t* input, camera_t* camera);
+vector_t input_mouse_to_world(input_t* input, camera_t* camera); //TODO: change to new format
 #endif
 
-void input_destroy(input_t* input);
-void input_update(input_t* input);
-void input_begin_frame(input_t* input);
+void input_update();
+void input_begin_frame();
+
+int input_is_button_just_pressed(INPUT_BUTTON_TYPES button_type);
 
 #endif //___INPUT_H___
