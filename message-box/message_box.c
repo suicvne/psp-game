@@ -27,7 +27,7 @@ void message_box_set_message(const char* message)
     memset(message_box_message, 0, size); //zero off
     memcpy(message_box_message, message, strlen(message));
     printf("message box message set to: '%s'\n", message_box_message);
-} 
+}
 
 void message_box_set_visibility(int visible)
 {
@@ -57,9 +57,9 @@ void message_box_draw()
         int id = 0;
         for(i = 0; i < message_box_text_index; i++)
         {
-            char c = message_box_message[i];
+            char* c = &message_box_message[i];
             int draw_x = MESSAGE_BOX_ORIGIN_X + 3 + (id * 6);
-            
+
             if(c == '\n')
             {
                 message_box_y_offset += 12;
@@ -73,7 +73,7 @@ void message_box_draw()
                 draw_x = MESSAGE_BOX_ORIGIN_X + 3 + (id * 6);
             }
             id++;
-            text_render_text(&c, draw_x, MESSAGE_BOX_ORIGIN_Y + message_box_y_offset);
+            text_render_text(c, draw_x, MESSAGE_BOX_ORIGIN_Y + message_box_y_offset);
         }
     }
 }

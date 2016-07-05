@@ -29,10 +29,11 @@ function onUpdate()
     message_box_set_message('no.');
     message_box_set_visibility(true);
   elseif(framecount == 2) then
-    message_box_set_message("what's up my dudes check out this really\ncool message box i just made hah :)")
+    --message_box_set_message("what's up my dudes check out this really\ncool message box i just made hah :)")
+    message_box_set_message("message w no specials");
     message_box_set_visibility(true);
   end
-  
+
 
   time_loop();
   check_input(_current_tilemap);

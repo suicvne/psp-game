@@ -12,7 +12,7 @@ int text_render_text(const char* text, int x, int y)
   oslDrawStringf(x, y, text);
 
   #elif SDL_VERS
-
+  //printf("%s\n", text, text);
   //wew
   SDL_Surface* shadowSurface = TTF_RenderText_Solid(kSdlFont, text, text_shadow_text_color);
   SDL_Surface* textSurface = TTF_RenderText_Solid(kSdlFont, text, text_standard_text_color);
