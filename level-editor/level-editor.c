@@ -49,6 +49,7 @@ level_editor_t* editor_create()
 
   editor->current_screen = EDITOR_SCREEN_EDIT;
   editor->current_tile_id = 0;
+  editor->current_tile_angle = 0;
 
   /**
   For retrieving graphical mode info
@@ -178,7 +179,7 @@ void editor_draw_editor(level_editor_t* editor)
   /**
   Get Selection Area
   */
-  vector_t location = input_mouse_to_world(kInput, kCamera);
+  vector_t location = input_mouse_to_world(kCamera);
   SDL_Rect rect;
 
   rect.x = ((floor(location.x / 32) * 32) + kCamera->x);
@@ -223,7 +224,7 @@ void editor_draw_pick_tile(level_editor_t* editor)
   Draw Selection
   */
   {
-    vector_t location = input_mouse_to_world(kInput, NULL);
+    vector_t location = input_mouse_to_world(NULL);
     SDL_Rect rect;
 
     rect.x = ((floor(location.x / 32) * 32)); //+ kCamera->x);
@@ -283,26 +284,18 @@ void editor_handle_input(level_editor_t* editor)
     }
   }
 
-  if(kInput->button_angle_decrease) //decrease angle
-  {
-    editor->current_tile_angle -= 90;
-    if(editor->current_tile_angle < 0)
-      editor->current_tile_angle = 360;
-    kInput->button_angle_decrease = 0;
-  }
-  else if(kInput->button_angle_increase) //increase angle
+  if(input_is_button_just_pressed(INPUT_BUTTON_ANGLE_INCREASE)) //decrease angle
   {
     editor->current_tile_angle += 90;
     if(editor->current_tile_angle > 360)
       editor->current_tile_angle = 0;
-    kInput->button_angle_increase = 0;
   }
 
   if(editor->current_screen == EDITOR_SCREEN_PICK_TILE)
   {
     if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
     {
-      vector_t location = input_mouse_to_world(kInput, NULL);
+      vector_t location = input_mouse_to_world(NULL);
       int sx, sy;
       sx = floor(location.x / 32);
       sy = floor(location.y / 32);
@@ -320,7 +313,7 @@ void editor_handle_input(level_editor_t* editor)
   {
     if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
     {
-      vector_t location = input_mouse_to_world(kInput, kCamera);
+      vector_t location = input_mouse_to_world(kCamera);
       int sx, sy;
       sx = floor(location.x / 32);
       sy = floor(location.y / 32); //to normalize
@@ -342,7 +335,7 @@ void editor_handle_input(level_editor_t* editor)
 
 void editor_update(level_editor_t* editor)
 {
-  input_update(kInput);
+  input_update();
   editor_handle_input(editor);
 
   tilemap_update(editor->tilemap, kCamera);

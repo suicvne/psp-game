@@ -89,6 +89,9 @@ int lua_map_draw_rect(lua_State* L)
   #ifdef PSP
   oslDrawFillRect(x0, y0, x1, y1, color);
   //oslDrawFillRect(10, 10, 100, 100, RGB(0, 255, 0));
+  #elif SDL_VERS
+  SDL_Rect rect = {x0, y0, x1, y1};
+  SDL_RenderFillRect(kSdlRenderer, &rect);
   #endif
 
   return 0;
@@ -148,7 +151,7 @@ int lua_map_test_blending(lua_State* L)
 }
 
 
-int lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
+void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
 {
   /**
   Setting path properly
@@ -158,7 +161,7 @@ int lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   const char* cur_path = lua_tostring(L, -1);
   printf("lua cur_path: %s\n", cur_path);
   /*const char* to_append = ";./map/?.lua"; //what to append
-  
+
   int combined_size = sizeof(char) * (strlen(cur_path) + strlen(to_append)) + 1;
   char* combined_path = malloc(combined_size);
   memset(combined_path, 0, combined_size);

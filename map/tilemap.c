@@ -24,7 +24,7 @@ tilemap_t* tilemap_create(int width, int height, int allocate_texture)
   int total_tiles = width * height;
   tilemap->tiles = malloc(sizeof(tile_t) * total_tiles);
   tilemap->surrounding_tile_id = 1; //stone
-  printf("allocated %d for map\n", sizeof(tile_t) * total_tiles);
+  printf("allocated %d for map\n", (int)(sizeof(tile_t) * total_tiles));
 
   int x, y;
   for(x = 0; x < width; x++)
@@ -76,9 +76,8 @@ void tilemap_destroy(tilemap_t* map)
   free(map->tileset);
   free(map->tiles);
   free(map);
-  //TODO: SDL_DestroyTexture for SDL
   #else
-  SDL_DestroyTexture(map->tileset);
+  SDL_DestroyTexture(map->tileset->image);
   #endif
 }
 
@@ -211,9 +210,11 @@ int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t
 
 void camera_get_index_bounds(const camera_t* camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y)
 {
+  /*
   int half_map_width, half_map_height;
   half_map_width = ((tilemap->width * 32) / 2);
   half_map_height = ((tilemap->height * 32) / 2);
+  */
 
   float corrected_x, corrected_y;
   corrected_x = -camera->x;
@@ -330,7 +331,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
   if(file_size > 0)
   {
     char* buffer = malloc(sizeof(char) * file_size);
-    int pointer = 0, i;
+    int pointer = 0;
 
     serializer_read_from_file(buffer, file_size, combined_filename);
 
@@ -344,7 +345,6 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       char* map_name = serializer_read_string(buffer, &pointer);
       char* tileset_path = serializer_read_string(buffer, &pointer);
       printf("tileset: %s\n", tileset_path);
-      printf("sizeofchar: %d\n", sizeof(char));
       int width, height;
       width = serializer_read_int(buffer, &pointer);
       height = serializer_read_int(buffer, &pointer);

@@ -27,14 +27,15 @@ typedef struct input_t {
   int mouse_y;
 
   int button_angle_increase;
-  int button_angle_decrease;
   #endif
 
 } input_t;
 
 typedef enum INPUT_BUTTON_TYPES {
 
-  INPUT_BUTTON_INTERACT = 0 //default (X) on PSP
+  INPUT_BUTTON_INTERACT = 0, //default (X) on PSP
+
+  INPUT_BUTTON_ANGLE_INCREASE = 6 //for SDL
 
 } INPUT_BUTTON_TYPES;
 
@@ -45,7 +46,7 @@ extern input_t input_last_frame;
 void input_initialize();
 
 #ifdef SDL_VERS
-vector_t input_mouse_to_world(input_t* input, camera_t* camera); //TODO: change to new format
+vector_t input_mouse_to_world(camera_t* camera); //TODO: change to new format
 #endif
 
 void input_update();

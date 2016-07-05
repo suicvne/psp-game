@@ -12,6 +12,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 #endif
 
@@ -109,6 +110,7 @@ int shutdown_SDL()
 
   TTF_Quit();
   IMG_Quit();
+  Mix_CloseAudio();
   SDL_Quit();
 
   return 0;
@@ -137,6 +139,13 @@ int init_SDL()
     fprintf(stderr, "Error initializing SDL_TTTF: %s\n", TTF_GetError());
     return 1;
   }
+
+  if(Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) != 0)
+  {
+    fprintf(stderr, "Error initializing SDL_Mixer: %s\n", Mix_GetError());
+    return 1;
+  }
+
   return 0;
 }
 #endif
@@ -179,6 +188,7 @@ void destroy_globals(void)
   camera_destroy(kCamera);
   player_destroy(kPlayer);
   sprite_destroy(kForest);
+  sound_destroy();
 }
 
 int collides_with(const player_t* player, const sprite_t* sprite)

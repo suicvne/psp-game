@@ -1,6 +1,7 @@
 #ifndef ___RECTANGLE___H___
 #define ___RECTANGLE___H___
 
+#include "../globals.h"
 #include "common.h"
 #include "../camera/camera.h"
 
@@ -17,6 +18,19 @@ typedef struct rectangle_t {
   int left, right;
   int top, bottom;
 } rectangle_t;
+
+#if SDL_VERS
+static inline SDL_Rect rectangle_to_sdl(const rectangle_t* rect)
+{
+  SDL_Rect return_value;
+  return_value.x = rect->x;
+  return_value.y = rect->y;
+  return_value.w = rect->w;
+  return_value.h = rect->h;
+
+  return return_value;
+}
+#endif
 
 void rectangle_draw(const rectangle_t* rect, uint32_t color);
 void rectangle_draw_filled(const rectangle_t* rect, uint32_t color);

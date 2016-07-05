@@ -30,7 +30,7 @@ void get_scales(float* w, float* h)
   *h = wh / SCREEN_HEIGHT;
 }
 
-vector_t input_mouse_to_world(input_t* input, camera_t* camera)
+vector_t input_mouse_to_world(camera_t* camera)
 {
   int window_width, window_height;
   SDL_GetWindowSize(kSdlWindow, &window_width, &window_height);
@@ -42,13 +42,13 @@ vector_t input_mouse_to_world(input_t* input, camera_t* camera)
   vector_t value;
   if(camera != NULL)
   {
-    value.x = ((int)-camera->x) + (input->mouse_x) / w_scale;
-    value.y = ((int)-camera->y) + (input->mouse_y) / h_scale;
+    value.x = ((int)-camera->x) + (input_current_frame.mouse_x) / w_scale;
+    value.y = ((int)-camera->y) + (input_current_frame.mouse_y) / h_scale;
   }
   else
   {
-    value.x = (input->mouse_x) / w_scale;
-    value.y = (input->mouse_y) / h_scale;
+    value.x = (input_current_frame.mouse_x) / w_scale;
+    value.y = (input_current_frame.mouse_y) / h_scale;
   }
 
   return value;
@@ -60,10 +60,15 @@ void input_begin_frame()
   input_last_frame = input_current_frame; //pls copy
 
   input_current_frame.button_interact = 0; //zero off current frame
+
+  #if SDL_VERS
+  input_current_frame.button_angle_increase = 0;
+  #endif
 }
 
 int input_is_button_just_pressed(INPUT_BUTTON_TYPES button_type)
 {
+  //TODO: use arrays and do other cool stuff to make this more practical.
   if(button_type == INPUT_BUTTON_INTERACT)
   {
     if(input_current_frame.button_interact && input_last_frame.button_interact == 0)
@@ -71,7 +76,12 @@ int input_is_button_just_pressed(INPUT_BUTTON_TYPES button_type)
       return 1;
     }
   }
-  
+  else if(button_type == INPUT_BUTTON_ANGLE_INCREASE)
+  {
+    if(input_current_frame.button_angle_increase && input_last_frame.button_angle_increase == 0)
+      return 1;
+  }
+
   return 0;
 }
 
@@ -88,17 +98,6 @@ void input_update()
       kQuit = 1;
       break;
     case SDL_KEYDOWN:
-      if(kSdlEvent.key.repeat == 0)
-      {
-        switch(kSdlEvent.key.keysym.sym)
-        {
-          case SDLK_LEFTBRACKET:
-            input_current_frame.button_angle_decrease = 1;
-          case SDLK_RIGHTBRACKET:
-            input_current_frame.button_angle_increase = 1;
-            break;
-        }
-      }
       switch(kSdlEvent.key.keysym.sym)
       {
       case SDLK_w: //up
@@ -112,6 +111,13 @@ void input_update()
         break;
       case SDLK_d: //right
         input_current_frame.analogue_input.x = 1.0f;
+        break;
+      case SDLK_k:
+      case SDLK_SPACE:
+        input_current_frame.button_interact = 1;
+        break;
+      case SDLK_RIGHTBRACKET: //editor angle
+        input_current_frame.button_angle_increase = 1;
         break;
       }
       break;

@@ -7,6 +7,10 @@ defines various global variables to be reused in the lifetime of the game.
 #ifndef ___GLOBALS_H___
 #define ___GLOBALS_H___
 
+#ifndef RGBA
+#define RGBA(r,g,b,a) (((r)) | ((g) >> 8) | ((b) >> 16) | ((a) >> 24)) //TODO: is this correct?
+#endif
+
 extern int kQuit;
 extern int kLevelEditorMode;
 extern int kUpdate; //whether or not to update the game (useful for pause screens or message boxes)

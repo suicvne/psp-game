@@ -10,6 +10,10 @@ void rectangle_draw(const rectangle_t* rect, uint32_t color)
         rect->y + rect->h,
         color
     );
+    #elif SDL_VERS
+    SDL_Rect sdl = rectangle_to_sdl(rect);
+    //TODO: color
+    SDL_RenderDrawRect(kSdlRenderer, &sdl);
     #endif
 }
 
@@ -23,6 +27,9 @@ void rectangle_draw_filled(const rectangle_t* rect, uint32_t color)
         rect->y + rect->h,
         color
     );
+    #elif SDL_VERS
+    SDL_Rect sdl = rectangle_to_sdl(rect);
+    SDL_RenderFillRect(kSdlRenderer, &sdl);
     #endif
 }
 
@@ -36,6 +43,11 @@ void rectangle_draw_camera(const rectangle_t* rect, uint32_t color, const camera
         rect->y + rect->h + camera->y,
         color
     );
+    #elif SDL_VERS
+    SDL_Rect sdl = rectangle_to_sdl(rect);
+    sdl.x += camera->x;
+    sdl.y += camera->y;
+    SDL_RenderDrawRect(kSdlRenderer, &sdl);
     #endif
 }
 
@@ -49,6 +61,11 @@ void rectangle_draw_filled_camera(const rectangle_t* rect, uint32_t color, const
         rect->y + rect->h + camera->y,
         color
     );
+    #elif SDL_VERS
+    SDL_Rect sdl = rectangle_to_sdl(rect);
+    sdl.x += camera->x;
+    sdl.y += camera->y;
+    SDL_RenderFillRect(kSdlRenderer, &sdl);
     #endif
 }
 

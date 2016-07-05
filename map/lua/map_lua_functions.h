@@ -27,13 +27,15 @@ Defines common functions for the map's Lua interpreter.
 #include <lauxlib.h>
 #include <lualib.h>
 
+struct tilemap_t;
+
 /**
 Drawing functions
 */
 int lua_map_print(lua_State* L);
 int lua_map_draw_text(lua_State* L);
 int lua_map_rgba(lua_State* L);
-int lua_map_register_functions(lua_State* L, struct tilemap_t* tilemap);
+void lua_map_register_functions(lua_State* L, struct tilemap_t* tilemap);
 int lua_map_draw_rect(lua_State* L);
 int lua_map_draw_rect_camera(lua_State* L);
 
