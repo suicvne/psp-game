@@ -19,7 +19,7 @@ sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type)
     sprite->image = IMG_LoadTexture(kSdlRenderer, sprite_path);
     if(sprite->image == NULL)
     {
-      reportFatalError(IMG_GetError());
+      report_fatal_error(IMG_GetError());
     }
     #endif
     printf("png sprite with path '%s' has pointer value %p\n", sprite_path, (void*)sprite->image);
@@ -33,7 +33,7 @@ sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type)
   }
   else
   {
-    reportFatalError("Wrong given type!");
+    report_fatal_error("Wrong given type!");
     return NULL;
   }
 

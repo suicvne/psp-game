@@ -19,7 +19,8 @@ function math.clamp(value, lower, upper)
 end
 
 function onUpdate()
-  if(framecount < 3) then
+  
+  --[[if(framecount < 3) then
     framecount = framecount + 1;
   end
 
@@ -31,6 +32,7 @@ function onUpdate()
     message_box_set_message("what's up my dudes check out this really\ncool message box i just made hah :)")
     message_box_set_visibility(true);
   end
+  ]]--
 
   time_loop();
   check_input(_current_tilemap);
@@ -43,13 +45,6 @@ function onDraw()
   draw_text(message, 10, 42);
   
   get_direction_string(); --why is this necessary
-  
-  value = input_is_button_down(BUTTON_USE);
-  if(value == 1) then
-    message = "interact: yes";
-  else
-    message = "interact: no";
-  end
-  
+   
   draw_selection();
 end
