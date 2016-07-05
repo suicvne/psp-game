@@ -100,6 +100,7 @@ function draw_selection()
     PLAYER_SELECTION_Y = y0;
     
     if(x0 < 0 or y0 < 0) then
+        return;
     else
         draw_rect_camera(x0, y0, x1, y1, RGBA(0, 0, 0, 255));
     end

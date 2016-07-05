@@ -1,13 +1,13 @@
-kMinutesPerHour = 60;
-kHoursPerDay = 12;
-kTicksPerSecond = 120; --120
+local kMinutesPerHour = 60;
+local kHoursPerDay = 12;
+local kTicksPerSecond = 120; --120
 
 time_hour = 0;
 time_minute = 0;
 time_ticks = 0;
 
-kMinLighting = 0.001;
-kMaxLighting = 1.0;
+local kMinLighting = 0.001;
+local kMaxLighting = 1.0;
 
 function time_loop()
   time_ticks = time_ticks + 1;

@@ -8,8 +8,6 @@ function onLoad() --map contains table based metadata for the level
   print("Hello from inside of Lua!");
   print("Map Name: " .. tilemap_get_name(_current_tilemap));
   print("Map Size: " .. tilemap_get_width(_current_tilemap) .. " x " .. tilemap_get_height(_current_tilemap));
-
-  message_box_set_message("This is a much longer message detailing a quest\nor something that you have to do for some\nperson.");
 end
 
 function math.clamp(value, lower, upper)
@@ -21,13 +19,16 @@ function math.clamp(value, lower, upper)
 end
 
 function onUpdate()
-  framecount = framecount + 1;
-  
+  if(framecount < 3) then
+    framecount = framecount + 1;
+  end
+
   if(framecount == 1) then
-    message_box_set_message("Welcome to the Rock Bottom alpha!\nYou can't do much, sorry!");
+    --message_box_set_message("Welcome to the Rock Bottom alpha!\nYou can't do much, sorry!");
+    message_box_set_message('no.');
     message_box_set_visibility(true);
   elseif(framecount == 2) then
-    message_box_set_message("There is, however, a test of changing tiles. :)")
+    message_box_set_message("what's up my dudes check out this really\ncool message box i just made hah :)")
     message_box_set_visibility(true);
   end
 

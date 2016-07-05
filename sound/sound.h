@@ -25,11 +25,11 @@ typedef enum {
 
 typedef struct {
 
-#if PSP
-OSL_SOUND* sound;
-#elif SDL_VERS
-//TODO
-#endif
+    #if PSP
+    OSL_SOUND* sound;
+    #elif SDL_VERS
+    //TODO
+    #endif
 
 } sound_effect_t;
 
