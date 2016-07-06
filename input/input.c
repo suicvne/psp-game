@@ -78,8 +78,10 @@ int input_is_button_just_pressed(INPUT_BUTTON_TYPES button_type)
   }
   else if(button_type == INPUT_BUTTON_ANGLE_INCREASE)
   {
+    #if SDL_VERS //USED FOR LEVEL EDITOR ONLY
     if(input_current_frame.button_angle_increase && input_last_frame.button_angle_increase == 0)
       return 1;
+    #endif
   }
 
   return 0;

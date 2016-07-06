@@ -50,6 +50,19 @@ int text_render_text(const char* text, int x, int y)
   return 0;
 }
 
+int text_render_char(const char character, int x, int y)
+{
+  char* temp_str = malloc(sizeof(char) * 2);
+  temp_str[0] = character;
+  temp_str[1] = '\0';
+
+  text_render_text(temp_str, x, y);
+
+  free(temp_str);
+  
+  return 0;
+}
+
 int text_get_width(const char* text)
 {
   #if PSP

@@ -57,7 +57,9 @@ void message_box_draw()
         int id = 0;
         for(i = 0; i < message_box_text_index; i++)
         {
-            char* c = &message_box_message[i];
+            char c = message_box_message[i];
+            //printf("c: %c\n", c);
+
             int draw_x = MESSAGE_BOX_ORIGIN_X + 3 + (id * 6);
 
             if(c == '\n')
@@ -73,7 +75,7 @@ void message_box_draw()
                 draw_x = MESSAGE_BOX_ORIGIN_X + 3 + (id * 6);
             }
             id++;
-            text_render_text(c, draw_x, MESSAGE_BOX_ORIGIN_Y + message_box_y_offset);
+            text_render_char(c, draw_x, MESSAGE_BOX_ORIGIN_Y + message_box_y_offset);
         }
     }
 }
