@@ -1,13 +1,36 @@
---package.path = "map/?.lua" --todo: map this from inside of C?
-require "time"
-require "player"
+--[[
 
-framecount = 0;
+  about script.lua
 
-function onLoad() --map contains table based metadata for the level
-  print("Hello from inside of Lua!");
-  print("Map Name: " .. tilemap_get_name(_current_tilemap));
-  print("Map Size: " .. tilemap_get_width(_current_tilemap) .. " x " .. tilemap_get_height(_current_tilemap));
+  the current iteration of the engine supports executing a lua script in the same directory as the map as long as the file is named script.lua.
+  the engine's lua interpreter will execute 3 functions at certain times and will skip them if it can't find them or they don't exist.
+
+  1. onLoad() - called when the map is loaded. do initialization here.
+  2. onUpdate() - called when the map's update function is called n times per second.
+  3. onDraw() - called when the map's draw function is called n times per second.
+
+  in the case of onUpdate() and onDraw(), both are called **AFTER** the map's normal drawing/updating functions.
+
+]]
+
+require "time" --time.lua contains functions for time related stuff. what else did you expect?
+require "player" --lua testing of player functions (tilling soil at the moment)
+require "npc"
+
+local framecount = 0;
+
+local npc_test_2;
+
+
+function onLoad()
+  npc_test_2 = NPC:new{name = "DJ Khaled", sprite = sprite_create("../res/ness.png")}
+  print('created test npc');
+
+  --npc_test_2:destroy();
+
+  --print("Hello from inside of Lua!");
+  --print("Map Name: " .. tilemap_get_name(_current_tilemap));
+  --print("Map Size: " .. tilemap_get_width(_current_tilemap) .. " x " .. tilemap_get_height(_current_tilemap));
 end
 
 function math.clamp(value, lower, upper)
@@ -19,31 +42,22 @@ function math.clamp(value, lower, upper)
 end
 
 function onUpdate()
-
-  if(framecount < 3) then
-    framecount = framecount + 1;
-  end
-
-  if(framecount == 1) then
-    --message_box_set_message("Welcome to the Rock Bottom alpha!\nYou can't do much, sorry!");
-    message_box_set_message('no.');
-    message_box_set_visibility(true);
-  elseif(framecount == 2) then
-    --message_box_set_message("what's up my dudes check out this really\ncool message box i just made hah :)")
-    message_box_set_message("message w no specials");
-    message_box_set_visibility(true);
-  end
-
+ --message_box_set_message("message w no specials");
+ --message_box_set_visibility(true);
+  npc_test_2:update();
 
   time_loop();
   check_input(_current_tilemap);
 end
 
 function onDraw()
-  message = string.format("time: %d:%02d", time_hour, time_minute, time_ticks);
-  draw_text(message, 10, 32);
+  
+  npc_test_2:draw();
+
+  message = string.format("Day %d - %d:%02d", time_day, time_hour, time_minute);
+  draw_text(message, 10, 22);
   message = string.format("energy: %d", player_current_energy);
-  draw_text(message, 10, 42);
+  draw_text(message, 10, 32);
 
   get_direction_string(); --why is this necessary
 

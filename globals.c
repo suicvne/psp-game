@@ -11,6 +11,7 @@
 int kQuit;
 int kLevelEditorMode;
 int kUpdate = 1;
+int kSkip = 0;
 
 struct player_t* kPlayer = NULL;
 //struct sprite_t* kTestEntity = NULL; //22x29 sprite on a 32x32 sheet

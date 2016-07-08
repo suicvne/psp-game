@@ -51,14 +51,12 @@ void message_box_draw()
 {
     if(message_box_is_visible)
     {
-        //printf("message box draw: %d, %d (%d x %d)\n", message_box_rectangle.x, message_box_rectangle.y, message_box_rectangle.w, message_box_rectangle.h);
         rectangle_draw_filled(&message_box_rectangle, RGBA(0, 0, 0, 255));
         int i, message_box_y_offset = 0;
         int id = 0;
         for(i = 0; i < message_box_text_index; i++)
         {
             char c = message_box_message[i];
-            //printf("c: %c\n", c);
 
             int draw_x = MESSAGE_BOX_ORIGIN_X + 3 + (id * 6);
 

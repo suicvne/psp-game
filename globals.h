@@ -14,6 +14,7 @@ defines various global variables to be reused in the lifetime of the game.
 extern int kQuit;
 extern int kLevelEditorMode;
 extern int kUpdate; //whether or not to update the game (useful for pause screens or message boxes)
+extern int kSkip; //mostly used for the PSP
 
 extern struct player_t* kPlayer;
 //extern struct sprite_t* kTestEntity; //22x29 sprite on a 32x32 sheet

@@ -60,24 +60,30 @@ void player_update(player_t* player)
     {
       player_update_animation_offset(player, &stickInput);
     }
-
-    if(magnitude < DEADZONE)
+    else if(magnitude < DEADZONE)
     {
       stickInput.x = 0;
       stickInput.y = 0;
     }
 
     float xtrajectory, ytrajectory;
+
+    #if SDL
     if(kLevelEditorMode)
     {
+    #endif
+    //lol
       xtrajectory = -(PLAYER_SPEED * stickInput.x);
       ytrajectory = -(PLAYER_SPEED * stickInput.y);
+    #if SDL
+
     }
     else
     {
       xtrajectory = -(PLAYER_SPEED * stickInput.x);
       ytrajectory = -(PLAYER_SPEED * stickInput.y);
     }
+    #endif
 
     kCamera->x += xtrajectory;
     kCamera->y += ytrajectory;

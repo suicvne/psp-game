@@ -150,6 +150,22 @@ int lua_map_test_blending(lua_State* L)
   return 0;
 }
 
+int lua_map_draw_sprite(lua_State* L)
+{
+  //Should just pass the sprite pointer since x & y, etc. are handled by the sprite's rectangle parameter
+  int arg_count = lua_gettop(L);
+  if(arg_count == 1)
+  {
+    sprite_t* sprite = ((sprite_t*)lua_touserdata(L, 1));
+    if(sprite != NULL)
+    {
+      sprite_draw_camera(sprite, *kCamera);
+      return 0;
+    }
+  }
+  return 0;
+}
+
 
 void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
 {
@@ -183,6 +199,8 @@ void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   lua_pushlightuserdata(L, (void*)tilemap);
   lua_setglobal(L, "_current_tilemap");
 
+  //TODO: rename these "general" functions
+
   lua_register(L, "print", lua_map_print);
   lua_register(L, "draw_text", lua_map_draw_text);
   lua_register(L, "RGBA", lua_map_rgba);
@@ -190,6 +208,8 @@ void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   lua_register(L, "draw_rect_camera", lua_map_draw_rect_camera);
   lua_register(L, "draw_set_alpha", lua_map_set_blending);
   lua_register(L, "draw_set_alpha_color", lua_map_test_blending);
+
+  lua_register(L, "map_draw_sprite", lua_map_draw_sprite);
 
   //player
   lua_register(L, "player_get_x", lua_player_get_x);
@@ -215,6 +235,16 @@ void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   lua_register(L, "message_box_set_message", lua_message_box_set_message);
   lua_register(L, "message_box_get_message", lua_message_box_get_message);
   //end message box
+
+  //sprites
+  lua_register(L, "sprite_create", lua_sprite_create);
+  lua_register(L, "sprite_destroy", lua_sprite_destroy);
+  lua_register(L, "sprite_set_position", lua_sprite_set_position);
+  lua_register(L, "sprite_set_size", lua_sprite_set_size);
+  lua_register(L, "sprite_set_frame_count", lua_sprite_set_frame_count);
+  lua_register(L, "sprite_set_frame_time", lua_sprite_set_frame_time);
+  lua_register(L, "sprite_update", lua_sprite_update);
+  //end sprites
 }
 
 

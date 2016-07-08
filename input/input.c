@@ -60,6 +60,7 @@ void input_begin_frame()
   input_last_frame = input_current_frame; //pls copy
 
   input_current_frame.button_interact = 0; //zero off current frame
+  input_current_frame.button_use_item = 0;
 
   #if SDL_VERS
   input_current_frame.button_angle_increase = 0;
@@ -75,6 +76,11 @@ int input_is_button_just_pressed(INPUT_BUTTON_TYPES button_type)
     {
       return 1;
     }
+  }
+  else if(button_type == INPUT_BUTTON_USE_ITEM)
+  {
+    if(input_current_frame.button_use_item && input_last_frame.button_use_item == 0)
+      return 1;
   }
   else if(button_type == INPUT_BUTTON_ANGLE_INCREASE)
   {
@@ -161,6 +167,10 @@ void input_update()
     if(pad.Buttons & PSP_CTRL_CROSS) //x, default interact button
     {
       input_current_frame.button_interact = 1;
+    }
+    if(pad.Buttons & PSP_CTRL_SQUARE)
+    {
+      input_current_frame.button_use_item = 1;
     }
   }
   #endif

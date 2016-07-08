@@ -215,14 +215,17 @@ void update(tilemap_t* tilemap)
     player_update(kPlayer);
   }
 
-  message_box_update(); //always update message boxes to maintain consitency
+  if(message_box_is_visible)
+    message_box_update(); //always update message boxes to maintain consitency
 }
 
 void draw(tilemap_t* tilemap)
 {
   #if PSP //step 1: clear screen
-  oslStartDrawing();
-  oslClearScreen(RGBA(0, 0, 0, 255));
+  if(!kSkip)
+  {
+    oslStartDrawing();
+    oslClearScreen(RGBA(0, 0, 0, 255));
   #elif SDL_VERS
   SDL_RenderClear(kSdlRenderer);
   #endif
@@ -232,13 +235,15 @@ void draw(tilemap_t* tilemap)
   tilemap_draw(tilemap, kCamera);
   sprite_draw(kPlayer->main_sprite);
   text_render_text(tilemap->map_name, 10, 2);
-  message_box_draw();
+  if(message_box_is_visible)
+    message_box_draw();
 
   //End do drawing in here
 
   #if PSP //present
+  }
   oslEndDrawing();
-  oslSyncFrame();
+  kSkip = oslSyncFrame();
   #elif SDL_VERS
   SDL_RenderPresent(kSdlRenderer);
   #endif

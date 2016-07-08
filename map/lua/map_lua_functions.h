@@ -10,6 +10,7 @@ Defines common functions for the map's Lua interpreter.
 #define ___MAP_LUA_FUNCTIONS_H___
 
 #include "../tilemap.h"
+#include "../../sprites/sprite.h"
 #include "../../graphics/rectangle.h"
 #include "../../graphics/text.h"
 #include "../../player/player.h"
@@ -41,6 +42,8 @@ int lua_map_draw_rect_camera(lua_State* L);
 
 int lua_map_set_blending(lua_State* L);
 int lua_map_test_blending(lua_State* L);
+
+int lua_map_draw_sprite(lua_State* L); //map will have its own draw sprite function to differentiate between with or without camera
 /**
 End Drawing functions
 */
@@ -99,4 +102,24 @@ int lua_message_box_get_message(lua_State* L);
 /**
 End Message Box Functions
 */
+
+/**
+Sprite functions - map_lua_functions_sprite.c
+*/
+
+int lua_sprite_create(lua_State* L);
+
+int lua_sprite_set_position(lua_State* L);
+int lua_sprite_set_size(lua_State* L);
+int lua_sprite_set_frame_count(lua_State* L);
+int lua_sprite_set_frame_time(lua_State* L);
+
+int lua_sprite_update(lua_State* L); //This is under sprites because updating is independent from drawing
+
+int lua_sprite_destroy(lua_State* L);
+
+/**
+End sprite functions
+*/
+
 #endif //___MAP_LUA_FUNCTIONS_H___

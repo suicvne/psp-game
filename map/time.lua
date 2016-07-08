@@ -1,9 +1,10 @@
 local kMinutesPerHour = 60;
 local kHoursPerDay = 12;
-local kTicksPerSecond = 120; --120
+local kTicksPerSecond = 90; --120
 
-time_hour = 0;
-time_minute = 0;
+time_day = 1;
+time_hour = 6; --default 6 
+time_minute = 0; --default 0
 time_ticks = 0;
 
 local kMinLighting = 0.001;
@@ -20,11 +21,14 @@ function time_loop()
 
     if(time_hour == kHoursPerDay) then
       time_hour = 0;
+      time_day = 1;
     end
 
     time_ticks = 0;
   end
 end
+
+--TODO: alpha blended lighting stuff
 
 --[[
 function calculateLighting()

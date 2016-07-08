@@ -13,7 +13,7 @@ sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type)
 
   if(type == SPRITE_TYPE_PNG)
   {
-    #ifdef PSP
+    #if PSP
     sprite->image = oslLoadImageFilePNG(sprite_path, OSL_IN_RAM | OSL_SWIZZLED, OSL_PF_8888);
     #else
     sprite->image = IMG_LoadTexture(kSdlRenderer, sprite_path);
@@ -26,7 +26,7 @@ sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type)
   }
   else if(type == SPRITE_TYPE_JPEG)
   {
-    #ifdef PSP
+    #if PSP
     sprite->image = oslLoadImageFileJPG(sprite_path, OSL_IN_RAM | OSL_SWIZZLED, OSL_PF_8888);
     #endif
     printf("jpeg sprite with path '%s' has pointer value %p\n", sprite_path, (void*)sprite->image);
@@ -37,7 +37,7 @@ sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type)
     return NULL;
   }
 
-  #ifdef SDL_VERS
+  #if SDL_VERS
   sprite->angle = 0; //no rotation
   sprite->center.x = 0;
   sprite->center.y = 0; //top left
@@ -49,13 +49,20 @@ sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type)
 void sprite_destroy(sprite_t* sprite)
 {
   assert(sprite->image != NULL);
+  printf("destroying sprite with pointer %p\n", ((void*)sprite));
+
+  #if PSP
+  oslDeleteImage(sprite->image);
+  #elif SDL_VERS
+  SDL_DestroyTexture(sprite->image); //TODO: is this correct?
+  #endif
+
   free(sprite);
-  //TODO: proper resource freeing for SDL and OSLib
 }
 
 void sprite_set_angle(sprite_t* sprite, int angle)
 {
-  #ifdef PSP
+  #if PSP
   sprite->image->angle = angle;
   #else
   sprite->angle = angle;
@@ -64,7 +71,7 @@ void sprite_set_angle(sprite_t* sprite, int angle)
 
 void sprite_set_center_point(sprite_t* sprite, int cx, int cy)
 {
-  #ifdef PSP
+  #if PSP
   sprite->image->centerX = cx;
   sprite->image->centerY = cy;
   #else
@@ -89,7 +96,7 @@ void sprite_draw(sprite_t* sprite)
   sx = (sprite->currentframe * sprite->rectangle.w);
   sy = (sprite->yframeoffset * sprite->rectangle.h);
 
-  #ifdef PSP
+  #if PSP
   if(sprite->frames > 0)
     oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
 
@@ -126,7 +133,7 @@ void sprite_draw_offset(sprite_t* sprite, int x_offset, int y_offset)
   sx = (sprite->currentframe * sprite->rectangle.w);
   sy = (sprite->yframeoffset * sprite->rectangle.h);
 
-  #ifdef PSP
+  #if PSP
   if(sprite->frames > 0)
     oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
 
@@ -165,7 +172,7 @@ void sprite_draw_camera(sprite_t* sprite, const camera_t camera)
   sx = (sprite->currentframe * sprite->rectangle.w);
   sy = (sprite->yframeoffset * sprite->rectangle.h);
 
-  #ifdef PSP
+  #if PSP
   if(sprite->frames > 0)
     oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
 
@@ -200,7 +207,7 @@ void sprite_draw_camera(sprite_t* sprite, const camera_t camera)
 
 void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, int y, int sx, int sy, int w, int h)
 {
-  #ifdef PSP
+  #if PSP
   if(sprite == NULL)
   {
     oslFatalError("passed sprite was null");
@@ -240,8 +247,7 @@ void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, i
 
 void sprite_draw_source(sprite_t* sprite, int x, int y, int sx, int sy, int w, int h)
 {
-
-  #ifdef PSP
+  #if PSP
   if(sprite == NULL)
   {
     oslFatalError("passed sprite was null");
@@ -287,7 +293,7 @@ void sprite_draw_camera_factor(sprite_t* sprite, const camera_t camera, float mo
   sx = (sprite->currentframe * sprite->rectangle.w);
   sy = (sprite->yframeoffset * sprite->rectangle.h);
 
-  #ifdef PSP
+  #if PSP
   if(sprite->frames > 0)
     oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
 
@@ -326,7 +332,7 @@ void sprite_draw_camera_factor_offset(sprite_t* sprite, const camera_t camera, f
   sx = (sprite->currentframe * sprite->rectangle.w);
   sy = (sprite->yframeoffset * sprite->rectangle.h);
 
-  #ifdef PSP
+  #if PSP
   if(sprite->frames > 0)
     oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
 
@@ -364,7 +370,7 @@ void sprite_draw_camera_pointer_factor_offset(sprite_t* sprite, const camera_t c
   sx = (sprite->currentframe * sprite->rectangle.w);
   sy = (sprite->yframeoffset * sprite->rectangle.h);
 
-  #ifdef PSP
+  #if PSP
   if(sprite->frames > 0)
     oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
 

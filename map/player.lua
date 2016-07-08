@@ -48,7 +48,7 @@ function get_direction_string()
 end
 
 function check_input(tilemap)
-  if(input_is_button_down(BUTTON_USE) == 1) then
+  if(input_is_button_down(1 --[[square]]) == 1) then
     if(player_current_energy < 1) then
         return; --no energy
     end

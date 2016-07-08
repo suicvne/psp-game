@@ -20,7 +20,8 @@ typedef struct input_t {
 
   vector_t analogue_input; //used to determine analogue movement/player movement
 
-  int button_interact; //1 if pressed; 0 otherwise
+  int button_interact; //the button to interact with objects in the overworld (npcs, signs, etc.)
+  int button_use_item; //uses the current inventory item.
 
   #ifdef SDL_VERS
   int mouse_x; //used in the level editor.
@@ -34,6 +35,7 @@ typedef struct input_t {
 typedef enum INPUT_BUTTON_TYPES {
 
   INPUT_BUTTON_INTERACT = 0, //default (X) on PSP
+  INPUT_BUTTON_USE_ITEM = 1, //default (square) on PSP
 
   INPUT_BUTTON_ANGLE_INCREASE = 6 //for SDL
 
