@@ -2,10 +2,11 @@
 
     about npc.lua
 
-    potentially some NPC related things.
+    potentially (more than likely) some NPC related things.
 
 ]]
 
+--the NPC template
 NPC = {
     name = "Tester",
     sprite = nil, --C pointer to the sprite_t data
