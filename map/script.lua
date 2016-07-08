@@ -23,7 +23,7 @@ local npc_test_2;
 
 
 function onLoad()
-  npc_test_2 = NPC:new{name = "DJ Khaled", sprite = sprite_create("../res/ness.png")}
+  npc_test_2 = NPC:new{name = "DJ Khaled", sprite = sprite_create("./res/ness.png")}
   print('created test npc');
 
   --npc_test_2:destroy();
@@ -51,7 +51,7 @@ function onUpdate()
 end
 
 function onDraw()
-  
+
   npc_test_2:draw();
 
   message = string.format("Day %d - %d:%02d", time_day, time_hour, time_minute);
