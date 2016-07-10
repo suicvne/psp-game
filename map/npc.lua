@@ -42,6 +42,10 @@ function NPC:set_position(x, y)
     sprite_set_position(self.sprite, x, y);
 end
 
+function NPC:get_position()
+    return sprite_get_x(self.sprite), sprite_get_y(self.sprite);
+end
+
 function NPC:destroy()
     if(self.sprite ~= nil) then
         sprite_destroy(self.sprite);

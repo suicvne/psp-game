@@ -114,6 +114,9 @@ int lua_sprite_set_size(lua_State* L);
 int lua_sprite_set_frame_count(lua_State* L);
 int lua_sprite_set_frame_time(lua_State* L);
 
+int lua_sprite_get_x(lua_State* L);
+int lua_sprite_get_y(lua_State* L);
+
 int lua_sprite_update(lua_State* L); //This is under sprites because updating is independent from drawing
 
 int lua_sprite_destroy(lua_State* L);

@@ -67,8 +67,8 @@ function draw_selection()
     
     x0 = math.floor((player_x + 7) / 32) * 32;
     y0 = math.floor((player_y + 12) / 32) * 32;
-    x0 = x0 + 32;
-    y0 = y0 + 32;
+    --x0 = x0;
+    --y0 = y0;
     
     --[[
     if(direction == PLAYER_RIGHT) then

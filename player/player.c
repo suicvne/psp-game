@@ -1,5 +1,12 @@
 #include "player.h"
 
+const float DEADZONE = 0.5f;
+const int PLAYER_SPEED = 2;
+const int PLAYER_SPEED_EDITOR = 4;
+const int PLAYER_WIDTH = 15;
+const int PLAYER_HEIGHT = 24;
+
+
 void player_destroy(player_t* player)
 {
   assert(player != NULL);

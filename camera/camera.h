@@ -5,12 +5,13 @@
 #include <stdlib.h> //abs
 #include <assert.h>
 
-#define SCREEN_WIDTH 480
-#define SCREEN_HEIGHT 272
-#define HALF_SCREEN_WIDTH 240
-#define HALF_SCREEN_HEIGHT 136
-#define ORIGIN_X 224
-#define ORIGIN_Y 120
+extern const int SCREEN_WIDTH;
+extern const int SCREEN_HEIGHT;
+extern const int HALF_SCREEN_WIDTH;
+extern const int HALF_SCREEN_HEIGHT;
+
+extern int ORIGIN_X;
+extern int ORIGIN_Y;
 
 typedef struct camera_t {
 

@@ -244,6 +244,8 @@ void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   lua_register(L, "sprite_set_frame_count", lua_sprite_set_frame_count);
   lua_register(L, "sprite_set_frame_time", lua_sprite_set_frame_time);
   lua_register(L, "sprite_update", lua_sprite_update);
+  lua_register(L, "sprite_get_x", lua_sprite_get_x);
+  lua_register(L, "sprite_get_y", lua_sprite_get_y);
   //end sprites
 }
 

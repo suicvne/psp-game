@@ -118,6 +118,38 @@ int lua_sprite_set_frame_time(lua_State* L)
     return 0;
 }
 
+int lua_sprite_get_x(lua_State* L)
+{
+    if(lua_gettop(L) == 1)
+    {
+        sprite_t* sprite;
+        sprite = ((sprite_t*)lua_touserdata(L, 1));
+
+        if(sprite != NULL)
+        {
+            lua_pushnumber(L, sprite->rectangle.x);
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int lua_sprite_get_y(lua_State* L)
+{
+    if(lua_gettop(L) == 1)
+    {
+        sprite_t* sprite;
+        sprite = ((sprite_t*)lua_touserdata(L, 1));
+
+        if(sprite != NULL)
+        {
+            lua_pushnumber(L, sprite->rectangle.y);
+            return 1;
+        }
+    }
+    return 0;
+}
+
 int lua_sprite_update(lua_State* L)
 {
     int arg_count = lua_gettop(L);

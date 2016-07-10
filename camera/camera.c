@@ -1,5 +1,13 @@
 #include "camera.h"
 
+#include "../player/player.h"
+
+const int SCREEN_WIDTH = 480;
+const int SCREEN_HEIGHT = 272;
+const int HALF_SCREEN_WIDTH = 240;
+const int HALF_SCREEN_HEIGHT = 136;
+
+
 camera_t* camera_create(int x, int y)
 {
   camera_t* return_value = malloc(sizeof(camera_t));
@@ -18,9 +26,13 @@ void camera_destroy(camera_t* camera)
 
 vector_t camera_player_to_world(const camera_t* camera)
 {
+  //TODO: make this constant somehow
+  int ORIGIN_X = HALF_SCREEN_WIDTH - (PLAYER_WIDTH / 4);
+  int ORIGIN_Y = HALF_SCREEN_HEIGHT - (PLAYER_HEIGHT / 4);
+
   vector_t value = {
-    -camera->x + ORIGIN_X - 16,
-    -camera->y + ORIGIN_Y - 16
+    -camera->x + ORIGIN_X,
+    -camera->y + ORIGIN_Y
   };
 
   return value;
