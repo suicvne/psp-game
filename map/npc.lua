@@ -1,3 +1,5 @@
+require "input"
+
 --[[
 
     about npc.lua
@@ -6,10 +8,34 @@
 
 ]]
 
+local kNpcRange = 32;
+
+local function isNPCInRange(npc, range)
+  assert(npc and range, "npc and range must not be nil or 0!");
+
+  player_x = player_get_x(); --c function
+  player_y = player_get_y();
+
+  npc_x, npc_y = npc:get_position();
+
+  min_x = npc_x - range
+  min_y = npc_y - range
+
+  max_x = npc_x + range
+  max_y = npc_x + range
+
+  if((player_x > min_x and player_x < max_x) and (player_y > min_y and player_y < max_y)) then
+    return true;
+  end
+
+  return false;
+end
+
 --the NPC template
 NPC = {
     name = "Tester",
     sprite = nil, --C pointer to the sprite_t data
+    interact_function = nil --function to call upon interaction
 };
 
 function NPC:new(o)
@@ -26,8 +52,21 @@ function NPC:new(o)
     return o;
 end
 
+function NPC:interact()
+    if(self.interact_function ~= nil) then
+        if(isNPCInRange(self, kNpcRange) and input_is_button_down(BUTTON_INTERACT) == 1) then
+            self.interact_function(self);
+        end
+    end
+end
+
+function NPC:set_interact_action(interact_action)
+    self.interact_function = interact_action;
+end
+
 function NPC:update()
     sprite_update(self.sprite);
+    self:interact();
 end
 
 function NPC:draw()

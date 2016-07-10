@@ -24,6 +24,14 @@ local npc_test_2;
 
 function onLoad()
   npc_test_2 = NPC:new{name = "DJ Khaled", sprite = sprite_create("./res/ness.png")}
+
+  npc_test_2:set_interact_action(
+    function(npc) 
+      message_box_set_message(npc.name .. ": bless up");
+      message_box_set_visibility(true);
+    end
+  );
+
   print('created test npc');
 
   --npc_test_2:destroy();
@@ -44,40 +52,10 @@ end
 function onUpdate()
  --message_box_set_message("message w no specials");
  --message_box_set_visibility(true);
-  npc_test_2:update();
+  npc_test_2:update(); --also calls to check for interaction
 
   time_loop();
   check_input(_current_tilemap);
-
-  if(isNPCInRange(npc_test_2, 32)) then
-    if(input_is_button_down(0) == 1) then
-      message_box_set_message("Hello!");
-      message_box_set_visibility(true);
-    end
-  end
-end
-
-function isNPCInRange(npc, range)
-  assert(npc and range, "npc and range must not be nil or 0!");
-
-  player_x = player_get_x(); --c function
-  player_y = player_get_y();
-
-  npc_x, npc_y = npc:get_position();
-
-  min_x = npc_x - range
-  min_y = npc_y - range
-
-  max_x = npc_x + range
-  max_y = npc_x + range
-
-  print(string.format("min_x: %d; max_x: %d; min_y: %d; max_y: %d", min_x, max_x, min_y, max_y));
-
-  if((player_x > min_x and player_x < max_x) and (player_y > min_y and player_y < max_y)) then
-    return true;
-  end
-
-  return false;
 end
 
 function onDraw()
