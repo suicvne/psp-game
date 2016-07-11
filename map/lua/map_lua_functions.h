@@ -30,6 +30,10 @@ Defines common functions for the map's Lua interpreter.
 
 struct tilemap_t;
 
+extern lua_State* current_lua_state;
+
+int lua_resume_execution(lua_State* L);
+
 /**
 Drawing functions
 */
@@ -98,6 +102,8 @@ int lua_message_box_is_visible(lua_State* L);
 int lua_message_box_set_visible(lua_State* L);
 int lua_message_box_set_message(lua_State* L);
 int lua_message_box_get_message(lua_State* L);
+int lua_message_box_update(lua_State* L);
+int lua_message_box_draw(lua_State* L);
 
 /**
 End Message Box Functions

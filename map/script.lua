@@ -16,6 +16,7 @@
 require "time" --time.lua contains functions for time related stuff. what else did you expect?
 require "player" --lua testing of player functions (tilling soil at the moment)
 require "npc"
+require "messagebox"
 
 local framecount = 0;
 
@@ -26,9 +27,12 @@ function onLoad()
   npc_test_2 = NPC:new{name = "DJ Khaled", sprite = sprite_create("./res/ness.png")}
 
   npc_test_2:set_interact_action(
-    function(npc) 
-      message_box_set_message(npc.name .. ": bless up");
-      message_box_set_visibility(true);
+    function(npc)
+      print("message 1")
+      messagebox.show_message(npc.name .. ": bless up!");
+      print("message 2")
+      messagebox.show_message("LIIIIOOOON");
+      print("end")
     end
   );
 

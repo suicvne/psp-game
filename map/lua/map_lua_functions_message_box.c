@@ -35,3 +35,15 @@ int lua_message_box_get_message(lua_State* L)
     }
     return 0;
 }
+
+int lua_message_box_draw(lua_State* L)
+{
+    message_box_draw();
+    return 0;
+}
+
+int lua_message_box_update(lua_State* L)
+{
+    message_box_update();
+    return 0;
+}

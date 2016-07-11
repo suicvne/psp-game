@@ -21,6 +21,8 @@ void message_box_set_message(const char* message)
 {
     if(message_box_message != NULL)
     {/* TODO? probably not */}
+    if(message_box_is_visible)
+        return;
 
     int size = sizeof(char) * strlen(message) + 1;
     message_box_message = malloc(size);
@@ -97,10 +99,10 @@ void message_box_update()
                 if(message_box_message[message_box_text_index] != ' ' && message_box_text_index % 2 == 1)
                     sound_play(SOUND_EFFECT_TEXT);
             }
-
-            if(message_box_text_index >= (strlen(message_box_message) - 1) && input_is_button_just_pressed(INPUT_BUTTON_INTERACT)) //dismiss the message
+            if(message_box_text_index >= (strlen(message_box_message) - 1))
             {
-                message_box_set_visibility(0); //dismiss
+                if(input_is_button_just_pressed(INPUT_BUTTON_INTERACT))
+                    message_box_set_visibility(0);
             }
         }
     }

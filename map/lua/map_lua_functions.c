@@ -1,5 +1,7 @@
 #include "map_lua_functions.h"
 
+lua_State* current_lua_state;
+
 int lua_map_print(lua_State* L)
 {
   int arg_count = lua_gettop(L);
@@ -166,9 +168,9 @@ int lua_map_draw_sprite(lua_State* L)
   return 0;
 }
 
-
 void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
 {
+  current_lua_state = L;
   /**
   Setting path properly
   */
@@ -234,6 +236,8 @@ void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   lua_register(L, "message_box_is_visible", lua_message_box_is_visible);
   lua_register(L, "message_box_set_message", lua_message_box_set_message);
   lua_register(L, "message_box_get_message", lua_message_box_get_message);
+  lua_register(L, "message_box_draw", lua_message_box_draw);
+  lua_register(L, "message_box_update", lua_message_box_update);
   //end message box
 
   //sprites
