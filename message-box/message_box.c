@@ -1,9 +1,12 @@
 #include "message_box.h"
 
 // Queue Related
+#if 0
 int message_box_queue_index = 0;
+int message_box_queue_push_index = 0;
 message_box_t* message_box_queue;
 const int MESSAGE_BOX_MAX_QUEUE_SIZE = 10;
+#endif
 // Queue Related
 
 /**
@@ -29,6 +32,7 @@ char* message_box_message = "no.";
 Misc Constants / older variables
 */
 
+#if 0
 int message_box_has_messages()
 {
     int i;
@@ -52,13 +56,14 @@ void message_box_init_queue()
 
 void message_box_queue_push(message_box_t message)
 {
-    if((message_box_queue_index + 1) > MESSAGE_BOX_MAX_QUEUE_SIZE)
+    if((message_box_queue_push_index + 1) > MESSAGE_BOX_MAX_QUEUE_SIZE)
         return; //no overflows pls
     printf("push\n");
     printf("given: %s\n", message.message);
-    message_box_queue[message_box_queue_index] = message;
+    message_box_queue[message_box_queue_push_index] = message;
     //memcpy(message_box_queue[message_box_queue_index], message, message_box_queue_index);
-    printf("good: %s\n", message_box_queue[message_box_queue_index].message);
+    printf("good: %s\n", message_box_queue[message_box_queue_push_index].message);
+    message_box_queue_push_index++;
 }
 
 void message_box_queue_pop(int index)
@@ -71,6 +76,7 @@ void message_box_queue_pop(int index)
     {
         message_box_queue[i] = message_box_queue[i + 1];
     }
+    message_box_queue_push_index--;
 }
 
 void message_box_create(const char* message)
@@ -94,6 +100,7 @@ void message_box_create(const char* message)
 
     message_box_queue_push(message_box);
 }
+#endif
 
 void message_box_set_message(const char* message)
 {
@@ -131,38 +138,31 @@ void message_box_draw()
 {
     if(message_box_is_visible) //should trigger the queue and begin to take from it
     {
-        if(message_box_queue_index >= 0 && message_box_queue_index < MESSAGE_BOX_MAX_QUEUE_SIZE)
+        rectangle_draw_filled(&message_box_rectangle, RGBA(0, 0, 0, 255));
+        int i, message_box_y_offset = 0;
+        int id = 0;
+        for(i = 0; i < message_box_text_index; i++)
         {
-            message_box_t box = message_box_queue[message_box_queue_index];
+            //char c = message_box_message[i];
+            char c = message_box_message[i]; //wew
 
-            rectangle_draw_filled(&message_box_rectangle, RGBA(0, 0, 0, 255));
-            int i, message_box_y_offset = 0;
-            int id = 0;
-            for(i = 0; i < box.current_index; i++)
+            int draw_x = MESSAGE_BOX_ORIGIN_X + 3 + (id * 6);
+
+            if(c == '\n')
             {
-                //char c = message_box_message[i];
-                char c = box.message[i]; //wew
-
-                int draw_x = MESSAGE_BOX_ORIGIN_X + 3 + (id * 6);
-
-                if(c == '\n')
-                {
-                    message_box_y_offset += 12;
-                    id = 0;
-                    continue;
-                }
-                if(draw_x > (MESSAGE_BOX_MAX_WIDTH + MESSAGE_BOX_ORIGIN_X) - 8)
-                {
-                    message_box_y_offset += 12;
-                    id = 0;
-                    draw_x = MESSAGE_BOX_ORIGIN_X + 3 + (id * 6);
-                }
-                id++;
-                text_render_char(c, draw_x, MESSAGE_BOX_ORIGIN_Y + message_box_y_offset);
+                message_box_y_offset += 12;
+                id = 0;
+                continue;
             }
+            if(draw_x > (MESSAGE_BOX_MAX_WIDTH + MESSAGE_BOX_ORIGIN_X) - 8)
+            {
+                message_box_y_offset += 12;
+                id = 0;
+                draw_x = MESSAGE_BOX_ORIGIN_X + 3 + (id * 6);
+            }
+            id++;
+            text_render_char(c, draw_x, MESSAGE_BOX_ORIGIN_Y + message_box_y_offset);
         }
-        else
-            message_box_set_visibility(0);
     }
 }
 
@@ -170,37 +170,29 @@ void message_box_update()
 {
     if(message_box_is_visible) //why use extra cycles if it's not visible?'
     {
-        if(message_box_queue_index >= 0 && message_box_queue_index < MESSAGE_BOX_MAX_QUEUE_SIZE)
-        {
-            message_box_t box = message_box_queue[message_box_queue_index];
-            box.framecount++;
+            message_box_framecount++;
             int frame_mod = 5;
             if(input_current_frame.button_interact)
                 frame_mod = 1;
 
-            if(box.framecount > frame_mod)
+            if(message_box_framecount > frame_mod)
             {
-                box.framecount = 0;
-                box.current_index++;
-                if(box.current_index > strlen(box.message))
-                    box.current_index--;
+                message_box_framecount = 0;
+                message_box_text_index++;
+                if(message_box_text_index > strlen(message_box_message))
+                    message_box_text_index--;
                 else
                 {
-                    if(box.message[message_box_text_index] != ' ')
+                    if(message_box_message[message_box_text_index] != ' ')
                         sound_play(SOUND_EFFECT_TEXT);
                 }
-                if(box.current_index >= (strlen(message_box_message) - 1))
+                if(message_box_text_index >= (strlen(message_box_message) - 1))
                 {
                     if(input_is_button_just_pressed(INPUT_BUTTON_INTERACT))
                     {
-                        message_box_queue_pop(message_box_queue_index);
-                        message_box_queue_index++;
-                        if(!message_box_has_messages())
-                            message_box_is_visible = 0;
+                        message_box_is_visible = 0;
                     }
                 }
             }
-            message_box_queue[message_box_queue_index] = box;
-        }
     }
 }

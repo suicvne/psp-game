@@ -26,16 +26,6 @@ int lua_message_box_set_message(lua_State* L)
     return 0;
 }
 
-int lua_message_box_create(lua_State* L)
-{
-    //message_box_create
-    if(lua_gettop(L) == 1)
-    {
-        message_box_create(lua_tostring(L, 1));
-    }
-    return 0;
-}
-
 int lua_message_box_get_message(lua_State* L)
 {
     if(message_box_message != NULL)

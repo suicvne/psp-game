@@ -234,11 +234,10 @@ void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   //message box
   lua_register(L, "message_box_set_visibility", lua_message_box_set_visible);
   lua_register(L, "message_box_is_visible", lua_message_box_is_visible);
-  /*lua_register(L, "message_box_set_message", lua_message_box_set_message);
+  lua_register(L, "message_box_set_message", lua_message_box_set_message);
   lua_register(L, "message_box_get_message", lua_message_box_get_message);
   lua_register(L, "message_box_draw", lua_message_box_draw);
-  lua_register(L, "message_box_update", lua_message_box_update);*/
-  lua_register(L, "message_box_create", lua_message_box_create);
+  lua_register(L, "message_box_update", lua_message_box_update);
   //end message box
 
   //sprites

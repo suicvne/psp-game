@@ -104,7 +104,6 @@ int lua_message_box_set_message(lua_State* L);
 int lua_message_box_get_message(lua_State* L);
 int lua_message_box_update(lua_State* L);
 int lua_message_box_draw(lua_State* L);
-int lua_message_box_create(lua_State* L);
 
 /**
 End Message Box Functions
