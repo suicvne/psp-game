@@ -28,11 +28,12 @@ function onLoad()
 
   npc_test_2:set_interact_action(
     function(npc)
-      print("message 1")
-      messagebox.show_message(npc.name .. ": bless up!");
-      print("message 2")
-      messagebox.show_message("LIIIIOOOON");
-      print("end")
+      --print("message 1")
+      messagebox:new(npc.name .. ": bless up!");
+      message_box_set_visibility(true);
+      --print("message 2")
+      --messagebox.show_message("LIIIIOOOON");
+      --print("end")
     end
   );
 
