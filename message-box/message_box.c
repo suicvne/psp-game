@@ -190,7 +190,7 @@ void message_box_update()
                 {
                     if(input_is_button_just_pressed(INPUT_BUTTON_INTERACT))
                     {
-                        message_box_is_visible = 0;
+                        message_box_set_visibility(0);
                     }
                 }
             }
