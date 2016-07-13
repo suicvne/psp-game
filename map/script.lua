@@ -28,8 +28,9 @@ function onLoad()
 
   npc_test_2:set_interact_action(
     function(npc)
-      message_box_set_message("liiiioooonnnnn wew");
+      message_box_set_message("ok here take this red-bull.");
       message_box_set_visibility(true);
+      player_current_energy = 110;
     end
   );
 

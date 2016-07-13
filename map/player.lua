@@ -9,7 +9,7 @@ PLAYER_RIGHT_UP = 7;
 PLAYER_LEFT_DOWN = 1;
 PLAYER_LEFT_UP = 6;
 
-MAP_DIRT_TILE = 3;
+MAP_PLOT_TILE = 7;
 
 PLAYER_SELECTION_X = 0;
 PLAYER_SELECTION_Y = 0;
@@ -54,8 +54,8 @@ function check_input(tilemap)
     end
 
     selected_tile = tilemap_get_tile(tilemap, PLAYER_SELECTION_X, PLAYER_SELECTION_Y);
-    if(selected_tile ~= MAP_DIRT_TILE) then
-        tilemap_set_tile(tilemap, PLAYER_SELECTION_X, PLAYER_SELECTION_Y, MAP_DIRT_TILE);
+    if(selected_tile ~= MAP_PLOT_TILE) then
+        tilemap_set_tile(tilemap, PLAYER_SELECTION_X, PLAYER_SELECTION_Y, MAP_PLOT_TILE);
         player_current_energy = player_current_energy - PLAYER_DEPLETE_AMOUNT;
     end
   end

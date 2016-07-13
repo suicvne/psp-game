@@ -21,7 +21,7 @@ function time_loop()
 
     if(time_hour == kHoursPerDay) then
       time_hour = 0;
-      time_day = 1;
+      time_day = time_day + 1;
     end
 
     time_ticks = 0;
