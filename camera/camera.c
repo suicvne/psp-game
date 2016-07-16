@@ -43,3 +43,11 @@ void camera_move(camera_t* camera, const vector_t movement_amount)
   camera->x += movement_amount.x;
   camera->y += movement_amount.y;
 };
+
+int camera_get_player_origin(int* x, int* y)
+{
+	(*x) = HALF_SCREEN_WIDTH - (PLAYER_WIDTH / 4);
+	(*y) = HALF_SCREEN_HEIGHT - (PLAYER_HEIGHT / 4);
+	
+	return 0;
+}

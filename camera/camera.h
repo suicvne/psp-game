@@ -26,4 +26,6 @@ vector_t camera_player_to_world(const camera_t* camera);
 
 void camera_move(camera_t* camera, const vector_t movement_amount);
 
+int camera_get_player_origin(int* x, int* y);
+
 #endif //___CAMERA_H___

@@ -95,6 +95,8 @@ int rectangle_intersects(rectangle_t* a, rectangle_t* b)
 
 rectangle_t camera_player_to_world_rectangle(const camera_t* camera)
 {
+  int ORIGIN_X, ORIGIN_Y;
+  camera_get_player_origin(&ORIGIN_X, &ORIGIN_Y);
   //they can set w/h later tbh
   rectangle_t value;
   value.x = -camera->x + ORIGIN_X - 16;

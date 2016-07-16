@@ -1,7 +1,7 @@
 #PSP MAKEFILE
 
 TARGET = analogue
-OBJS = main.o sound/sound.o globals.o graphics/rectangle.o message-box/message_box.o graphics/text.o input/input.o camera/camera.o vector/vector.o player/player.o sprites/sprite.o serialization/serializer.o serialization/serialization_reader.o map/tilemap.o map/tile.o map/lua/map_lua_functions_player.o map/lua/map_lua_functions_sprite.o map/lua/map_lua_functions_input.o map/lua/map_lua_functions.o map/lua/map_lua_functions_message_box.o
+OBJS = main.o sound/sound.o globals.o camera/camera.o graphics/rectangle.o message-box/message_box.o graphics/text.o input/input.o vector/vector.o player/player.o sprites/sprite.o serialization/serializer.o serialization/serialization_reader.o map/tilemap.o map/tile.o map/lua/map_lua_functions_player.o map/lua/map_lua_functions_sprite.o map/lua/map_lua_functions_input.o map/lua/map_lua_functions.o map/lua/map_lua_functions_message_box.o
 
 INCDIR =
 CFLAGS = -O2 -g -G0 -Wall
