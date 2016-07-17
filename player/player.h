@@ -5,6 +5,7 @@
 #include "../input/input.h"
 #include "../vector/vector.h"
 #include "../globals.h"
+#include "inventory.h"
 #include <malloc.h>
 #include <assert.h>
 

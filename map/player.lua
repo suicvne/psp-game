@@ -61,6 +61,12 @@ function check_input(tilemap)
   end
 end
 
+function player_fill_energy()
+    if(player_current_energy > 100) then return end
+
+    player_current_energy = 100;
+end
+
 function draw_selection()
     player_x = player_get_x();
     player_y = player_get_y();

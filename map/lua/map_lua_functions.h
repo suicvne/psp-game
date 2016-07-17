@@ -14,6 +14,7 @@ Defines common functions for the map's Lua interpreter.
 #include "../../graphics/rectangle.h"
 #include "../../graphics/text.h"
 #include "../../player/player.h"
+#include "../../player/inventory.h"
 #include "../../vector/vector.h"
 #include "../../camera/camera.h"
 #include "../../globals.h"
@@ -129,6 +130,19 @@ int lua_sprite_destroy(lua_State* L);
 
 /**
 End sprite functions
+*/
+
+/**
+Inventory functions - map_lua_functions_inventory.c
+*/
+
+int lua_inventory_get_inventory(lua_State* L); //returns inventory as table
+//int lua_inventory_push_item(lua_State* L);
+//int lua_inventory_pop_item(lua_State* L);
+//int lua_inventory_get_item(lua_State* L);
+
+/**
+End inventory functions
 */
 
 #endif //___MAP_LUA_FUNCTIONS_H___

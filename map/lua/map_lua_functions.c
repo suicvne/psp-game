@@ -251,6 +251,10 @@ void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   lua_register(L, "sprite_get_x", lua_sprite_get_x);
   lua_register(L, "sprite_get_y", lua_sprite_get_y);
   //end sprites
+
+  //inventory
+  lua_register(L, "inventory_get", lua_inventory_get_inventory);
+  //end inventory
 }
 
 

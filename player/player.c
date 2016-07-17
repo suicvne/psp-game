@@ -127,6 +127,8 @@ player_t* player_create()
   oslSetImageTileSize(player->main_sprite->image, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
   #endif
 
+  inventory_create(); //to create the inventory and stuff
+
   return player;
 }
 

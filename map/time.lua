@@ -1,6 +1,8 @@
+require "player"
+
 local kMinutesPerHour = 60;
 local kHoursPerDay = 12;
-local kTicksPerSecond = 90; --120
+local kTicksPerSecond = 60; --120
 
 time_day = 1;
 time_hour = 6; --default 6 
@@ -22,6 +24,7 @@ function time_loop()
     if(time_hour == kHoursPerDay) then
       time_hour = 0;
       time_day = time_day + 1;
+      player_fill_energy();
     end
 
     time_ticks = 0;
