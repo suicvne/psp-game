@@ -19,6 +19,8 @@ extern int kSkip; //mostly used for the PSP
 extern struct player_t* kPlayer;
 //extern struct sprite_t* kTestEntity; //22x29 sprite on a 32x32 sheet
 extern struct sprite_t* kForest;
+extern struct sprite_t* kItems; //contains the sheet for the items
+extern struct sprite_t* kInventory; //contains the inventory sprites
 extern struct camera_t* kCamera;
 //extern struct input_t* kInput;
 extern struct input_t* kInputLastFrame;

@@ -54,7 +54,7 @@ void sprite_destroy(sprite_t* sprite)
   #if PSP
   oslDeleteImage(sprite->image);
   #elif SDL_VERS
-  SDL_DestroyTexture(sprite->image); //TODO: is this correct?
+  SDL_DestroyTexture(sprite->image);
   #endif
 
   free(sprite);
@@ -75,7 +75,7 @@ void sprite_set_center_point(sprite_t* sprite, int cx, int cy)
   sprite->image->centerX = cx;
   sprite->image->centerY = cy;
   #else
-  //TODO
+  // TODO
   #endif
 }
 

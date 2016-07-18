@@ -120,8 +120,8 @@ player_t* player_create()
   player->main_sprite->frametime = PLAYER_SPEED * 2.5;
   player->main_sprite->frames = 2; //no animation, yet
 
-  player->lift_sprite = NULL; //TODO
-  player->hold_sprite = NULL; //TODO
+  player->lift_sprite = NULL; //TODO: these
+  player->hold_sprite = NULL; //TODO: these
 
   #ifdef PSP
   oslSetImageTileSize(player->main_sprite->image, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);

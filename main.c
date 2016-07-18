@@ -166,6 +166,8 @@ void initialize_globals(void)
   kCamera = camera_create(0, 0);
   kPlayer = player_create();
   kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
+  kInventory = sprite_create("res/inventory.png", SPRITE_TYPE_PNG);
+  kItems = sprite_create("res/items.png", SPRITE_TYPE_PNG);
 
   #ifdef PSP
   //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0
@@ -237,7 +239,8 @@ void draw(tilemap_t* tilemap)
   text_render_text(tilemap->map_name, 10, 2);
   if(message_box_is_visible)
     message_box_draw();
-
+  
+  inventory_draw();
   //End do drawing in here
 
   #if PSP //present
