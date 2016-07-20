@@ -219,6 +219,8 @@ void update(tilemap_t* tilemap)
 
   if(message_box_is_visible)
     message_box_update(); //always update message boxes to maintain consitency
+
+  inventory_update();
 }
 
 void draw(tilemap_t* tilemap)
@@ -271,7 +273,7 @@ int main(int argc, char** argv)
   #if PSP
   if(kLevelEditorMode)
   {
-    report_fatal_error("How the fuck did you get level edit mode on the PSP?");
+    report_fatal_error("How the fuck did you get level editor mode on the PSP?");
   }
   #endif
 

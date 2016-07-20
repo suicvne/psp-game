@@ -61,6 +61,15 @@ void input_begin_frame()
 
   input_current_frame.button_interact = 0; //zero off current frame
   input_current_frame.button_use_item = 0;
+  input_current_frame.button_hotbar_next = 0;
+  input_current_frame.button_hotbar_back = 0;
+
+  input_current_frame.button_dpad_up = 0;
+  input_current_frame.button_dpad_down = 0;
+  input_current_frame.button_dpad_left = 0;
+  input_current_frame.button_dpad_right = 0;
+
+  input_current_frame.button_inventory_open = 0;
 
   #if SDL_VERS
   input_current_frame.button_angle_increase = 0;
@@ -82,12 +91,47 @@ int input_is_button_just_pressed(INPUT_BUTTON_TYPES button_type)
     if(input_current_frame.button_use_item && input_last_frame.button_use_item == 0)
       return 1;
   }
+  else if(button_type == INPUT_BUTTON_HOTBAR_NEXT)
+  {
+    if(input_current_frame.button_hotbar_next && input_last_frame.button_hotbar_next == 0)
+      return 1;
+  }
+  else if(button_type == INPUT_BUTTON_HOTBAR_BACK)
+  {
+    if(input_current_frame.button_hotbar_back && input_last_frame.button_hotbar_back == 0)
+      return 1;
+  }
+  else if(button_type == INPUT_BUTTON_DUP)
+  {
+    if(input_current_frame.button_dpad_up && input_last_frame.button_dpad_up == 0)
+      return 1; 
+  }
+  else if(button_type == INPUT_BUTTON_DDOWN)
+  {
+    if(input_current_frame.button_dpad_down && input_last_frame.button_dpad_down == 0)
+      return 1; 
+  }
+  else if(button_type == INPUT_BUTTON_DLEFT)
+  {
+    if(input_current_frame.button_dpad_left && input_last_frame.button_dpad_left == 0)
+      return 1; 
+  }
+  else if(button_type == INPUT_BUTTON_DRIGHT)
+  {
+    if(input_current_frame.button_dpad_right && input_last_frame.button_dpad_right == 0)
+      return 1; 
+  }
   else if(button_type == INPUT_BUTTON_ANGLE_INCREASE)
   {
     #if SDL_VERS //USED FOR LEVEL EDITOR ONLY
     if(input_current_frame.button_angle_increase && input_last_frame.button_angle_increase == 0)
       return 1;
     #endif
+  }
+  else if(button_type == INPUT_BUTTON_INVENTORY_OPEN)
+  {
+    if(input_current_frame.button_inventory_open && input_last_frame.button_inventory_open == 0)
+      return 1;
   }
 
   return 0;
@@ -172,6 +216,25 @@ void input_update()
     {
       input_current_frame.button_use_item = 1;
     }
+    if(pad.Buttons & PSP_CTRL_LTRIGGER)
+    {
+      input_current_frame.button_hotbar_back = 1;
+    }
+    if(pad.Buttons & PSP_CTRL_RTRIGGER)
+    {
+      input_current_frame.button_hotbar_next = 1;
+    }
+    if(pad.Buttons & PSP_CTRL_TRIANGLE)
+      input_current_frame.button_inventory_open = 1;
+
+    if(pad.Buttons & PSP_CTRL_UP)
+      input_current_frame.button_dpad_up = 1;
+    else if(pad.Buttons & PSP_CTRL_DOWN)
+      input_current_frame.button_dpad_down = 1;
+    else if(pad.Buttons & PSP_CTRL_LEFT)
+      input_current_frame.button_dpad_left = 1;
+    else if(pad.Buttons & PSP_CTRL_RIGHT)
+      input_current_frame.button_dpad_right = 1;
   }
   #endif
 }

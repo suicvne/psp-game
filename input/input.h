@@ -23,6 +23,16 @@ typedef struct input_t {
   int button_interact; //the button to interact with objects in the overworld (npcs, signs, etc.)
   int button_use_item; //uses the current inventory item.
 
+  int button_hotbar_next; //advances the hotbar
+  int button_hotbar_back;
+
+  int button_dpad_up;
+  int button_dpad_down;
+  int button_dpad_left;
+  int button_dpad_right;
+
+  int button_inventory_open;
+
   #ifdef SDL_VERS
   int mouse_x; //used in the level editor.
   int mouse_y;
@@ -36,8 +46,16 @@ typedef enum INPUT_BUTTON_TYPES {
 
   INPUT_BUTTON_INTERACT = 0, //default (X) on PSP
   INPUT_BUTTON_USE_ITEM = 1, //default (square) on PSP
+  INPUT_BUTTON_HOTBAR_NEXT = 2, //default (R) on PSP
+  INPUT_BUTTON_HOTBAR_BACK = 3, //default (L) on PSP
+  INPUT_BUTTON_DUP = 4,
+  INPUT_BUTTON_DDOWN = 5,
+  INPUT_BUTTON_DLEFT = 6,
+  INPUT_BUTTON_DRIGHT = 7,
 
-  INPUT_BUTTON_ANGLE_INCREASE = 6 //for SDL
+  INPUT_BUTTON_INVENTORY_OPEN = 8, //default (triangle) on PSP
+
+  INPUT_BUTTON_ANGLE_INCREASE = 20 //for SDL
 
 } INPUT_BUTTON_TYPES;
 

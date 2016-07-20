@@ -16,7 +16,7 @@ Inventory is tied to the player class!!!!!! Do not initialize this anywhere else
 
 #define BLANK 0
 #define GRASS_SEED 1
-#define TEST_ITEM 2
+#define TEST_HOE 2
 
 typedef enum {
 
@@ -62,7 +62,7 @@ void inventory_draw_full(); //draws the full inventory on screen
 
 void inventory_update();
 
-void inventory_get_item_sheet_location(int item, int* x, int* y);
+vector_t inventory_get_item_sheet_location(int item);
 
 
 #endif //___INVENTORY_H___

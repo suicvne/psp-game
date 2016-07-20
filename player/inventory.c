@@ -17,26 +17,30 @@ const int inventory_item_height = 32;
 int inventory_starting_x = 110;
 int inventory_starting_y = 4;
 
-void inventory_get_item_sheet_location(int index, int* x, int* y)
+vector_t inventory_get_item_sheet_location(int index)
 {
     assert(index < inventory_max_items);
     int id = player_inventory[index];
 
+    vector_t return_value;
+
     int max_tiles = (inventory_item_sheet_width * inventory_item_sheet_height) / (inventory_item_width * inventory_item_height);
     if(id > max_tiles)
     {
-        (*x) = 0;
-        (*y) = 0;
+        return_value.x = 0;
+        return_value.y = 0;
         return;
     }
 
-    (*x) = id * inventory_item_width;
-    (*y) = 0;
-    while((*x) >= inventory_item_sheet_width)
+    return_value.x = id * inventory_item_width;
+    return_value.y = 0;
+    while(return_value.x >= inventory_item_sheet_width)
     {
-        (*x) -= inventory_item_sheet_width;
-        (*y) += inventory_item_height;
+        return_value.x -= inventory_item_sheet_width;
+        return_value.y += inventory_item_height;
     }
+
+    return return_value;
 }
 
 void inventory_create()
@@ -44,14 +48,19 @@ void inventory_create()
     player_inventory = malloc(sizeof(int) * inventory_max_items);
     memset(player_inventory, BLANK, 32);
 
-    player_inventory[0] = 0;
-    player_inventory[1] = GRASS_SEED;
+    player_inventory[0] = TEST_HOE; //2
+    player_inventory[1] = GRASS_SEED; //1
     //player_inventory[2] = 2;
     //player_inventory[3] = 3;
     //player_inventory[4] = 4;
     //player_inventory[5] = 5;
     //player_inventory[6] = 6;
     //player_inventory[7] = 7;
+    int i ;
+    for(i = 0; i < 8; i++)
+    {
+        printf("inv at %d: %d\n", i, player_inventory[i]);
+    }
 }
 
 void inventory_destroy()
@@ -97,9 +106,9 @@ void inventory_draw()
                 sprite_draw_source(kInventory, x, inventory_starting_y, 32, 0, 32, 32);
             }
             
-            int item_x, item_y;
-            inventory_get_item_sheet_location(player_inventory[i], &item_x, &item_y);
-            sprite_draw_source(kItems, x, inventory_starting_y, item_x, item_y, 32, 32);
+            vector_t item_location = inventory_get_item_sheet_location(i);
+            
+            sprite_draw_source(kItems, x, inventory_starting_y, item_location.x, item_location.y, 32, 32);
         }
     }
     else if(inventory_display_mode == INVENTORY_MODE_FULLSCREEN)
@@ -115,5 +124,16 @@ void inventory_draw_full()
 
 void inventory_update()
 {
-    //TODO: this will be for handling input and whatnot
+    if(input_is_button_just_pressed(INPUT_BUTTON_HOTBAR_NEXT))
+    {
+        inventory_hotbar_index++;
+        if(inventory_hotbar_index > 7) //TODO: make this a constant
+            inventory_hotbar_index = 0;
+    }
+    else if(input_is_button_just_pressed(INPUT_BUTTON_HOTBAR_BACK))
+    {
+        inventory_hotbar_index--;
+        if(inventory_hotbar_index < 0)
+            inventory_hotbar_index = 7; //TODO: make this a constant
+    }
 }
