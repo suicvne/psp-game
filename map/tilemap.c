@@ -153,7 +153,7 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
           }
           sprite_set_center_point(map->tileset, cx, cy);
         }
-        sprite_draw_camera_source(map->tileset, *cam, x_iter * 32, y_iter * 32, sheet_location.x, sheet_location.y, 32, 32);
+        sprite_draw_camera_source(map->tileset, *cam, floor(x_iter * 32), floor(y_iter * 32), sheet_location.x, sheet_location.y, 32, 32);
         sprite_set_angle(map->tileset, 0);
         sprite_set_center_point(map->tileset, 0, 0);
       }

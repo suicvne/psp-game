@@ -75,7 +75,8 @@ void sprite_set_center_point(sprite_t* sprite, int cx, int cy)
   sprite->image->centerX = cx;
   sprite->image->centerY = cy;
   #else
-  // TODO
+  //sprite->center.x = cx;
+  //sprite->center.y = cy;
   #endif
 }
 
@@ -229,8 +230,8 @@ void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, i
   src_rect.h = h;
 
   SDL_Rect dst_rect;
-  dst_rect.x = x + camera.x;
-  dst_rect.y = y + camera.y;
+  dst_rect.x = x + ((int)camera.x);
+  dst_rect.y = y + ((int)camera.y);
   dst_rect.w = w;
   dst_rect.h = h;
 
