@@ -69,9 +69,9 @@ int init_OSLib()
 
 int init_window()
 {
-  char* windowTitle = "Rock Bottom Alpha";
+  char* windowTitle = "alpha";
   if(kLevelEditorMode)
-    windowTitle = "Rock Bottom Level Editor Mode";
+    windowTitle = "alpha - level editor";
   kSdlWindow = SDL_CreateWindow(windowTitle,
     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
     SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2,
@@ -256,6 +256,61 @@ void draw(tilemap_t* tilemap)
 
 int main(int argc, char** argv)
 {
+    printf("\n\nARGS TEST\n\n");
+    int i;
+    for(i = 0; i <  argc; i++)
+    {
+        printf("arg %d: %s\n", i, argv[i]);
+        if(strcmp("--level-editor", argv[i]) == 0)
+        {
+            kLevelEditorMode = 1;
+            break;
+        }
+    }
+
+#if PSP
+#endif
+    psp_setup_callbacks();
+    init_subsystem();
+    initialize_globals();
+
+    kQuit = 0;
+    if(kLevelEditorMode)
+    {
+#if SDL_VERS
+        //level_editor_t* editor = editor_create();
+        while(!kQuit)
+        {
+            //editor_update(editor);
+
+            //editor_draw(editor);
+        }
+#endif
+    }
+    else
+    {
+        tilemap_t* tilemap_test = load_level("./map", "level.bin");
+        printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
+
+        while(!kQuit)
+        {
+          update(tilemap_test);
+
+          draw(tilemap_test);
+        }
+
+        tilemap_destroy(tilemap_test);
+    }
+    destroy_globals();
+
+#if PSP
+    oslEndGfx();
+    oslQuit();
+#elif SDL_VERS
+    shutdown_SDL();
+#endif
+
+    /*
   printf("\n---Args---\n\n");
   int i;
   for(i = 0; i < argc; i++)
@@ -319,4 +374,6 @@ int main(int argc, char** argv)
   #endif
 
   return 0;
+  */
+    return 0;
 }

@@ -54,13 +54,15 @@ static inline int zeroize(int input)
     return input;
 }
 
-static inline int min(int a, int b)
+/*
+int min(int a, int b)
 {
   if(a > b)
     return b;
   else
     return a;
 }
+*/
 
 int tilemap_load_lua_file(lua_State* L, const char* directory);
 tilemap_t* tilemap_create(int width, int height, int allocate_texture);

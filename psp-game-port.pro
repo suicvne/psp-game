@@ -1,0 +1,95 @@
+TEMPLATE = app
+CONFIG += console
+CONFIG -= app_bundle
+CONFIG -= qt
+
+DEFINES += SDL_VERS
+
+SOURCES += \
+    camera/camera.c \
+    graphics/rectangle.c \
+    graphics/text.c \
+    input/input.c \
+    map/lua/map_lua_functions.c \
+    map/lua/map_lua_functions_input.c \
+    map/lua/map_lua_functions_inventory.c \
+    map/lua/map_lua_functions_message_box.c \
+    map/lua/map_lua_functions_player.c \
+    map/lua/map_lua_functions_sprite.c \
+    map/tile.c \
+    map/tilemap.c \
+    message-box/message_box.c \
+    player/inventory.c \
+    player/player.c \
+    serialization/serialization_reader.c \
+    serialization/serializer.c \
+    sound/sound.c \
+    sprites/sprite.c \
+    vector/vector.c \
+    globals.c \
+    main.c
+
+win32: {
+    DEPENDPATH += $$PWD/dependencies/win32/lib
+    LIBS += -L$$PWD/dependencies/win32/lib -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua52
+    INCLUDEPATH += $$PWD/dependencies/win32/include
+}
+
+DISTFILES += \
+    map/level.bin \
+    res/hack.pgf \
+    res/ltn0.pgf \
+    res/hack.ttf \
+    res/text.ogg \
+    res/text.wav \
+    res/bg.png \
+    res/bullet.png \
+    res/edgelord.png \
+    res/forest.png \
+    res/inventory.png \
+    res/items.png \
+    res/ness.png \
+    res/ness_lift.png \
+    res/player.png \
+    res/textures.png \
+    res/beta/middle dirt mound.psd \
+    res/beta/ness.psd \
+    res/beta/ness_lift.psd \
+    res/beta/pepper take two.psd \
+    res/beta/playground.psd \
+    res/beta/rock bottom.psd \
+    res/beta/terribad pepper.psd \
+    res/beta/top left dirt mound.psd \
+    LICENSE \
+    map/input.lua \
+    map/inventory.lua \
+    map/messagebox.lua \
+    map/npc.lua \
+    map/player.lua \
+    map/script.lua \
+    map/time.lua \
+    README.md
+
+HEADERS += \
+    camera/camera.h \
+    graphics/common.h \
+    graphics/rectangle.h \
+    graphics/text.h \
+    input/input.h \
+    map/lua/map_lua_functions.h \
+    map/tile.h \
+    map/tilemap.h \
+    map/tilemap_lua.h \
+    map/tilemap_serializer.h \
+    message-box/message_box.h \
+    player/inventory.h \
+    player/player.h \
+    serialization/serialization_reader.h \
+    serialization/serializer.h \
+    sound/sound.h \
+    sprites/sprite.h \
+    string/string.h \
+    vector/vector.h \
+    callback.h \
+    common.h \
+    globals.h \
