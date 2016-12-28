@@ -30,9 +30,14 @@ SOURCES += \
     main.c
 
 win32: {
-    DEPENDPATH += $$PWD/dependencies/win32/lib
-    LIBS += -L$$PWD/dependencies/win32/lib -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua52
-    INCLUDEPATH += $$PWD/dependencies/win32/include
+    ## For regular Win32
+    #DEPENDPATH += $$PWD/dependencies/win32/lib
+    #LIBS += -L$$PWD/dependencies/win32/lib -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua52
+    #INCLUDEPATH += $$PWD/dependencies/win32/include
+    ## For Mingw
+    DEPENDPATH += $$PWD/dependencies/win32_mingw/lib
+    LIBS += -L$$PWD/dependencies/win32_mingw/lib -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua52
+    INCLUDEPATH += $$PWD/dependencies/win32_mingw/include
 }
 
 DISTFILES += \
