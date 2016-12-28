@@ -29,15 +29,23 @@ SOURCES += \
     globals.c \
     main.c
 
+CONFIG(debug, debug|release) {
+    CONFIG += console
+} else {
+    CONFIG -= console
+}
+
 win32: {
     ## For regular Win32
     #DEPENDPATH += $$PWD/dependencies/win32/lib
     #LIBS += -L$$PWD/dependencies/win32/lib -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua52
     #INCLUDEPATH += $$PWD/dependencies/win32/include
+
     ## For Mingw
-    DEPENDPATH += $$PWD/dependencies/win32_mingw/lib
-    LIBS += -L$$PWD/dependencies/win32_mingw/lib -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua52
     INCLUDEPATH += $$PWD/dependencies/win32_mingw/include
+    #DEPENDPATH += $$PWD/dependencies/win32_mingw/lib
+    #LIBS += -L$$PWD/dependencies/win32_mingw/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua52
+    LIBS += -L"C:\Users\Mike\Documents\GitHub\psp-game\dependencies\win32_mingw\lib" -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua52
 }
 
 DISTFILES += \

@@ -11,6 +11,11 @@ defines various global variables to be reused in the lifetime of the game.
 #define RGBA(r,g,b,a) (((r)) | ((g) >> 8) | ((b) >> 16) | ((a) >> 24)) //TODO: is this correct?
 #endif
 
+#include <math.h>
+#ifndef min
+#define min(x, y) (fmin(x, y))
+#endif
+
 extern int kQuit;
 extern int kLevelEditorMode;
 extern int kUpdate; //whether or not to update the game (useful for pause screens or message boxes)

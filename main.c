@@ -9,6 +9,8 @@
 
 #elif SDL_VERS
 
+#define SDL_MAIN_HANDLED
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -253,6 +255,14 @@ void draw(tilemap_t* tilemap)
   SDL_RenderPresent(kSdlRenderer);
   #endif
 }
+
+/**
+ * @brief SDL_main
+ * main
+ * @param argc arg count
+ * @param argv args
+ * @return nothing
+ */
 
 int main(int argc, char** argv)
 {
