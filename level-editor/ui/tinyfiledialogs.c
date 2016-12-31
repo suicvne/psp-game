@@ -103,6 +103,8 @@ misrepresented as being the original software.
  #include <conio.h>
  #define SLASH "\\"
 #else
+ #include <stdio.h>
+ #include <string.h>
  #include <limits.h>
  #include <unistd.h>
  #include <dirent.h> /* on old systems try <sys/dir.h> instead */

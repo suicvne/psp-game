@@ -2,8 +2,8 @@
 
 TARGET = analogue-sdl
 PKGCONFIG = $(shell which pkg-config)
-CFLAGS = $(shell $(PKGCONFIG) --cflags sdl2) $(shell $(PKGCONFIG) --cflags SDL2_ttf) $(shell $(PKGCONFIG) --cflags SDL2_image) $(shell $(PKGCONFIG) --cflags SDL2_mixer) $(shell $(PKGCONFIG) --cflags lua5.2) -DSDL_VERS
-LIBS = $(shell $(PKGCONFIG) --libs sdl2) $(shell $(PKGCONFIG) --libs SDL2_ttf) $(shell $(PKGCONFIG) --libs SDL2_image) $(shell $(PKGCONFIG) --libs SDL2_mixer) $(shell $(PKGCONFIG) --libs lua5.2) -lm
+CFLAGS = $(shell $(PKGCONFIG) --cflags glew) $(shell $(PKGCONFIG) --cflags sdl2) $(shell $(PKGCONFIG) --cflags SDL2_ttf) $(shell $(PKGCONFIG) --cflags SDL2_image) $(shell $(PKGCONFIG) --cflags SDL2_mixer) $(shell $(PKGCONFIG) --cflags lua5.2) -DSDL_VERS
+LIBS = $(shell $(PKGCONFIG) --libs glew) $(shell $(PKGCONFIG) --libs sdl2) $(shell $(PKGCONFIG) --libs SDL2_ttf) $(shell $(PKGCONFIG) --libs SDL2_image) $(shell $(PKGCONFIG) --libs SDL2_mixer) $(shell $(PKGCONFIG) --libs lua5.2) -lm
 
 LOCAL_DEPS = sound/*.c graphics/*.c sprites/*.c level-editor/ui/*.c level-editor/*.c input/*.c camera/*.c map/*.c map/lua/*.c player/*.c serialization/*.c vector/*.c message-box/*.c *.c
 
