@@ -276,6 +276,11 @@ void update(tilemap_t* tilemap)
   inventory_update();
 }
 
+int draw_tri()
+{
+
+}
+
 void draw(tilemap_t* tilemap)
 {
   #if PSP //step 1: clear screen
@@ -284,13 +289,24 @@ void draw(tilemap_t* tilemap)
     oslStartDrawing();
     oslClearScreen(RGBA(0, 0, 0, 255));
   #elif SDL_VERS
+    glClearDepth(1.0);
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    SDL_GL_SwapWindow(kSdlWindow);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    SDL_GL_SwapWindow(kSdlWindow); //render present
   #endif
 
-  //Do drawing in here
+    glEnableClientState(GL_COLOR_ARRAY);
+    glBegin(GL_TRIANGLES); //immediate mode
 
+    glColor3f(1.0, .3, 0.0);
+    glVertex2f(20, 20);
+    glVertex2f(60, 30);
+    glVertex2f(35, 300);
+
+    glEnd();
+
+  /*
+  //Do drawing in here
   tilemap_draw(tilemap, kCamera);
   sprite_draw(kPlayer->main_sprite);
   text_render_text(tilemap->map_name, 10, 2);
@@ -299,6 +315,7 @@ void draw(tilemap_t* tilemap)
   
   inventory_draw();
   //End do drawing in here
+  */
 
   #if PSP //present
   }

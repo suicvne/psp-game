@@ -45,7 +45,7 @@ win32: {
     INCLUDEPATH += $$PWD/dependencies/win32_mingw/include
     #DEPENDPATH += $$PWD/dependencies/win32_mingw/lib
     #LIBS += -L$$PWD/dependencies/win32_mingw/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua52
-    LIBS += -L"C:\Users\Mike\Documents\GitHub\psp-game\dependencies\win32_mingw\lib" -lmingw32 -lglew32 -lglew32mx -lopengl32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua52
+    LIBS += -L$$PWD/dependencies/win32_mingw/lib -lmingw32 -lglew32 -lglew32mx -lopengl32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua52
 }
 
 DISTFILES += \
