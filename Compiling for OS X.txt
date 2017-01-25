@@ -1,0 +1,11 @@
+Compiling for macOS
+
+*Note: this was tested on macOS 10.12
+
+Clone the zip from GitHub and extract it to a directory you’ll find easily.
+2. Install Homebrew from the following link: http://brew.sh
+3. Once home-brew is installed, install the following packages using this command:
+    brew install lua sdl2 sdl2_mixer sdl2_ttf sdl2_image
+    brew install pkg-config
+4. cd into the directory you extracted the zip to and run
+         make -f Makefile-SDL
