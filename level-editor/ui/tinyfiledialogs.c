@@ -104,7 +104,9 @@ misrepresented as being the original software.
  #define SLASH "\\"
 #else
  #include <stdio.h>
+ #include <stdlib.h>
  #include <string.h>
+ #include <math.h>
  #include <limits.h>
  #include <unistd.h>
  #include <dirent.h> /* on old systems try <sys/dir.h> instead */

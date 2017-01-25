@@ -28,8 +28,6 @@ struct OSL_FONT* kMainFont;
 
 #ifdef SDL_VERS
 SDL_Window* kSdlWindow;
-SDL_GLContext kGlContext;
-
 SDL_Renderer* kSdlRenderer;
 SDL_Event kSdlEvent;
 TTF_Font* kSdlFont;

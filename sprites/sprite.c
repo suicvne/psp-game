@@ -75,8 +75,8 @@ void sprite_set_center_point(sprite_t* sprite, int cx, int cy)
   sprite->image->centerX = cx;
   sprite->image->centerY = cy;
   #else
-  sprite->center.x = cx;
-  sprite->center.y = cy;
+  //sprite->center.x = cx;
+  //sprite->center.y = cy;
   #endif
 }
 
@@ -116,14 +116,12 @@ void sprite_draw(sprite_t* sprite)
   dst_rect.w = src_rect.w;
   dst_rect.h = src_rect.h;
 
-  SDL_Point center_point = sprite->center;
-
   SDL_RenderCopyEx(kSdlRenderer,
     sprite->image,
     &src_rect,
     &dst_rect,
     sprite->angle,
-    &center_point,
+    NULL,
     SDL_FLIP_NONE
   );
 
@@ -154,14 +152,12 @@ void sprite_draw_offset(sprite_t* sprite, int x_offset, int y_offset)
   dst_rect.w = src_rect.w;
   dst_rect.h = src_rect.h;
 
-  SDL_Point center_point = sprite->center;
-
   SDL_RenderCopyEx(kSdlRenderer,
     sprite->image,
     &src_rect,
     &dst_rect,
     sprite->angle,
-    &center_point,
+    NULL,
     SDL_FLIP_NONE
   );
   #endif
@@ -199,14 +195,12 @@ void sprite_draw_camera(sprite_t* sprite, const camera_t camera)
   dst_rect.w = src_rect.w;
   dst_rect.h = src_rect.h;
 
-  SDL_Point center_point = sprite->center;
-
   SDL_RenderCopyEx(kSdlRenderer,
     sprite->image,
     &src_rect,
     &dst_rect,
     sprite->angle,
-    &center_point,
+    NULL,
     SDL_FLIP_NONE
   );
   #endif
@@ -241,14 +235,12 @@ void sprite_draw_camera_source(sprite_t* sprite, const camera_t camera, int x, i
   dst_rect.w = w;
   dst_rect.h = h;
 
-  SDL_Point center_point = sprite->center;
-
   SDL_RenderCopyEx(kSdlRenderer,
     sprite->image,
     &src_rect,
     &dst_rect,
     sprite->angle,
-    &center_point,
+    NULL,
     SDL_FLIP_NONE
   );
   #endif
@@ -281,14 +273,12 @@ void sprite_draw_source(sprite_t* sprite, int x, int y, int sx, int sy, int w, i
   dst_rect.w = w;
   dst_rect.h = h;
 
-  SDL_Point center_point = sprite->center;
-
   SDL_RenderCopyEx(kSdlRenderer,
     sprite->image,
     &src_rect,
     &dst_rect,
     sprite->angle,
-    &center_point,
+    NULL,
     SDL_FLIP_NONE
   );
   #endif
@@ -325,14 +315,12 @@ void sprite_draw_camera_factor(sprite_t* sprite, const camera_t camera, float mo
   dst_rect.w = src_rect.w;
   dst_rect.h = src_rect.h;
 
-  SDL_Point center_point = sprite->center;
-
   SDL_RenderCopyEx(kSdlRenderer,
     sprite->image,
     &src_rect,
     &dst_rect,
     sprite->angle,
-    &center_point,
+    NULL,
     SDL_FLIP_NONE
   );
   #endif
@@ -366,14 +354,12 @@ void sprite_draw_camera_factor_offset(sprite_t* sprite, const camera_t camera, f
   dst_rect.w = src_rect.w;
   dst_rect.h = src_rect.h;
 
-  SDL_Point center_point = sprite->center;
-
   SDL_RenderCopyEx(kSdlRenderer,
     sprite->image,
     &src_rect,
     &dst_rect,
     sprite->angle,
-    &center_point,
+    NULL,
     SDL_FLIP_NONE
   );
   #endif
@@ -406,14 +392,12 @@ void sprite_draw_camera_pointer_factor_offset(sprite_t* sprite, const camera_t c
   dst_rect.w = src_rect.w;
   dst_rect.h = src_rect.h;
 
-  SDL_Point center_point = sprite->center;
-
   SDL_RenderCopyEx(kSdlRenderer,
     sprite->image,
     &src_rect,
     &dst_rect,
     sprite->angle,
-    &center_point,
+    NULL,
     SDL_FLIP_NONE
   );
   #endif

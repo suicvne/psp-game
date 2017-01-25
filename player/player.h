@@ -6,7 +6,8 @@
 #include "../vector/vector.h"
 #include "../globals.h"
 #include "inventory.h"
-#include <malloc.h>
+#include <stdlib.h>
+//#include <malloc.h>
 #include <assert.h>
 
 #ifdef PSP

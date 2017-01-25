@@ -136,7 +136,6 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
         if(tile.angle > 0)
         {
           int cx, cy;
-#if PSP
           switch(tile.angle) //...i'm..not proud of this..
           {
             case 90:
@@ -152,24 +151,6 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
             cx = 0; cy = 0;
             break;
           }
-#else
-          switch(tile.angle)
-          {
-          case 90:
-              cx = 16.5; cy = 16;
-              break;
-          case 180:
-              cx = 32; cy = 32;
-              break;
-          case 270:
-              cx = 0; cy = 32;
-              break;
-          default:
-              cx = 0; cy = 0;
-              break;
-          }
-
-#endif
           sprite_set_center_point(map->tileset, cx, cy);
         }
         sprite_draw_camera_source(map->tileset, *cam, floor(x_iter * 32), floor(y_iter * 32), sheet_location.x, sheet_location.y, 32, 32);

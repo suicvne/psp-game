@@ -40,12 +40,9 @@ extern struct OSL_FONT* kMainFont;
 #include <SDL2/SDL_ttf.h>
 
 extern SDL_Window* kSdlWindow;
-extern SDL_GLContext kGlContext;
+extern SDL_Renderer* kSdlRenderer;
 extern SDL_Event kSdlEvent;
 extern TTF_Font* kSdlFont;
-
-/*unknown if needed when using OpenGL, probably not.*/
-extern SDL_Renderer* kSdlRenderer;
 
 #endif
 

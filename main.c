@@ -1,6 +1,3 @@
-/**
-  Version specific
-  */
 #ifdef PSP
 
 #include <pspkernel.h>
@@ -14,19 +11,12 @@
 
 #define SDL_MAIN_HANDLED
 
-#include <GL/glew.h>
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
 #endif
-
-/**
-  End version specific
-  */
-
 
 #include "graphics/rectangle.h"
 #include "graphics/text.h"
@@ -87,8 +77,7 @@ int init_window()
   kSdlWindow = SDL_CreateWindow(windowTitle,
     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
     SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2,
-    SDL_WINDOW_OPENGL
-    //SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
+    SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
   );
   if(kSdlWindow == NULL)
   {
@@ -96,49 +85,11 @@ int init_window()
     SDL_Quit();
     return 1;
   }
-
-  /**
-    init OpenGL
-    */
-
-  kGlContext = SDL_GL_CreateContext(kSdlWindow);
-  if(kGlContext == NULL)
-  {
-      fprintf(stderr, "Error creating OpenGL Context: %s\n", SDL_GetError());
-      SDL_Quit();
-      return 1;
-  }
-
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2); //OpenGL 3.2
-  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-  SDL_GL_SetSwapInterval(1);
-
-  /**
-    end init openGL
-    */
-
-  /**
-    init GLEW
-    */
-
-#ifndef __APPLE__ //may or MAY NOT be needed for Mac OS X
-  glewExperimental = GL_TRUE;
-  glewInit();
-#endif
-
-  /**
-    end init GLEW
-    */
-
-
   return 0;
 }
 
 int init_renderer()
 {
-    /*
   kSdlRenderer = SDL_CreateRenderer(kSdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if(kSdlRenderer == NULL)
   {
@@ -147,14 +98,12 @@ int init_renderer()
     SDL_Quit();
     return 1;
   }
-  SDL_RenderSetLogicalSize(kSdlRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);*/
+  SDL_RenderSetLogicalSize(kSdlRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);
   return 0;
 }
 
 int shutdown_SDL()
 {
-  SDL_GL_DeleteContext(kGlContext);
-
   if(kSdlRenderer != NULL)
     SDL_DestroyRenderer(kSdlRenderer);
 
@@ -276,11 +225,6 @@ void update(tilemap_t* tilemap)
   inventory_update();
 }
 
-int draw_tri()
-{
-
-}
-
 void draw(tilemap_t* tilemap)
 {
   #if PSP //step 1: clear screen
@@ -289,24 +233,11 @@ void draw(tilemap_t* tilemap)
     oslStartDrawing();
     oslClearScreen(RGBA(0, 0, 0, 255));
   #elif SDL_VERS
-    glClearDepth(1.0);
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    SDL_GL_SwapWindow(kSdlWindow); //render present
+  SDL_RenderClear(kSdlRenderer);
   #endif
 
-    glEnableClientState(GL_COLOR_ARRAY);
-    glBegin(GL_TRIANGLES); //immediate mode
-
-    glColor3f(1.0, .3, 0.0);
-    glVertex2f(20, 20);
-    glVertex2f(60, 30);
-    glVertex2f(35, 300);
-
-    glEnd();
-
-  /*
   //Do drawing in here
+
   tilemap_draw(tilemap, kCamera);
   sprite_draw(kPlayer->main_sprite);
   text_render_text(tilemap->map_name, 10, 2);
@@ -315,15 +246,13 @@ void draw(tilemap_t* tilemap)
   
   inventory_draw();
   //End do drawing in here
-  */
 
   #if PSP //present
   }
   oslEndDrawing();
   kSkip = oslSyncFrame();
   #elif SDL_VERS
-  //SDL_RenderPresent(kSdlRenderer);
-  SDL_GL_SwapWindow(kSdlWindow);
+  SDL_RenderPresent(kSdlRenderer);
   #endif
 }
 

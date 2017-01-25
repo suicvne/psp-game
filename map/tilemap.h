@@ -21,7 +21,8 @@ v2 - appends the tileset filename after map_name
 #include "../serialization/serialization_reader.h"
 #include "lua/map_lua_functions.h"
 
-#include <malloc.h>
+#include <stdlib.h>
+//#include <malloc.h>
 #include <assert.h>
 #include <lua.h>
 #include <lauxlib.h>
