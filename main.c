@@ -288,12 +288,12 @@ int main(int argc, char** argv)
     if(kLevelEditorMode)
     {
 #if SDL_VERS
-        //level_editor_t* editor = editor_create();
+        level_editor_t* editor = editor_create();
         while(!kQuit)
         {
-            //editor_update(editor);
+            editor_update(editor);
 
-            //editor_draw(editor);
+            editor_draw(editor);
         }
 #endif
     }

@@ -2,6 +2,8 @@
 
 #include "level-editor.h"
 
+SDL_Scancode CONTROL_SCANCODE = SDL_SCANCODE_LCTRL;
+
 const char* editor_dialog_filters[1] = { "*.bin" };
 /**
 Notes on tinyfd
@@ -60,6 +62,10 @@ level_editor_t* editor_create()
   printf("\n\ngraphics mode: %s\n", tinyfd_response);
 
   //tinyfd_messageBox("Editor Initiated", "Initiated blank 32x32 level.", "ok", "information", 0);
+
+  #if __APPLE__
+  CONTROL_SCANCODE = SDL_SCANCODE_LGUI; //command key on Apple computers, winkey on windows 
+  #endif
 
   return editor;
 }
@@ -263,11 +269,11 @@ void editor_handle_input(level_editor_t* editor)
   {
     const Uint8* keyboard_state;
     keyboard_state = SDL_GetKeyboardState(NULL);
-    if(keyboard_state[SDL_SCANCODE_LCTRL] && keyboard_state[SDL_SCANCODE_O]) //open
+    if(keyboard_state[CONTROL_SCANCODE] && keyboard_state[SDL_SCANCODE_O]) //open
     {
       editor_load_level(editor);
     }
-    else if(keyboard_state[SDL_SCANCODE_LCTRL] && keyboard_state[SDL_SCANCODE_S]) //save
+    else if(keyboard_state[CONTROL_SCANCODE] && keyboard_state[SDL_SCANCODE_S]) //save
     {
       editor_save_level(editor);
     }
