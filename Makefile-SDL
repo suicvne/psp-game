@@ -36,7 +36,7 @@ LIBS = $(shell $(PKGCONFIG) --libs sdl2) $(shell $(PKGCONFIG) --libs SDL2_ttf) $
 LOCAL_DEPS = sound/*.c graphics/*.c sprites/*.c level-editor/ui/*.c level-editor/*.c input/*.c camera/*.c map/*.c map/lua/*.c player/*.c serialization/*.c vector/*.c message-box/*.c *.c
 
 compile:
-	gcc $(CFLAGS) -Wall $(LOCAL_DEPS) -o gen/$(TARGET) $(LIBS)
+	gcc -g $(CFLAGS) -Wall $(LOCAL_DEPS) -o gen/$(TARGET) $(LIBS)
 run:
 	gen/$(TARGET)
 edit:

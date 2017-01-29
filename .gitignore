@@ -5,6 +5,9 @@
 *.o
 *.obj
 
+# New to OS X
+.DS_Store
+
 # Precompiled Headers
 *.gch
 *.pch
