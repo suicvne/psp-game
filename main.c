@@ -45,6 +45,8 @@
 
 #include "map/tilemap.h"
 
+#include "system/system_info.h"
+
 #if PSP
 PSP_MODULE_INFO("Analogue Sample", 0, 1, 0);
 PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
@@ -256,6 +258,19 @@ void draw(tilemap_t* tilemap)
   #endif
 }
 
+void output_system_info()
+{
+  system_info_t info = get_system_info();
+  printf("\n\n---SYSTEM INFO---\n\n");
+  printf("Platform: %s\n", info.platform);
+  printf("Subsystem: %s\n", info.subsystem);
+  printf("CPU Logical Cores: %d\n", info.cpu_core_count);
+  #ifdef SDL_VERS
+  printf("SDL Version: %d.%d.%d\n", info.sdl_version_major, info.sdl_version_minor, info.sdl_version_patch);
+  #endif
+  printf("\n\n---END SYSTEM INFO---\n\n");
+}
+
 /**
  * @brief SDL_main
  * main
@@ -283,6 +298,8 @@ int main(int argc, char** argv)
     psp_setup_callbacks();
     init_subsystem();
     initialize_globals();
+
+    output_system_info(); //output system info to console for convenience sake
 
     kQuit = 0;
     if(kLevelEditorMode)

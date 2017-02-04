@@ -33,7 +33,7 @@ endif
 CFLAGS = -I$(SDL2INCLUDE) -I$(SDL2MIXERINCLUDE) -I$(SDL2IMAGEINCLUDE) -I$(SDL2TTFINCLUDE) $(shell $(PKGCONFIG) --cflags lua5.2) -DSDL_VERS
 LIBS = $(shell $(PKGCONFIG) --libs sdl2) $(shell $(PKGCONFIG) --libs SDL2_ttf) $(shell $(PKGCONFIG) --libs SDL2_image) $(shell $(PKGCONFIG) --libs SDL2_mixer) $(shell $(PKGCONFIG) --libs lua5.2) -lm
 
-LOCAL_DEPS = sound/*.c graphics/*.c sprites/*.c level-editor/ui/*.c level-editor/*.c input/*.c camera/*.c map/*.c map/lua/*.c player/*.c serialization/*.c vector/*.c message-box/*.c *.c
+LOCAL_DEPS = sound/*.c graphics/*.c sprites/*.c level-editor/ui/*.c level-editor/*.c input/*.c camera/*.c map/*.c map/lua/*.c player/*.c serialization/*.c vector/*.c message-box/*.c system/*.c *.c
 
 compile:
 	gcc -g $(CFLAGS) -Wall $(LOCAL_DEPS) -o gen/$(TARGET) $(LIBS)

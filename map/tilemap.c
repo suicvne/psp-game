@@ -42,7 +42,7 @@ tilemap_t* tilemap_create(int width, int height, int allocate_texture)
   tilemap->height = height;
 
   tilemap->tileset_path = "textures.png";
-  char buffer[20];
+  char buffer[32];
   sprintf(buffer, "res/%s", tilemap->tileset_path);
   if(allocate_texture)
   {
@@ -96,7 +96,7 @@ void tilemap_update(tilemap_t* map, const camera_t* cam)
     {/*Function dne*/}
     else if(lua_pcall(map->lua_state, 0, 0, 0) != 0)
     {
-      char buffer[50];
+      char buffer[64];
       sprintf(buffer, "Fatal Error during onUpdate: %s", lua_tostring(map->lua_state, -1));
       report_fatal_error(buffer);
       lua_pop(map->lua_state, 1);
@@ -210,11 +210,11 @@ int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t
 
 void camera_get_index_bounds(const camera_t* camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y)
 {
-  /*
+  
   int half_map_width, half_map_height;
   half_map_width = ((tilemap->width * 32) / 2);
   half_map_height = ((tilemap->height * 32) / 2);
-  */
+  
 
   float corrected_x, corrected_y;
   corrected_x = -camera->x;
@@ -288,7 +288,7 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
 
 int tilemap_verify_header(char* buffer, short version)
 {
-  char filler[30];
+  char filler[32];
 
   if(buffer[0] == HEADER_0 && buffer[1] == HEADER_1 && version == VERSION)
     return 1;
@@ -324,7 +324,7 @@ void tilemap_report_lua_errors(lua_State* L, int status)
 
 tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
 {
-  char combined_filename[30];
+  char combined_filename[32];
   sprintf(combined_filename, "%s/%s", directory, filename);
 
   int file_size = serializer_get_file_size(combined_filename);
