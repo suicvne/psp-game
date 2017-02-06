@@ -27,12 +27,22 @@ SOURCES += \
     sprites/sprite.c \
     vector/vector.c \
     globals.c \
-    main.c
+    main.c \
+    system/system_info.c \
+    level-editor/ui/tinyfiledialogs.c \
+    level-editor/level-editor.c
 
 CONFIG(debug, debug|release) {
     CONFIG += console
 } else {
     CONFIG -= console
+}
+
+macx: {
+
+    INCLUDEPATH += /usr/local/include
+    LIBS += -L/usr/local/lib -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua.5.2.4
+
 }
 
 win32: {
@@ -106,3 +116,6 @@ HEADERS += \
     callback.h \
     common.h \
     globals.h \
+    system/system_info.h \
+    level-editor/ui/tinyfiledialogs.h \
+    level-editor/level-editor.h
