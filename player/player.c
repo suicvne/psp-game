@@ -14,7 +14,30 @@ void player_destroy(player_t* player)
   free(player);
 }
 
-void player_update_animation_offset(player_t* player, const vector_t* movement)
+//0: left, 1: right, 2: up, 3: down
+void player_update_animation_offset_by_direction(player_t* player, int direction)
+{
+  int offset;
+  switch (direction)
+  {
+    case 0:
+      offset = 3;
+      break;
+    case 1:
+      offset = 4;
+      break;
+    case 2:
+      offset = 5;
+      break;
+    case 3:
+      offset = 0;
+      break;
+  }
+
+  player->main_sprite->yframeoffset = offset;
+}
+
+void player_update_animation_offset_by_vector(player_t* player, const vector_t* movement)
 {
   int offset = 0;
 
@@ -72,6 +95,8 @@ if(!kLevelEditorMode)
       player->move_timer = 32;
       player->speed_x = -move_speed;
       player->speed_y = 0;
+
+      player_update_animation_offset_by_direction(player, 1);
     }
     else if(stickInput.x < 0.0f) //left
     {
@@ -79,25 +104,33 @@ if(!kLevelEditorMode)
       player->move_timer = 32;
       player->speed_x = move_speed;
       player->speed_y = 0;
+
+      player_update_animation_offset_by_direction(player, 0);
     }
-    else if(stickInput.y > 0.0f) //up
+    else if(stickInput.y > 0.0f) //down
     {
       player->is_moving = 1;
       player->move_timer = 32;
       player->speed_x = 0;
       player->speed_y = -move_speed;
+
+      player_update_animation_offset_by_direction(player, 3);
     }
-    else if(stickInput.y < 0.0f) //down
+    else if(stickInput.y < 0.0f) //up
     {
       player->is_moving = 1;
       player->move_timer = 32;
       player->speed_x = 0;
       player->speed_y = move_speed;
+
+      player_update_animation_offset_by_direction(player, 2);
     }
   }
 
   if(player->is_moving == 1)
   {
+    sprite_update(player->main_sprite);
+
     kCamera->x += player->speed_x;
     kCamera->y += player->speed_y;
 
