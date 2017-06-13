@@ -140,6 +140,7 @@ int lua_map_set_blending(lua_State* L)
     oslSetAlpha(OSL_FX_DEFAULT, 0);
   }
   #endif
+
   return 0;
 }
 

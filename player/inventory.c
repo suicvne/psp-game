@@ -61,12 +61,14 @@ void inventory_create()
     //player_inventory[5] = 5;
     //player_inventory[6] = 6;
     //player_inventory[7] = 7;
+    /*
     int i;
     for(i = 2; i < inventory_max_items; i++)
     {
         if(i % 2)
             player_inventory[i] = GRASS_SEED;
     }
+    */
 }
 
 void inventory_destroy()

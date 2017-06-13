@@ -30,6 +30,12 @@ typedef struct player_t {
 
   int is_using; //true if using, false if not
 
+  int is_moving;
+  float move_timer;
+
+  float speed_x;
+  float speed_y;
+
 } player_t;
 
 player_t* player_create();

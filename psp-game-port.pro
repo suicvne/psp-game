@@ -39,10 +39,8 @@ CONFIG(debug, debug|release) {
 }
 
 macx: {
-
     INCLUDEPATH += /usr/local/include
     LIBS += -L/usr/local/lib -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image -llua.5.2.4
-
 }
 
 win32: {

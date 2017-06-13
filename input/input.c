@@ -188,6 +188,7 @@ void input_update()
       case SDLK_d: //right
         input_current_frame.analogue_input.x = 0;
         break;
+        
       }
       break;
     }
