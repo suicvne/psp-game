@@ -14,7 +14,7 @@ else
 endif
 
 
-TARGET = rock-sdl
+TARGET = rock-sdl.o
 PKGCONFIG = $(shell which pkg-config)
 
 SDL2INCLUDE = $(shell $(PKGCONFIG) —cflags sdl2)

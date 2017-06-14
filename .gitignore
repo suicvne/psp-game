@@ -7,6 +7,7 @@
 
 # New to OS X
 .DS_Store
+.dysm
 
 # Precompiled Headers
 *.gch
