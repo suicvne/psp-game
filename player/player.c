@@ -89,6 +89,7 @@ if(!kLevelEditorMode)
 #endif
   if(player->is_moving == 0)
   {
+    player->main_sprite->currentframe = 0;
     if(stickInput.x > 0.0f) //right
     {
       player->is_moving = 1;
