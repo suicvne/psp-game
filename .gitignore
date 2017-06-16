@@ -66,6 +66,7 @@ CMakeLists.txt.user*
 # New to OS X
 .DS_Store
 .dysm
+.dSYM
 
 # Precompiled Headers
 *.gch
