@@ -6,11 +6,9 @@
 
 #ifndef CUSTOMOPENGLWIDGET_H
 #define CUSTOMOPENGLWIDGET_H
+
 #include <QtOpenGL>
-#include <QWidget>
 #include <QOpenGLWidget>
-#include <gl.h>
-#include <QMatrix4x4>
 #include <QOpenGLFunctions>
 
 #include <rocklevel/tilemap.h>
@@ -24,7 +22,7 @@ class CustomOpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 public:
     CustomOpenGLWidget(QWidget *parent = 0);
     void initializeGL();
-    void resizeGL(int w, int h);
+    //void resizeGL(int w, int h);
     void paintGL();
 
     void loadTestTextures();
@@ -47,8 +45,10 @@ private:
     void rotate180(float x, float y, float w, float h, float topLeftX, float topLeftY, float offset);
     void rotate270(float x, float y, float w, float h, float topLeftX, float topLeftY, float offset);
 
-    QMatrix4x4 m_projection;
-    QOpenGLTexture* texture_atlas;
+    QOpenGLTexture* loadTexture(QString path);
+
+    //QMatrix4x4 m_projection;
+    QOpenGLTexture* main_texture;
     tilemap_t* currentTilemap;
 };
 

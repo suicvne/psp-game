@@ -22,8 +22,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-INCLUDEPATH += ../lib-rocklevel
-LIBS += -L../build-lib-rocklevel-Desktop_Qt_5_8_0_clang_64bit-Debug/ -lrocklevel
+INCLUDEPATH += ../librocklevel
+LIBS += -L../libs/ -lrocklevel
 
 SOURCES += main.cpp\
         mainwindow.cpp \

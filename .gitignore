@@ -12,8 +12,8 @@
 
 # Qt-es
 
-/.qmake.cache
-/.qmake.stash
+.qmake.cache
+.qmake.stash
 *.pro.user
 *.pro.user.*
 *.qbs.user
@@ -93,6 +93,7 @@ CMakeLists.txt.user*
 *.app
 
 # PSP Stuff
+gen/
 *.elf
 # linux/ps2/psp executable
 *.PBP

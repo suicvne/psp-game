@@ -16,6 +16,7 @@ CustomOpenGLWidget::CustomOpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 
     //prepare placeholder tilemap
     currentTilemap = tilemap_create(32, 32, 0);
+    this->main_texture = NULL; //lol this is probably a terrible idea
     //end prepare placeholder tilemap
 }
 
@@ -29,18 +30,20 @@ void CustomOpenGLWidget::initializeGL()
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
 
-    loadTestTextures();
+    this->main_texture = loadTexture("res/textures.png");
 }
 
+/*
 void CustomOpenGLWidget::resizeGL(int w, int h)
 {
     m_projection.setToIdentity();
     m_projection.perspective(60.0f, w / float(h), 1, 1000.0f);
 }
+*/
 
 void CustomOpenGLWidget::paintGL()
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -69,6 +72,31 @@ void CustomOpenGLWidget::setTileMapName(QString name)
     this->currentTilemap->map_name = (char*)name.toStdString().c_str();
 }
 
+QOpenGLTexture* CustomOpenGLWidget::loadTexture(QString path)
+{
+    QImage texture(path);
+    if(!texture.isNull())
+    {
+        return new QOpenGLTexture(texture);
+    }
+    else
+    {
+        QMessageBox::critical(this, "Editor", "Error loading texture.\nThe texture couldn't be loaded from the path " + path,
+                              QMessageBox::Ok, QMessageBox::Ok);
+        /*
+        QMessageBox box;
+        box.setText("Error loading texture");
+        box.setInformativeText("Couldn't load the texture you requested given the path " + path);
+#if __APPLE__
+        //box.setModal(true);
+#endif
+        box.exec();
+        */
+    }
+
+    return NULL;
+}
+
 void CustomOpenGLWidget::loadTestTextures()
 {
     //QOpenGLTexture()
@@ -77,7 +105,7 @@ void CustomOpenGLWidget::loadTestTextures()
 
     QImage textureAtlas(testTexturePath);
     if(!textureAtlas.isNull())
-        this->texture_atlas = new QOpenGLTexture(textureAtlas);
+        this->main_texture = new QOpenGLTexture(textureAtlas);
     else
     {
         QMessageBox box(this);
@@ -108,10 +136,12 @@ void CustomOpenGLWidget::drawTilemap()
 
 void CustomOpenGLWidget::drawRectangle(float x, float y, float w, float h, int rotation, int sheet_id)
 {
+    if(main_texture == NULL) return;
+
     vector_t tile_location = this->returnTileAreaByID(sheet_id);
 
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture_atlas->textureId());
+    glBindTexture(GL_TEXTURE_2D, main_texture->textureId());
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //disables filtering for scaling down
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //disables filtering for scaling up
@@ -243,8 +273,10 @@ vector_t CustomOpenGLWidget::returnTileAreaByID(int id)
 
 void CustomOpenGLWidget::drawRectangle(float x, float y, float w, float h)
 {
+    if(main_texture == NULL) return;
+
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture_atlas->textureId());
+    glBindTexture(GL_TEXTURE_2D, main_texture->textureId());
     //disables filtering
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -306,9 +338,14 @@ vector_t CustomOpenGLWidget::mouseToGame()
 bool CustomOpenGLWidget::loadTilemap(QString file)
 {
     tilemap_t* loaded = tilemap_read_from_file(file.toStdString().c_str());
+
     if(loaded != NULL)
     {
         this->currentTilemap = loaded;
+        QOpenGLTexture* theTexture = loadTexture("res/" + QString(this->currentTilemap->tileset_path));
+        if(theTexture == NULL) //load failed
+            return false; //cancel the load blowing
+        this->main_texture = loadTexture("res/" + QString(this->currentTilemap->tileset_path));
         return true;
     }
     else

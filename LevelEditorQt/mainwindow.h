@@ -20,8 +20,8 @@ private slots:
 
     void on_gameDrawWidget_frameSwapped();
 
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void mousePressEvent(QMouseEvent* event) override;
+    //void mouseMoveEvent(QMouseEvent* event) override;
+    //void mousePressEvent(QMouseEvent* event) override;
 
     void on_actionOpen_triggered();
 
@@ -33,7 +33,12 @@ private slots:
     void on_actionSave_triggered();
     void on_actionSave_As_triggered();
 
+    void on_actionOpen_resource_path_triggered();
+
 private:
+
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
     Ui::MainWindow *ui;
     void update();
     void draw();

@@ -13,20 +13,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setMouseTracking(true);
-    grabMouse();
+    //grabMouse();
     qApp->installEventFilter(this);
 
     //ui->gameDrawWidget->setFocus();
-}
-
-void MainWindow::update()
-{
-
-}
-
-void MainWindow::draw()
-{
-
 }
 
 MainWindow::~MainWindow()
@@ -34,8 +24,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/*
 void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
+    std::cout << "mouse move shit" << std::endl;
+    ui->gameDrawWidget->update();
     if(ui->gameDrawWidget->rect().contains(event->pos()))
     {
         ui->gameDrawWidget->update();
@@ -55,8 +48,9 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         }
     }
 }
+*/
 
-/*
+
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
     if(event->type() == QEvent::MouseMove)
@@ -70,6 +64,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             if(ui->gameDrawWidget->rect().contains(QCursor::pos()))
             {
                 std::cout << "triggered" << std::endl;
+                return true;
             }
             else
             {
@@ -83,7 +78,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     }
     return false;
 }
-*/
+
 
 void MainWindow::on_gameDrawWidget_aboutToCompose()
 {
@@ -179,4 +174,16 @@ void MainWindow::on_actionSave_triggered()
 void MainWindow::on_actionSave_As_triggered()
 {
     performSaveAs();
+}
+
+void MainWindow::on_actionOpen_resource_path_triggered()
+{
+    if(!QDir(qApp->applicationDirPath() + "/res/").exists())
+    {
+        std::cout << "resource path didn't exist, making" << std::endl;
+        QDir().mkdir(qApp->applicationDirPath() + "/res/");
+    }
+
+    QString path = QDir::toNativeSeparators(qApp->applicationDirPath() + "/res/");
+    QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
