@@ -14,6 +14,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    static void OpenResourcesDirectory();
 
 private slots:
     void on_gameDrawWidget_aboutToCompose();

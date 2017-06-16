@@ -24,6 +24,18 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::OpenResourcesDirectory()
+{
+    if(!QDir(qApp->applicationDirPath() + "/res/").exists())
+    {
+        std::cout << "resource path didn't exist, making" << std::endl;
+        QDir().mkdir(qApp->applicationDirPath() + "/res/");
+    }
+
+    QString path = QDir::toNativeSeparators(qApp->applicationDirPath() + "/res/");
+    QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+}
+
 /*
 void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
@@ -109,7 +121,7 @@ void MainWindow::onFileSelectedForSaving(const QString &filename)
 {
     if(!filename.isEmpty())
     {
-        tilemap_write_to_file(currentLevelPath.toStdString().c_str(), ui->gameDrawWidget->getCurrentTilemap());
+        tilemap_write_to_file(filename.toStdString().c_str(), ui->gameDrawWidget->getCurrentTilemap());
 
         this->currentLevelPath = filename;
 
@@ -117,6 +129,8 @@ void MainWindow::onFileSelectedForSaving(const QString &filename)
         setWindowTitle(QFileInfo(filename).fileName() + " - Level Editor");
         setWindowFilePath(filename);
     }
+    else
+        std::cout << "filename blank" << std::endl;
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -178,12 +192,5 @@ void MainWindow::on_actionSave_As_triggered()
 
 void MainWindow::on_actionOpen_resource_path_triggered()
 {
-    if(!QDir(qApp->applicationDirPath() + "/res/").exists())
-    {
-        std::cout << "resource path didn't exist, making" << std::endl;
-        QDir().mkdir(qApp->applicationDirPath() + "/res/");
-    }
-
-    QString path = QDir::toNativeSeparators(qApp->applicationDirPath() + "/res/");
-    QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+    MainWindow::OpenResourcesDirectory();
 }

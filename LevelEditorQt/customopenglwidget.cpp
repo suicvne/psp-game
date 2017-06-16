@@ -5,6 +5,8 @@
 #include <iostream>
 #include <math.h>
 
+#include "mainwindow.h"
+
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
@@ -31,6 +33,8 @@ void CustomOpenGLWidget::initializeGL()
     glEnable(GL_BLEND);
 
     this->main_texture = loadTexture("res/textures.png");
+    if(this->main_texture == NULL)
+        qApp->exit(0);
 }
 
 /*
@@ -46,25 +50,10 @@ void CustomOpenGLWidget::paintGL()
     glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
     this->drawTilemap();
-    /*
-    //texture_atlas->bind();
-    drawRectangle(32, 32, TILE_WIDTH, TILE_HEIGHT, 0);
-    drawRectangle(64 + 32, 32, TILE_WIDTH, TILE_HEIGHT, 2);
-    drawRectangle(64 + 64, 32, TILE_WIDTH, TILE_HEIGHT, 8);
-    */
 
-    //drawRectangle(32, 32, 256, 256);
-
-    //renders the mouse
-
-    //float mx, my;
-    //mx = floor(this->mapFromGlobal(QCursor::pos()).x() / TILE_WIDTH);
-    //my = floor(this->mapFromGlobal(QCursor::pos()).y() / TILE_WIDTH);
     vector_t mouse = mouseToGame();
     drawRectangle(floor(mouse.x / 32) * 32, floor(mouse.y / 32) * 32, TILE_WIDTH, TILE_HEIGHT, 0, 4);
-
 }
 
 void CustomOpenGLWidget::setTileMapName(QString name)
@@ -81,17 +70,10 @@ QOpenGLTexture* CustomOpenGLWidget::loadTexture(QString path)
     }
     else
     {
-        QMessageBox::critical(this, "Editor", "Error loading texture.\nThe texture couldn't be loaded from the path " + path,
+        QMessageBox::critical(this, "Editor", "Error loading texture.\nThe texture couldn't be loaded from the path " + path
+                              + "\n\nOpening resources directory now!",
                               QMessageBox::Ok, QMessageBox::Ok);
-        /*
-        QMessageBox box;
-        box.setText("Error loading texture");
-        box.setInformativeText("Couldn't load the texture you requested given the path " + path);
-#if __APPLE__
-        //box.setModal(true);
-#endif
-        box.exec();
-        */
+        MainWindow::OpenResourcesDirectory();
     }
 
     return NULL;
@@ -319,18 +301,6 @@ vector_t CustomOpenGLWidget::mouseToGame()
     vector_t value;
     value.x = this->mapFromGlobal(QCursor::pos()).x() / w_scale;
     value.y = this->mapFromGlobal(QCursor::pos()).y() / h_scale;
-    /*
-    if(camera != NULL)
-    {
-      value.x = ((int)-camera->x) + (input_current_frame.mouse_x) / w_scale;
-      value.y = ((int)-camera->y) + (input_current_frame.mouse_y) / h_scale;
-    }
-    else
-    {
-      value.x = (input_current_frame.mouse_x) / w_scale;
-      value.y = (input_current_frame.mouse_y) / h_scale;
-    }
-    */
 
     return value;
 }
