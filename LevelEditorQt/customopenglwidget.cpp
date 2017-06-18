@@ -53,7 +53,34 @@ void CustomOpenGLWidget::paintGL()
     this->drawTilemap();
 
     vector_t mouse = mouseToGame();
-    drawRectangle(floor(mouse.x / 32) * 32, floor(mouse.y / 32) * 32, TILE_WIDTH, TILE_HEIGHT, 0, placingTileID);
+    drawRectangle(floor(mouse.x / 32) * 32, floor(mouse.y / 32) * 32, TILE_WIDTH, TILE_HEIGHT, placingTileRotation, placingTileID);
+}
+
+int CustomOpenGLWidget::getPlacingTileRotation()
+{
+    return placingTileRotation;
+}
+
+void CustomOpenGLWidget::setPlacingTileRotation(int rotation)
+{
+    if(rotation > 360)
+        placingTileRotation = 0;
+    else if(rotation < 0)
+        placingTileRotation = 360;
+    else
+        placingTileRotation = rotation;
+}
+
+void CustomOpenGLWidget::placeTileAction()
+{
+    vector_t mouse = mouseToGame();
+    int tx, ty;
+    tx = floor(mouse.x / 32);
+    ty = floor(mouse.y / 32);
+
+    int index = tx * currentTilemap->height + ty;
+    currentTilemap->tiles[index].id = placingTileID;
+    currentTilemap->tiles[index].angle = placingTileRotation;
 }
 
 void CustomOpenGLWidget::setTileMapName(QString name)

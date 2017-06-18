@@ -73,9 +73,11 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     {
         if(this->isActiveWindow())
         {
-            if(ui->gameDrawWidget->rect().contains(QCursor::pos()))
+            //if(ui->gameDrawWidget->rect().contains(QCursor::pos()))
+            if(ui->gameDrawWidget->underMouse())
             {
-                std::cout << "triggered" << std::endl;
+                ui->gameDrawWidget->placeTileAction();
+                setWindowModified(true);
                 return true;
             }
             else
@@ -108,11 +110,6 @@ void MainWindow::on_gameDrawWidget_frameSwapped()
     if(!initialSetupDone)
     {
         populateTileList();
-        /*
-        QListWidgetItem* test = new QListWidgetItem("Test", ui->listWidget);
-        test->setIcon(QIcon(QPixmap::fromImage(ui->gameDrawWidget->getMainTexture()->toQImage())));
-        */
-
         initialSetupDone = true;
     }
 }
@@ -120,25 +117,6 @@ void MainWindow::on_gameDrawWidget_frameSwapped()
 void MainWindow::populateTileList()
 {
     ui->listWidget->clear();
-    /*
-    for(int x = 0; x < 7; x++)
-    {
-        for(int y = 0; y < 7; y++)
-        {
-            QListWidgetItem* test = new QListWidgetItem(QString("Tile"), ui->listWidget);
-            QRect rect;
-            rect.setX(x * 32);
-            rect.setY(y * 32);
-            rect.setWidth(32);
-            rect.setHeight(32);
-
-            QImage atlas = ui->gameDrawWidget->getMainTexture()->toQImage();
-
-            test->setIcon(QIcon(QPixmap::fromImage(createSubImage(&atlas, rect))));
-        }
-    }
-    */
-
     for(int i = 0; i < (8*8); i++)
     {
         //tile_get_location_by_id
@@ -255,6 +233,7 @@ void MainWindow::on_actionOpen_resource_path_triggered()
 
 void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
+    //this is all super hacky and i'm not proud
     QString* string = new QString(item->text());
     QStringRef substr(string, 5, 2);
 
@@ -262,4 +241,14 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 
     ui->gameDrawWidget->setPlacingTileID(item->text().split(" ")[1].toInt());
 
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    ui->gameDrawWidget->setPlacingTileRotation(ui->gameDrawWidget->getPlacingTileRotation() + 90);
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    ui->gameDrawWidget->setPlacingTileRotation(ui->gameDrawWidget->getPlacingTileRotation() - 90);
 }

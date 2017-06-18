@@ -40,6 +40,11 @@ public:
     int getPlacingTileID();
     void setPlacingTileID(int id);
 
+    int getPlacingTileRotation();
+    void setPlacingTileRotation(int rotation);
+
+    void placeTileAction();
+
 private:
     void drawTilemap();
 
@@ -58,6 +63,7 @@ private:
     tilemap_t* currentTilemap;
 
     int placingTileID = 0; //the ID of the tile we'll be placing
+    int placingTileRotation = 0; //the rotation of the tile we'll be placing
 };
 
 #endif // CUSTOMOPENGLWIDGET_H
