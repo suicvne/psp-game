@@ -7,13 +7,13 @@
 class gametexture
 {
 public:
-    gametexture(QImage image);
+    gametexture(QImage *image);
     ~gametexture();
 
     QOpenGLTexture* toOpenGLTexture();
-    QImage toQImage();
+    QImage* toQImage();
 private:
-    QImage qImageTexture;
+    QImage* qImageTexture;
     QOpenGLTexture *oglTexture;
 };
 

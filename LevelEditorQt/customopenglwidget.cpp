@@ -90,8 +90,8 @@ void CustomOpenGLWidget::setTileMapName(QString name)
 
 gametexture* CustomOpenGLWidget::loadTexture(QString path)
 {
-    QImage texture(path);
-    if(!texture.isNull())
+    QImage* texture = new QImage(path);
+    if(!texture->isNull())
     {
         return new gametexture(texture);
     }
@@ -112,8 +112,9 @@ void CustomOpenGLWidget::loadTestTextures()
     //TODO: this and change return type!
     QString testTexturePath = qApp->applicationDirPath() + "/res/textures.png";
 
-    QImage textureAtlas(testTexturePath);
-    if(!textureAtlas.isNull())
+    //QImage textureAtlas(testTexturePath);
+    QImage* textureAtlas = new QImage(testTexturePath);
+    if(!textureAtlas->isNull())
         this->main_texture = new gametexture(textureAtlas);
     else
     {

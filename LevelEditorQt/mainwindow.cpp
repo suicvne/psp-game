@@ -128,9 +128,9 @@ void MainWindow::populateTileList()
         rect.setWidth(TILE_WIDTH);
         rect.setHeight(TILE_HEIGHT);
 
-        QImage atlas = ui->gameDrawWidget->getMainTexture()->toQImage();
+        QImage* atlas = ui->gameDrawWidget->getMainTexture()->toQImage();
 
-        test->setIcon(QIcon(QPixmap::fromImage(createSubImage(&atlas, rect))));
+        test->setIcon(QIcon(QPixmap::fromImage(createSubImage(atlas, rect))));
     }
 }
 
