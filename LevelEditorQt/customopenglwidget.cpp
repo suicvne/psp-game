@@ -346,15 +346,14 @@ bool CustomOpenGLWidget::loadTilemap(QString file)
     if(loaded != NULL)
     {
         this->currentTilemap = loaded;
-        gametexture* theTexture = loadTexture("res/" + QString(this->currentTilemap->tileset_path));
-        if(theTexture == NULL) //load failed
+        delete this->main_texture;
+        this->main_texture = loadTexture("res/" + QString(this->currentTilemap->tileset_path));
+        if(this->main_texture == NULL) //load failed
         {
             std::cout << "load failed of texture" << std::endl;
             return false; //cancel the load blowing
         }
-        //this->main_texture = loadTexture("res/" + QString(this->currentTilemap->tileset_path));
-        delete this->main_texture;
-        this->main_texture = theTexture;
+
         return true;
     }
     else
