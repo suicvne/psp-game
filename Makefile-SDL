@@ -21,6 +21,7 @@ SDL2INCLUDE = $(shell $(PKGCONFIG) —cflags sdl2)
 SDL2MIXERINCLUDE = $(shell $(PKGCONFIG) —cflags SDL2_mixer)
 SDL2IMAGEINCLUDE = $(shell $(PKGCONFIG) —cflags SDL2_image)
 SDL2TTFINCLUDE = $(shell $(PKGCONFIG) —cflags SDL2_ttf)
+LIBROCKLEVELINCLUDE = ./librocklevel
 
 ifeq ($(OS),OSX)
 	SDL2INCLUDE = /usr/local/include/
@@ -30,10 +31,11 @@ ifeq ($(OS),OSX)
 endif
 
 
-CFLAGS = -I$(SDL2INCLUDE) -I$(SDL2MIXERINCLUDE) -I$(SDL2IMAGEINCLUDE) -I$(SDL2TTFINCLUDE) $(shell $(PKGCONFIG) --cflags lua5.2) -DSDL_VERS
-LIBS = $(shell $(PKGCONFIG) --libs sdl2) $(shell $(PKGCONFIG) --libs SDL2_ttf) $(shell $(PKGCONFIG) --libs SDL2_image) $(shell $(PKGCONFIG) --libs SDL2_mixer) $(shell $(PKGCONFIG) --libs lua5.2) -lm
+CFLAGS = -I$(SDL2INCLUDE) -I$(SDL2MIXERINCLUDE) -I$(SDL2IMAGEINCLUDE) -I$(SDL2TTFINCLUDE) -I$(LIBROCKLEVELINCLUDE) $(shell $(PKGCONFIG) --cflags lua5.2) -DSDL_VERS
+LIBS = -L./libs -lrocklevel $(shell $(PKGCONFIG) --libs sdl2) $(shell $(PKGCONFIG) --libs SDL2_ttf) $(shell $(PKGCONFIG) --libs SDL2_image) $(shell $(PKGCONFIG) --libs SDL2_mixer) $(shell $(PKGCONFIG) --libs lua5.2) -lm
 
-LOCAL_DEPS = sound/*.c graphics/*.c sprites/*.c level-editor/ui/*.c level-editor/*.c input/*.c camera/*.c map/*.c map/lua/*.c player/*.c serialization/*.c vector/*.c message-box/*.c system/*.c *.c
+LOCAL_DEPS = sound/*.c graphics/*.c sprites/*.c input/*.c camera/*.c map/*.c map/lua/*.c player/*.c serialization/*.c vector/*.c message-box/*.c system/*.c *.c
+# Removed 6/18/17: level-editor/ui/*.c level-editor/*.c
 
 compile:
 	gcc -g $(CFLAGS) -Wall $(LOCAL_DEPS) -o gen/$(TARGET) $(LIBS)

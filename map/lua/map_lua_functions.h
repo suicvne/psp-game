@@ -18,7 +18,6 @@ Defines common functions for the map's Lua interpreter.
 #include "../../vector/vector.h"
 #include "../../camera/camera.h"
 #include "../../globals.h"
-#include "../../string/string.h"
 #include "../../message-box/message_box.h"
 
 #ifdef PSP

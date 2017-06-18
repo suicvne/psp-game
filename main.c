@@ -38,7 +38,6 @@
 #include "camera/camera.h"
 #include "globals.h"
 #include "input/input.h"
-#include "level-editor/level-editor.h"
 
 #include "serialization/serialization_reader.h"
 #include "serialization/serializer.h"
@@ -74,8 +73,6 @@ int init_OSLib()
 int init_window()
 {
   char* windowTitle = "alpha";
-  if(kLevelEditorMode)
-    windowTitle = "alpha - level editor";
   kSdlWindow = SDL_CreateWindow(windowTitle,
     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
     SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2,
@@ -245,7 +242,7 @@ void draw(tilemap_t* tilemap)
   text_render_text(tilemap->map_name, 10, 2);
   if(message_box_is_visible)
     message_box_draw();
-  
+
   inventory_draw();
   //End do drawing in here
 
@@ -288,46 +285,31 @@ int main(int argc, char** argv)
         printf("arg %d: %s\n", i, argv[i]);
         if(strcmp("--level-editor", argv[i]) == 0)
         {
-            kLevelEditorMode = 1;
+            report_fatal_error("level editor mode no longer supported.");
             break;
         }
     }
 
 #if PSP
-#endif
     psp_setup_callbacks();
+#endif
     init_subsystem();
     initialize_globals();
 
     output_system_info(); //output system info to console for convenience sake
 
     kQuit = 0;
-    if(kLevelEditorMode)
+    tilemap_t* tilemap_test = load_level("./map", "level.bin");
+    printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
+
+    while(!kQuit)
     {
-#if SDL_VERS
-        level_editor_t* editor = editor_create();
-        while(!kQuit)
-        {
-            editor_update(editor);
+      update(tilemap_test);
 
-            editor_draw(editor);
-        }
-#endif
+      draw(tilemap_test);
     }
-    else
-    {
-        tilemap_t* tilemap_test = load_level("./map", "level.bin");
-        printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
 
-        while(!kQuit)
-        {
-          update(tilemap_test);
-
-          draw(tilemap_test);
-        }
-
-        tilemap_destroy(tilemap_test);
-    }
+    tilemap_destroy(tilemap_test);
     destroy_globals();
 
 #if PSP

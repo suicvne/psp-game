@@ -19,21 +19,24 @@ system_info_t get_system_info()
 	SDL_SysWMinfo sdlinfo;
 	SDL_GetWindowWMInfo(kSdlWindow, &sdlinfo);
 
-	info.platform = SDL_GetPlatform();
+	info.platform = (char*)SDL_GetPlatform();
 	switch(sdlinfo.subsystem)
 	{
 		case SDL_SYSWM_WINDOWS:
-		info.subsystem = "Win32";
-		break;
+			info.subsystem = "Win32";
+			break;
 		case SDL_SYSWM_COCOA:
-		info.subsystem = "Cocoa";
-		break;
+			info.subsystem = "Cocoa";
+			break;
 		case SDL_SYSWM_WAYLAND:
-		info.subsystem = "Wayland";
-		break;
+			info.subsystem = "Wayland";
+			break;
 		case SDL_SYSWM_MIR:
-		info.subsystem = "Mir";
-		break;
+			info.subsystem = "Mir";
+			break;
+		default:
+			info.subsystem = "Other";
+			break;
 	}
 
 	info.sdl_version_major = sdlinfo.version.major;

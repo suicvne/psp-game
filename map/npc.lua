@@ -8,7 +8,7 @@ require "input"
 
 ]]
 
-local kNpcRange = 32;
+local kNpcRange = 38;
 
 local function isNPCInRange(npc, range)
   assert(npc and range, "npc and range must not be nil or 0!");
@@ -46,7 +46,7 @@ function NPC:new(o)
     sprite_set_frame_count(o.sprite, 2);
     sprite_set_frame_time(o.sprite, 10); --idk
 
-    sprite_set_position(o.sprite, 32, 32);
+    sprite_set_position(o.sprite, 32 + (16 / 2), 32);
     sprite_set_size(o.sprite, 15, 24);
 
     return o;

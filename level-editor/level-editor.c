@@ -64,7 +64,7 @@ level_editor_t* editor_create()
   //tinyfd_messageBox("Editor Initiated", "Initiated blank 32x32 level.", "ok", "information", 0);
 
   #if __APPLE__
-  CONTROL_SCANCODE = SDL_SCANCODE_LGUI; //command key on Apple computers, winkey on windows 
+  CONTROL_SCANCODE = SDL_SCANCODE_LGUI; //command key on Apple computers, winkey on windows
   #endif
 
   return editor;
@@ -165,7 +165,8 @@ int editor_save_level(level_editor_t* editor)
   else
   {
     char buffer[256];
-    sprintf(buffer, "%s%s", editor->directory, editor->filename);
+    strcat(buffer, editor->directory);
+    strcat(buffer, editor->filename);
     tilemap_write_to_file(buffer, editor->tilemap);
     printf("Saved to %s\n", buffer);
     return 0;

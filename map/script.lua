@@ -34,8 +34,11 @@ function onLoad()
     end
   );
 
+  tilemap_set_tile(_current_tilemap, 32, 32, 4);
+
   print('created test npc');
 
+  --Setting the tile that the NPC sits on to a special one to see the grid
   --npc_test_2:destroy();
 
   --print("Hello from inside of Lua!");
