@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidget>
 
 namespace Ui {
 class MainWindow;
@@ -36,9 +37,13 @@ private slots:
 
     void on_actionOpen_resource_path_triggered();
 
+    void on_listWidget_itemClicked(QListWidgetItem *item);
+
 private:
 
     bool eventFilter(QObject *watched, QEvent *event) override;
+
+    void populateTileList();
 
     Ui::MainWindow *ui;
     void update();
@@ -47,6 +52,7 @@ private:
     void saveLevel();
     void performSaveAs();
     QString currentLevelPath;
+    bool initialSetupDone;
 };
 
 #endif // MAINWINDOW_H

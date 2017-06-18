@@ -53,7 +53,7 @@ void CustomOpenGLWidget::paintGL()
     this->drawTilemap();
 
     vector_t mouse = mouseToGame();
-    drawRectangle(floor(mouse.x / 32) * 32, floor(mouse.y / 32) * 32, TILE_WIDTH, TILE_HEIGHT, 0, 4);
+    drawRectangle(floor(mouse.x / 32) * 32, floor(mouse.y / 32) * 32, TILE_WIDTH, TILE_HEIGHT, 0, placingTileID);
 }
 
 void CustomOpenGLWidget::setTileMapName(QString name)
@@ -61,12 +61,12 @@ void CustomOpenGLWidget::setTileMapName(QString name)
     this->currentTilemap->map_name = (char*)name.toStdString().c_str();
 }
 
-QOpenGLTexture* CustomOpenGLWidget::loadTexture(QString path)
+gametexture* CustomOpenGLWidget::loadTexture(QString path)
 {
     QImage texture(path);
     if(!texture.isNull())
     {
-        return new QOpenGLTexture(texture);
+        return new gametexture(texture);
     }
     else
     {
@@ -87,7 +87,7 @@ void CustomOpenGLWidget::loadTestTextures()
 
     QImage textureAtlas(testTexturePath);
     if(!textureAtlas.isNull())
-        this->main_texture = new QOpenGLTexture(textureAtlas);
+        this->main_texture = new gametexture(textureAtlas);
     else
     {
         QMessageBox box(this);
@@ -120,10 +120,11 @@ void CustomOpenGLWidget::drawRectangle(float x, float y, float w, float h, int r
 {
     if(main_texture == NULL) return;
 
-    vector_t tile_location = this->returnTileAreaByID(sheet_id);
+    //vector_t tile_location = this->returnTileAreaByID(sheet_id);
+    vector_t tile_location = tile_get_location_by_id(sheet_id);
 
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, main_texture->textureId());
+    glBindTexture(GL_TEXTURE_2D, main_texture->toOpenGLTexture()->textureId());
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //disables filtering for scaling down
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //disables filtering for scaling up
@@ -258,7 +259,7 @@ void CustomOpenGLWidget::drawRectangle(float x, float y, float w, float h)
     if(main_texture == NULL) return;
 
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, main_texture->textureId());
+    glBindTexture(GL_TEXTURE_2D, main_texture->toOpenGLTexture()->textureId());
     //disables filtering
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -305,6 +306,11 @@ vector_t CustomOpenGLWidget::mouseToGame()
     return value;
 }
 
+gametexture* CustomOpenGLWidget::getMainTexture()
+{
+    return main_texture;
+}
+
 bool CustomOpenGLWidget::loadTilemap(QString file)
 {
     tilemap_t* loaded = tilemap_read_from_file(file.toStdString().c_str());
@@ -312,7 +318,7 @@ bool CustomOpenGLWidget::loadTilemap(QString file)
     if(loaded != NULL)
     {
         this->currentTilemap = loaded;
-        QOpenGLTexture* theTexture = loadTexture("res/" + QString(this->currentTilemap->tileset_path));
+        gametexture* theTexture = loadTexture("res/" + QString(this->currentTilemap->tileset_path));
         if(theTexture == NULL) //load failed
             return false; //cancel the load blowing
         this->main_texture = loadTexture("res/" + QString(this->currentTilemap->tileset_path));
@@ -326,4 +332,15 @@ bool CustomOpenGLWidget::loadTilemap(QString file)
     }
 
     return false;
+}
+
+int CustomOpenGLWidget::getPlacingTileID()
+{
+    return placingTileID;
+}
+
+void CustomOpenGLWidget::setPlacingTileID(int id)
+{
+    this->placingTileID = id;
+    std::cout << "placing tile is " << this->placingTileID << std::endl;
 }

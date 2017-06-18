@@ -11,6 +11,7 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 
+#include "gametexture.h"
 #include <rocklevel/tilemap.h>
 #include <rocklevel/vector.h>
 //#include "tile.h"
@@ -31,9 +32,13 @@ public:
     vector_t returnTileAreaByID(int id);
 
     tilemap_t* getCurrentTilemap();
+    gametexture* getMainTexture();
     bool loadTilemap(QString file);
 
     void setTileMapName(QString name);
+
+    int getPlacingTileID();
+    void setPlacingTileID(int id);
 
 private:
     void drawTilemap();
@@ -45,11 +50,14 @@ private:
     void rotate180(float x, float y, float w, float h, float topLeftX, float topLeftY, float offset);
     void rotate270(float x, float y, float w, float h, float topLeftX, float topLeftY, float offset);
 
-    QOpenGLTexture* loadTexture(QString path);
+    gametexture* loadTexture(QString path);
 
     //QMatrix4x4 m_projection;
-    QOpenGLTexture* main_texture;
+    //QOpenGLTexture* main_texture;
+    gametexture* main_texture;
     tilemap_t* currentTilemap;
+
+    int placingTileID = 0; //the ID of the tile we'll be placing
 };
 
 #endif // CUSTOMOPENGLWIDGET_H

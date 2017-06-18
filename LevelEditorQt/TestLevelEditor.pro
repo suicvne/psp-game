@@ -27,9 +27,11 @@ LIBS += -L../libs/ -lrocklevel
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    customopenglwidget.cpp
+    customopenglwidget.cpp \
+    gametexture.cpp
 
 HEADERS  += mainwindow.h \
-    customopenglwidget.h
+    customopenglwidget.h \
+    gametexture.h
 
 FORMS    += mainwindow.ui

@@ -96,8 +96,64 @@ void MainWindow::on_gameDrawWidget_aboutToCompose()
 {
 }
 
+QImage createSubImage(QImage* image, const QRect & rect) {
+    size_t offset = rect.x() * image->depth() / 8
+                    + rect.y() * image->bytesPerLine();
+    return QImage(image->bits() + offset, rect.width(), rect.height(),
+                  image->bytesPerLine(), image->format());
+}
+
 void MainWindow::on_gameDrawWidget_frameSwapped()
 {
+    if(!initialSetupDone)
+    {
+        populateTileList();
+        /*
+        QListWidgetItem* test = new QListWidgetItem("Test", ui->listWidget);
+        test->setIcon(QIcon(QPixmap::fromImage(ui->gameDrawWidget->getMainTexture()->toQImage())));
+        */
+
+        initialSetupDone = true;
+    }
+}
+
+void MainWindow::populateTileList()
+{
+    ui->listWidget->clear();
+    /*
+    for(int x = 0; x < 7; x++)
+    {
+        for(int y = 0; y < 7; y++)
+        {
+            QListWidgetItem* test = new QListWidgetItem(QString("Tile"), ui->listWidget);
+            QRect rect;
+            rect.setX(x * 32);
+            rect.setY(y * 32);
+            rect.setWidth(32);
+            rect.setHeight(32);
+
+            QImage atlas = ui->gameDrawWidget->getMainTexture()->toQImage();
+
+            test->setIcon(QIcon(QPixmap::fromImage(createSubImage(&atlas, rect))));
+        }
+    }
+    */
+
+    for(int i = 0; i < (8*8); i++)
+    {
+        //tile_get_location_by_id
+        QListWidgetItem* test = new QListWidgetItem("Tile " + QString::number(i), ui->listWidget);
+        QRect rect;
+        vector_t tile_area = tile_get_location_by_id(i);
+        rect.setX(tile_area.x);
+        rect.setY(tile_area.y);
+        rect.setWidth(TILE_WIDTH);
+        rect.setHeight(TILE_HEIGHT);
+
+        QImage atlas = ui->gameDrawWidget->getMainTexture()->toQImage();
+
+        test->setIcon(QIcon(QPixmap::fromImage(createSubImage(&atlas, rect))));
+    }
 }
 
 void MainWindow::onFileSelected(const QString& filename)
@@ -111,6 +167,8 @@ void MainWindow::onFileSelected(const QString& filename)
             ui->levelNameTextBox->setText(ui->gameDrawWidget->getCurrentTilemap()->map_name);
             setWindowFilePath(filename);
             setWindowTitle(levelFileInfo.fileName() + " - Level Editor");
+
+            populateTileList(); //repopulate the tile list
         }
     }
     else
@@ -193,4 +251,15 @@ void MainWindow::on_actionSave_As_triggered()
 void MainWindow::on_actionOpen_resource_path_triggered()
 {
     MainWindow::OpenResourcesDirectory();
+}
+
+void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
+{
+    QString* string = new QString(item->text());
+    QStringRef substr(string, 5, 2);
+
+    std::cout << "Selected '" << substr.toString().toStdString() << "'" << std::endl;
+
+    ui->gameDrawWidget->setPlacingTileID(item->text().split(" ")[1].toInt());
+
 }
