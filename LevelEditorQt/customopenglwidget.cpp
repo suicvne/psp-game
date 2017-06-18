@@ -369,5 +369,4 @@ int CustomOpenGLWidget::getPlacingTileID()
 void CustomOpenGLWidget::setPlacingTileID(int id)
 {
     this->placingTileID = id;
-    std::cout << "placing tile is " << this->placingTileID << std::endl;
 }

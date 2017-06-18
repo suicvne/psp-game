@@ -237,10 +237,10 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
     QString* string = new QString(item->text());
     QStringRef substr(string, 5, 2);
 
-    std::cout << "Selected '" << substr.toString().toStdString() << "'" << std::endl;
+    //std::cout << "Selected '" << substr.toString().toStdString() << "'" << std::endl;
 
     ui->gameDrawWidget->setPlacingTileID(item->text().split(" ")[1].toInt());
-
+    ui->gameDrawWidget->setPlacingTileRotation(0);
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -251,4 +251,9 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     ui->gameDrawWidget->setPlacingTileRotation(ui->gameDrawWidget->getPlacingTileRotation() - 90);
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    ui->gameDrawWidget->setPlacingTileRotation(0);
 }
