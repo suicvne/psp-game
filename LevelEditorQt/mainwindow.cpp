@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <gl.h>
+//#include <gl.h>
 #include <iostream>
 
 #include <rocklevel/tilemap.h>
@@ -144,7 +144,8 @@ void MainWindow::onFileSelected(const QString& filename)
             this->currentLevelPath = filename;
             ui->levelNameTextBox->setText(ui->gameDrawWidget->getCurrentTilemap()->map_name);
             setWindowFilePath(filename);
-            setWindowTitle(levelFileInfo.fileName() + " - Level Editor");
+            setWindowTitle(levelFileInfo.fileName() + "[*] - Level Editor");
+            setWindowModified(false);
 
             populateTileList(); //repopulate the tile list
         }
@@ -162,7 +163,7 @@ void MainWindow::onFileSelectedForSaving(const QString &filename)
         this->currentLevelPath = filename;
 
         setWindowModified(false);
-        setWindowTitle(QFileInfo(filename).fileName() + " - Level Editor");
+        setWindowTitle(QFileInfo(filename).fileName() + "[*] - Level Editor");
         setWindowFilePath(filename);
     }
     else

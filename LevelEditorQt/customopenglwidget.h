@@ -8,6 +8,11 @@
 #define CUSTOMOPENGLWIDGET_H
 
 #include <QtOpenGL>
+
+#ifdef Q_OS_WIN
+#include <GL/gl.h>
+#endif
+
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 
