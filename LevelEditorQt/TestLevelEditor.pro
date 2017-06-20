@@ -29,6 +29,11 @@ win32 {
 
 macx {
     LIBS += -L../libs/ -lrocklevel
+    QMAKE_INFO_PLIST = Info.plist
+}
+
+unix {
+    LIBS += -L../libs/ -lrocklevel
 }
 
 INCLUDEPATH += ../librocklevel
