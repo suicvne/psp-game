@@ -27,7 +27,8 @@ SOURCES += \
     rocklevel/serializer.c \
     rocklevel/tile.c \
     rocklevel/tilemap.c \
-    rocklevel/vector.c
+    rocklevel/vector.c \
+    rocklevel/camera.c
 
 HEADERS +=\
     rocklevel/serialization_reader.h \
@@ -35,7 +36,8 @@ HEADERS +=\
     rocklevel/tile.h \
     rocklevel/tilemap.h \
     rocklevel/tilemap_serializer.h \
-    rocklevel/vector.h
+    rocklevel/vector.h \
+    rocklevel/camera.h
 
 unix {
     target.path = /usr/lib

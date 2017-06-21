@@ -6,7 +6,7 @@
 #include <math.h>
 
 #include "mainwindow.h"
-
+#include <rocklevel/camera.h>
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
@@ -20,6 +20,8 @@ CustomOpenGLWidget::CustomOpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
     currentTilemap = tilemap_create(32, 32, 0);
     this->main_texture = NULL; //lol this is probably a terrible idea
     //end prepare placeholder tilemap
+
+    main_camera = camera_create(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void CustomOpenGLWidget::initializeGL()
@@ -53,7 +55,7 @@ void CustomOpenGLWidget::paintGL()
     this->drawTilemap();
 
     vector_t mouse = mouseToGame();
-    drawRectangle(floor(mouse.x / 32) * 32, floor(mouse.y / 32) * 32, TILE_WIDTH, TILE_HEIGHT, placingTileRotation, placingTileID);
+    drawRectangle((floor(mouse.x / 32) * 32) + main_camera->x, (floor(mouse.y / 32) * 32) + main_camera->y, TILE_WIDTH, TILE_HEIGHT, placingTileRotation, placingTileID);
 }
 
 int CustomOpenGLWidget::getPlacingTileRotation()
@@ -75,12 +77,24 @@ void CustomOpenGLWidget::placeTileAction()
 {
     vector_t mouse = mouseToGame();
     int tx, ty;
-    tx = floor(mouse.x / 32);
-    ty = floor(mouse.y / 32);
+    tx = floor((mouse.x) / 32) + floor(main_camera->x / 32); //+ floor(main_camera->x / 32);
+    ty = floor((mouse.y) / 32); //+ floor(main_camera->y / 32);
 
     int index = tx * currentTilemap->height + ty;
     currentTilemap->tiles[index].id = placingTileID;
     currentTilemap->tiles[index].angle = placingTileRotation;
+}
+
+void CustomOpenGLWidget::moveCamera(float _x, float _y)
+{
+    vector_t adjustment { _x, _y };
+    camera_move(main_camera, adjustment);
+}
+
+void CustomOpenGLWidget::setCameraPosition(float x, float y)
+{
+    main_camera->x = x == -1 ? main_camera->x : x;
+    main_camera->y = y == -1 ? main_camera->y : y; //shouldn't really do this but oh well ¯\_(ツ)_/¯
 }
 
 void CustomOpenGLWidget::setTileMapName(QString name)
@@ -137,7 +151,10 @@ void CustomOpenGLWidget::drawTilemap()
         {
             int index = x * currentTilemap->height + y;
             tile_t tile = currentTilemap->tiles[index];
-            drawRectangle(x * TILE_WIDTH, y * TILE_WIDTH, TILE_HEIGHT, TILE_WIDTH, tile.angle, tile.id);
+            drawRectangle((x * TILE_WIDTH) + main_camera->x,
+                          (y * TILE_WIDTH) + main_camera->y,
+                          TILE_HEIGHT, TILE_WIDTH, tile.angle, tile.id
+            );
 
             //TODO: camera, angles. not camera angles, this is a 2D game
         }

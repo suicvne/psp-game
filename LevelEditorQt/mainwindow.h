@@ -45,6 +45,10 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_horizontalScrollBar_sliderMoved(int position);
+
+    void on_verticalScrollBar_sliderMoved(int position);
+
 private:
 
     bool eventFilter(QObject *watched, QEvent *event) override;

@@ -19,6 +19,7 @@
 #include "gametexture.h"
 #include <rocklevel/tilemap.h>
 #include <rocklevel/vector.h>
+#include <rocklevel/camera.h>
 //#include "tile.h"
 
 
@@ -50,6 +51,9 @@ public:
 
     void placeTileAction();
 
+    void moveCamera(float _x, float _y);
+    void setCameraPosition(float x, float y);
+
 private:
     void drawTilemap();
 
@@ -60,6 +64,8 @@ private:
     void rotate180(float x, float y, float w, float h, float topLeftX, float topLeftY, float offset);
     void rotate270(float x, float y, float w, float h, float topLeftX, float topLeftY, float offset);
 
+
+    camera_t* main_camera;
     gametexture* loadTexture(QString path);
 
     //QMatrix4x4 m_projection;

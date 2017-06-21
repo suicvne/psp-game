@@ -90,6 +90,17 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         else
             return false;
     }
+    else if(event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent* keyEvent = (QKeyEvent*)event;
+        switch(keyEvent->key())
+        {
+        case Qt::Key_Right:
+            ui->gameDrawWidget->moveCamera(-16, 0);
+            break;
+        }
+        return true;
+    }
     return false;
 }
 
@@ -132,6 +143,11 @@ void MainWindow::populateTileList()
 
         test->setIcon(QIcon(QPixmap::fromImage(createSubImage(atlas, rect))));
     }
+
+    //we also adjust the scroll bar values
+    ui->horizontalScrollBar->setMaximum(ui->gameDrawWidget->getCurrentTilemap()->width);
+    ui->verticalScrollBar->setMaximum(ui->gameDrawWidget->getCurrentTilemap()->height);
+    //1 notch on the scroll bar will move exactly one tile
 }
 
 void MainWindow::onFileSelected(const QString& filename)
@@ -257,4 +273,15 @@ void MainWindow::on_pushButton_2_clicked()
 void MainWindow::on_pushButton_3_clicked()
 {
     ui->gameDrawWidget->setPlacingTileRotation(0);
+}
+
+void MainWindow::on_horizontalScrollBar_sliderMoved(int position)
+{
+    //ui->gameDrawWidget->adjustCamera(-position * 32, 0);
+    ui->gameDrawWidget->setCameraPosition(-position * 32, -1);
+}
+
+void MainWindow::on_verticalScrollBar_sliderMoved(int position)
+{
+    ui->gameDrawWidget->setCameraPosition(-1, -position * 32);
 }
