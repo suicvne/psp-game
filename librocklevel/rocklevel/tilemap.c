@@ -114,7 +114,7 @@ void tilemap_draw(tilemap_t* map)
 
 int tilemap_write_to_file(const char* filename, tilemap_t* map)
 {
-  int total_tiles = map->width * map->height;
+  int total_tiles = (map->width * map->height) + 1;
   int filesize = (sizeof(char) * 2) + //header (MS)
                   (sizeof(short)) + //VERSION
                   strlen(map->map_name) + //map name

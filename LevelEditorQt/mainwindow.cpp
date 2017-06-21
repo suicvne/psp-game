@@ -13,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setMouseTracking(true);
-    //grabMouse();
     qApp->installEventFilter(this);
 
     //ui->gameDrawWidget->setFocus();
@@ -34,6 +33,11 @@ void MainWindow::OpenResourcesDirectory()
 
     QString path = QDir::toNativeSeparators(qApp->applicationDirPath() + "/res/");
     QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+}
+
+QString MainWindow::getResourcesDirectory()
+{
+    return QDir::toNativeSeparators(qApp->applicationDirPath() + "/res/");
 }
 
 /*
@@ -92,6 +96,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     }
     else if(event->type() == QEvent::KeyPress)
     {
+        /*
         QKeyEvent* keyEvent = (QKeyEvent*)event;
         switch(keyEvent->key())
         {
@@ -100,6 +105,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             break;
         }
         return true;
+        */
     }
     return false;
 }
@@ -145,8 +151,9 @@ void MainWindow::populateTileList()
     }
 
     //we also adjust the scroll bar values
-    ui->horizontalScrollBar->setMaximum(ui->gameDrawWidget->getCurrentTilemap()->width);
+    ui->horizontalScrollBar->setMaximum(ui->gameDrawWidget->getCurrentTilemap()->width / 2);
     ui->verticalScrollBar->setMaximum(ui->gameDrawWidget->getCurrentTilemap()->height);
+    ui->gameDrawWidget->update(); //manually update so that it shows up without having to move the mouse
     //1 notch on the scroll bar will move exactly one tile
 }
 
@@ -209,7 +216,7 @@ void MainWindow::saveLevel()
 void MainWindow::on_levelNameTextBox_returnPressed()
 {
     setWindowModified(true);
-    ui->gameDrawWidget->setTileMapName(ui->levelNameTextBox->text());
+    ui->gameDrawWidget->setTileMapName(ui->levelNameTextBox->text().toUtf8().data());
 }
 
 void MainWindow::performSaveAs()

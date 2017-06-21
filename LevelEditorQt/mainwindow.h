@@ -16,6 +16,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     static void OpenResourcesDirectory();
+    static QString getResourcesDirectory();
 
 private slots:
     void on_gameDrawWidget_aboutToCompose();

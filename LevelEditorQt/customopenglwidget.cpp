@@ -34,7 +34,7 @@ void CustomOpenGLWidget::initializeGL()
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
 
-    this->main_texture = loadTexture("res/textures.png");
+    this->main_texture = loadTexture(MainWindow::getResourcesDirectory() + "textures.png");
     if(this->main_texture == NULL)
         qApp->exit(0);
 }
@@ -58,9 +58,6 @@ void CustomOpenGLWidget::paintGL()
     float tx = (floor(mouse.x / 32) * 32);
     float ty = (floor(mouse.y / 32) * 32);
     drawRectangle(tx, ty, TILE_WIDTH, TILE_HEIGHT, placingTileRotation, placingTileID);
-
-    //printf("drawing cursor at %.f, %.f\n", tx, ty);
-    std::cout <<  "drawing cursor at " << tx << ", " << ty << std::endl;
 }
 
 int CustomOpenGLWidget::getPlacingTileRotation()
@@ -111,7 +108,16 @@ void CustomOpenGLWidget::setCameraPosition(float x, float y)
 
 void CustomOpenGLWidget::setTileMapName(QString name)
 {
-    this->currentTilemap->map_name = (char*)name.toStdString().c_str();
+    std::cout << "map name to " << name.toStdString() << std::endl;
+
+    char* cstr;
+    std::string stdName = name.toStdString();
+    cstr = new char [stdName.size()+1];
+    strcpy( cstr, stdName.c_str() );
+
+    this->currentTilemap->map_name = cstr;
+
+    std::cout << "map name: " << this->currentTilemap->map_name << std::endl;;
 }
 
 gametexture* CustomOpenGLWidget::loadTexture(QString path)
@@ -127,6 +133,8 @@ gametexture* CustomOpenGLWidget::loadTexture(QString path)
                               + "\n\nOpening resources directory now!",
                               QMessageBox::Ok, QMessageBox::Ok);
         MainWindow::OpenResourcesDirectory();
+
+        qApp->quit();
     }
 
     return NULL;
@@ -376,7 +384,7 @@ bool CustomOpenGLWidget::loadTilemap(QString file)
     {
         this->currentTilemap = loaded;
         delete this->main_texture;
-        this->main_texture = loadTexture("res/" + QString(this->currentTilemap->tileset_path));
+        this->main_texture = loadTexture(MainWindow::getResourcesDirectory() + QString(this->currentTilemap->tileset_path));
         if(this->main_texture == NULL) //load failed
         {
             std::cout << "load failed of texture" << std::endl;
