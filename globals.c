@@ -31,4 +31,5 @@ SDL_Window* kSdlWindow;
 SDL_Renderer* kSdlRenderer;
 SDL_Event kSdlEvent;
 TTF_Font* kSdlFont;
+float kDelta; //time delta
 #endif

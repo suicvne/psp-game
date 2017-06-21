@@ -44,6 +44,8 @@ extern SDL_Renderer* kSdlRenderer;
 extern SDL_Event kSdlEvent;
 extern TTF_Font* kSdlFont;
 
+extern float kDelta;
+
 #endif
 
 #endif //___GLOBALS_H___

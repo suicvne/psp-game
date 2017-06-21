@@ -302,9 +302,25 @@ int main(int argc, char** argv)
     tilemap_t* tilemap_test = load_level("./map", "level.bin");
     printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
 
-    while(!kQuit)
+    #ifdef SDL_VERS
+    float frame_time = 0.f;
+    int previous_time = 0;
+    int current_time = 0;
+    //float deltaTime = 0.f;
+    #endif
+
+    while(!kQuit) //game loop
     {
-      update(tilemap_test);
+      previous_time = current_time;
+      current_time = SDL_GetTicks();
+      kDelta = (current_time - previous_time) / 1000.0f;
+      frame_time += kDelta;
+
+      if(frame_time >= 0.01f)
+      {
+        frame_time = 0;
+        update(tilemap_test);
+      }
 
       draw(tilemap_test);
     }
