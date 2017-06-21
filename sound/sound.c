@@ -27,7 +27,7 @@ sound_effect_t* sound_load_sound(const char* path)
 
 void sound_load_sounds()
 {
-    sound_effects[SOUND_EFFECT_TEXT] = sound_load_sound("res/text.wav");
+    sound_effects[SOUND_EFFECT_TEXT] = sound_load_sound("./res/text.wav");
 }
 
 void sound_play(SOUND_EFFECT_TYPE sound)
