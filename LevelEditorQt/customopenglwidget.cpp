@@ -55,7 +55,12 @@ void CustomOpenGLWidget::paintGL()
     this->drawTilemap();
 
     vector_t mouse = mouseToGame();
-    drawRectangle((floor(mouse.x / 32) * 32) + main_camera->x, (floor(mouse.y / 32) * 32) + main_camera->y, TILE_WIDTH, TILE_HEIGHT, placingTileRotation, placingTileID);
+    float tx = (floor(mouse.x / 32) * 32);
+    float ty = (floor(mouse.y / 32) * 32);
+    drawRectangle(tx, ty, TILE_WIDTH, TILE_HEIGHT, placingTileRotation, placingTileID);
+
+    //printf("drawing cursor at %.f, %.f\n", tx, ty);
+    std::cout <<  "drawing cursor at " << tx << ", " << ty << std::endl;
 }
 
 int CustomOpenGLWidget::getPlacingTileRotation()
@@ -77,8 +82,15 @@ void CustomOpenGLWidget::placeTileAction()
 {
     vector_t mouse = mouseToGame();
     int tx, ty;
-    tx = floor((mouse.x) / 32) + floor(main_camera->x / 32); //+ floor(main_camera->x / 32);
-    ty = floor((mouse.y) / 32); //+ floor(main_camera->y / 32);
+    tx = floor((mouse.x) / 32) + -floor(main_camera->x / 32); //+ floor(main_camera->x / 32);
+    ty = floor((mouse.y) / 32) + -floor(main_camera->y / 32); //+ floor(main_camera->y / 32);
+
+    if(tx < 0 || tx > currentTilemap->width)
+        return;
+    if(ty < 0 || ty > currentTilemap->height)
+        return;
+
+    std::cout <<  "placing at " << tx << ", " << ty << std::endl;
 
     int index = tx * currentTilemap->height + ty;
     currentTilemap->tiles[index].id = placingTileID;
