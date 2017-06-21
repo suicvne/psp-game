@@ -1,7 +1,9 @@
 #include "system_info.h"
 
+#ifdef SDL_VERS
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
+#endif
 
 #include "../globals.h"
 

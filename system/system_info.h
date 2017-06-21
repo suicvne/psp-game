@@ -3,7 +3,6 @@
 Defines convenience functions for retrieving system information.
 
 */
-
 #ifndef SYSTEM_INFO_H_
 #define SYSTEM_INFO_H_
 

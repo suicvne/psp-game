@@ -44,7 +44,9 @@
 
 #include "map/tilemap.h"
 
+#ifdef SDL_VERS
 #include "system/system_info.h"
+#endif
 
 #if PSP
 PSP_MODULE_INFO("Analogue Sample", 0, 1, 0);
@@ -257,6 +259,7 @@ void draw(tilemap_t* tilemap)
 
 void output_system_info()
 {
+#ifdef SDL_VERS
   system_info_t info = get_system_info();
   printf("\n\n---SYSTEM INFO---\n\n");
   printf("Platform: %s\n", info.platform);
@@ -266,6 +269,7 @@ void output_system_info()
   printf("SDL Version: %d.%d.%d\n", info.sdl_version_major, info.sdl_version_minor, info.sdl_version_patch);
   #endif
   printf("\n\n---END SYSTEM INFO---\n\n");
+#endif
 }
 
 /**
@@ -311,6 +315,7 @@ int main(int argc, char** argv)
 
     while(!kQuit) //game loop
     {
+#ifdef SDL_VERS
       previous_time = current_time;
       current_time = SDL_GetTicks();
       kDelta = (current_time - previous_time) / 1000.0f;
@@ -321,6 +326,9 @@ int main(int argc, char** argv)
         frame_time = 0;
         update(tilemap_test);
       }
+#else
+	update(tilemap_test);
+#endif
 
       draw(tilemap_test);
     }
