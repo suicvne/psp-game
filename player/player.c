@@ -107,8 +107,8 @@ void player_update(player_t* player, tilemap_t* tilemap)
     }
     else if(stickInput.x < 0.0f) //left
     {
-      ptx = ceil(player_current_position.x / TILE_WIDTH);
-      pty = ceil(player_current_position.y / TILE_HEIGHT);
+      ptx = floor(player_current_position.x / TILE_WIDTH);
+      pty = floor(player_current_position.y / TILE_WIDTH);
       tile_t next_tile = tilemap_get_tile_at(tilemap, ptx - 1, pty);
       if(next_tile.tile_type == TILE_TYPE_PASSABLE)
       {
@@ -137,8 +137,8 @@ void player_update(player_t* player, tilemap_t* tilemap)
     }
     else if(stickInput.y < 0.0f) //up
     {
-      ptx = ceil(player_current_position.x / TILE_WIDTH);
-      pty = ceil(player_current_position.y / TILE_HEIGHT);
+      ptx = floor(player_current_position.x / TILE_WIDTH);
+      pty = floor(player_current_position.y / TILE_HEIGHT);
       tile_t next_tile = tilemap_get_tile_at(tilemap, ptx, pty - 1);
       if(next_tile.tile_type == TILE_TYPE_PASSABLE)
       {

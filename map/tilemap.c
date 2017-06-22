@@ -18,9 +18,9 @@ int tilemap_load_lua_file(lua_State* L, const char* filename)
 
 tile_t tilemap_get_tile_at(tilemap_t* tilemap, int x, int y)
 {
-  if(x > 0 && x < tilemap->width)
+  if(x > 0 && x < tilemap->width - 1)
   {
-    if(y > 0 && y < tilemap->height)
+    if(y > 0 && y < tilemap->height - 1)
     {
       return tilemap->tiles[x * tilemap->height + y];
     }
