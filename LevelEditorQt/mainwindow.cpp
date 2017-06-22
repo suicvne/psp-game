@@ -73,6 +73,20 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     {
         ui->gameDrawWidget->update();
     }
+    else if(event->type() == QEvent::Wheel)
+    {
+        if(ui->gameDrawWidget->underMouse())
+        {
+            QWheelEvent* wheelie = (QWheelEvent*)event;
+            int dx, dy;
+            dx = wheelie->angleDelta().x();
+            dy = wheelie->angleDelta().y();
+
+            ui->verticalScrollBar->setValue(ui->verticalScrollBar->value() + -fmin(ceil(dy / 4), 2));
+            ui->horizontalScrollBar->setValue(ui->horizontalScrollBar->value() + -fmin(ceil(dx / 4), 2));
+            return true;
+        }
+    }
     else if(event->type() == QEvent::MouseButtonPress)
     {
         if(this->isActiveWindow())
@@ -188,6 +202,9 @@ void MainWindow::onFileSelectedForSaving(const QString &filename)
         setWindowModified(false);
         setWindowTitle(QFileInfo(filename).fileName() + "[*] - Level Editor");
         setWindowFilePath(filename);
+
+        if(this->isQuitting)
+            qApp->quit();
     }
     else
         std::cout << "filename blank" << std::endl;
@@ -282,13 +299,57 @@ void MainWindow::on_pushButton_3_clicked()
     ui->gameDrawWidget->setPlacingTileRotation(0);
 }
 
-void MainWindow::on_horizontalScrollBar_sliderMoved(int position)
+void MainWindow::closeEvent(QCloseEvent* event)
 {
-    //ui->gameDrawWidget->adjustCamera(-position * 32, 0);
-    ui->gameDrawWidget->setCameraPosition(-position * 32, -1);
+    if(this->isWindowModified()) //has changes
+    {
+        QMessageBox quitBox(this);
+        quitBox.setText("Level has been modified");
+        quitBox.setInformativeText("Would you like to save your changes?");
+        quitBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        quitBox.setDefaultButton(QMessageBox::Save);
+        //quitBox.setParent(this);
+        quitBox.setIcon(QMessageBox::Information);
+        quitBox.setWindowModality(Qt::WindowModal);
+        quitBox.setModal(true);
+
+        int returnValue = quitBox.exec();
+
+        switch(returnValue)
+        {
+        case QMessageBox::Save:
+            performSaveAs();
+            event->ignore();
+            this->isQuitting = true;
+            break;
+        case QMessageBox::Discard:
+            //do nothing
+            break;
+        case QMessageBox::Cancel:
+            event->ignore();
+            break;
+        }
+    }
+    else
+    {
+        //quit as normally
+    }
 }
 
+void MainWindow::on_horizontalScrollBar_sliderMoved(int position)
+{}
+
 void MainWindow::on_verticalScrollBar_sliderMoved(int position)
+{}
+
+void MainWindow::on_horizontalScrollBar_valueChanged(int value)
 {
-    ui->gameDrawWidget->setCameraPosition(-1, -position * 32);
+    ui->gameDrawWidget->setCameraPosition(-value * 32, -1);
+    ui->gameDrawWidget->update();
+}
+
+void MainWindow::on_verticalScrollBar_valueChanged(int value)
+{
+    ui->gameDrawWidget->setCameraPosition(-1, -value * 32);
+    ui->gameDrawWidget->update();
 }

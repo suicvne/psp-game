@@ -8,7 +8,7 @@ QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = RockLevelEditor
+TARGET = "Rock Level Editor"
 
 TEMPLATE = app
 

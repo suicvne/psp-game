@@ -20,5 +20,7 @@
         <string>@BUNDLEIDENTIFIER@</string>
         <key>CFBundleDisplayName</key>
         <string>Rock Level Editor</string>
+        <key>CFBundleName</key>
+        <string>Rock Level Editor</string>
 </dict>
 </plist>

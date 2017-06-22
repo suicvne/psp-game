@@ -50,6 +50,12 @@ private slots:
 
     void on_verticalScrollBar_sliderMoved(int position);
 
+    void on_horizontalScrollBar_valueChanged(int value);
+
+    void on_verticalScrollBar_valueChanged(int value);
+
+    void closeEvent(QCloseEvent* event) override;
+
 private:
 
     bool eventFilter(QObject *watched, QEvent *event) override;
@@ -64,6 +70,7 @@ private:
     void performSaveAs();
     QString currentLevelPath;
     bool initialSetupDone;
+    bool isQuitting = false;
 };
 
 #endif // MAINWINDOW_H
