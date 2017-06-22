@@ -353,3 +353,8 @@ void MainWindow::on_verticalScrollBar_valueChanged(int value)
     ui->gameDrawWidget->setCameraPosition(-1, -value * 32);
     ui->gameDrawWidget->update();
 }
+
+void MainWindow::on_actionClose_triggered()
+{
+    this->close();
+}
