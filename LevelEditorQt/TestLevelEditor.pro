@@ -29,6 +29,7 @@ win32 {
 }
 
 macx {
+    ICON = icon.icns
     LIBS += -L../libs/ -lrocklevel
     QMAKE_INFO_PLIST = Info.plist
 }
