@@ -16,6 +16,23 @@ int tilemap_load_lua_file(lua_State* L, const char* filename)
     return 1;
 }
 
+tile_t tilemap_get_tile_at(tilemap_t* tilemap, int x, int y)
+{
+  if(x > 0 && x < tilemap->width)
+  {
+    if(y > 0 && y < tilemap->height)
+    {
+      return tilemap->tiles[x * tilemap->height + y];
+    }
+  }
+  else //trying to collide out of bounds. yikes
+  {
+    tile_t t;
+    t.tile_type = TILE_TYPE_SOLID;
+    return t;
+  }
+}
+
 tilemap_t* tilemap_create(int width, int height, int allocate_texture)
 {
   tilemap_t* tilemap = malloc(sizeof(tilemap_t));
@@ -188,7 +205,7 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
   End Lua
   */
 }
-
+/*
 int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t* camera)
 {
   rectangle_t player_hitbox = camera_player_to_world_rectangle(camera);
@@ -205,6 +222,7 @@ int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t
   else
     return 1;
 }
+*/
 
 void camera_get_index_bounds(const camera_t* camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y)
 {

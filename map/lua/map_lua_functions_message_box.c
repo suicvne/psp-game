@@ -1,4 +1,5 @@
 #include "map_lua_functions.h"
+#include "../../message-box/message_box.h"
 
 int lua_message_box_is_visible(lua_State* L)
 {

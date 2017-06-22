@@ -79,50 +79,74 @@ void player_update_animation_offset_by_vector(player_t* player, const vector_t* 
   player->main_sprite->yframeoffset = offset;
 }
 
-void player_update(player_t* player)
+void player_update(player_t* player, tilemap_t* tilemap)
 {
   float move_speed = 1;
   vector_t stickInput = input_current_frame.analogue_input;
-#if SDL_VERS
-if(!kLevelEditorMode)
-{
-#endif
+
   if(player->is_moving == 0)
   {
     player->main_sprite->currentframe = 0;
+    vector_t player_current_position = camera_player_to_world(kCamera);
+
+    int ptx, pty;
     if(stickInput.x > 0.0f) //right
     {
-      player->is_moving = 1;
-      player->move_timer = 32;
-      player->speed_x = -move_speed;
-      player->speed_y = 0;
+      ptx = floor(player_current_position.x / TILE_WIDTH);
+      pty = floor(player_current_position.y / TILE_HEIGHT);
+      tile_t next_tile = tilemap_get_tile_at(tilemap, ptx + 1, pty);
+      if(next_tile.tile_type == TILE_TYPE_PASSABLE)
+      {
+        player->is_moving = 1;
+        player->move_timer = 32;
+        player->speed_x = -move_speed;
+        player->speed_y = 0;
+      }
 
       player_update_animation_offset_by_direction(player, 1);
     }
     else if(stickInput.x < 0.0f) //left
     {
-      player->is_moving = 1;
-      player->move_timer = 32;
-      player->speed_x = move_speed;
-      player->speed_y = 0;
+      ptx = ceil(player_current_position.x / TILE_WIDTH);
+      pty = ceil(player_current_position.y / TILE_HEIGHT);
+      tile_t next_tile = tilemap_get_tile_at(tilemap, ptx - 1, pty);
+      if(next_tile.tile_type == TILE_TYPE_PASSABLE)
+      {
+        player->is_moving = 1;
+        player->move_timer = 32;
+        player->speed_x = move_speed;
+        player->speed_y = 0;
+      }
 
       player_update_animation_offset_by_direction(player, 0);
     }
     else if(stickInput.y > 0.0f) //down
     {
-      player->is_moving = 1;
-      player->move_timer = 32;
-      player->speed_x = 0;
-      player->speed_y = -move_speed;
+      ptx = floor(player_current_position.x / TILE_WIDTH);
+      pty = floor(player_current_position.y / TILE_HEIGHT);
+      tile_t next_tile = tilemap_get_tile_at(tilemap, ptx, pty + 1);
+      if(next_tile.tile_type == TILE_TYPE_PASSABLE)
+      {
+        player->is_moving = 1;
+        player->move_timer = 32;
+        player->speed_x = 0;
+        player->speed_y = -move_speed;
+      }
 
       player_update_animation_offset_by_direction(player, 3);
     }
     else if(stickInput.y < 0.0f) //up
     {
-      player->is_moving = 1;
-      player->move_timer = 32;
-      player->speed_x = 0;
-      player->speed_y = move_speed;
+      ptx = ceil(player_current_position.x / TILE_WIDTH);
+      pty = ceil(player_current_position.y / TILE_HEIGHT);
+      tile_t next_tile = tilemap_get_tile_at(tilemap, ptx, pty - 1);
+      if(next_tile.tile_type == TILE_TYPE_PASSABLE)
+      {
+        player->is_moving = 1;
+        player->move_timer = 32;
+        player->speed_x = 0;
+        player->speed_y = move_speed;
+      }
 
       player_update_animation_offset_by_direction(player, 2);
     }
@@ -139,13 +163,6 @@ if(!kLevelEditorMode)
     if(player->move_timer <= 0)
       player->is_moving = 0;
   }
-#if SDL_VERS
-}
-else
-{
-
-}
-#endif
 
   #ifdef OLD_MOVEMENT
   vector_t stickInput = input_current_frame.analogue_input;

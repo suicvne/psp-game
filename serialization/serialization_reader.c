@@ -15,7 +15,7 @@ int serializer_read_from_file(char *readInto, int bufferSize, const char* filena
 
   fseek(file, 0, SEEK_END);
   fileLength = ftell(file);
-  printf("file is %d bytes\n", fileLength);
+  //printf("file is %d bytes\n", fileLength);
   rewind(file);
 
   buffer = (char*)malloc(sizeof(char) * fileLength);
@@ -74,7 +74,7 @@ int serializer_read_int(char* src, int* pointer)
 char* serializer_read_string(char* src, int* pointer)
 {
   short string_length = serializer_read_short(src, pointer);
-  printf("length of string: %d\n", string_length);
+  //printf("length of string: %d\n", string_length);
   if(string_length > 0)
   {
     char* return_value = malloc(sizeof(char) * string_length + 1);

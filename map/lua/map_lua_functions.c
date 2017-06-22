@@ -1,5 +1,19 @@
 #include "map_lua_functions.h"
 
+#include "../tilemap.h"
+
+/*
+#include "../../sprites/sprite.h"
+#include "../../graphics/rectangle.h"
+#include "../../graphics/text.h"
+#include "../../player/player.h"
+#include "../../player/inventory.h"
+#include "../../vector/vector.h"
+#include "../../camera/camera.h"
+#include "../../globals.h"
+#include "../../message-box/message_box.h"
+*/
+
 lua_State* current_lua_state;
 
 int lua_map_print(lua_State* L)

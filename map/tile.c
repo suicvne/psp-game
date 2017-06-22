@@ -5,11 +5,11 @@ GunnerWolf at the Game Dev League Discord channel helped me out with this! Thank
 */
 vector_t tile_get_location_by_id(short id)
 {
-  vector_t return_value;
+  vector_t return_value = { 0, 0 };
   int max_tiles = (SHEET_WIDTH * SHEET_HEIGHT) / (TILE_WIDTH * TILE_HEIGHT);
   if(id > max_tiles)
   {
-    return return_value; //should default to 0, 0
+    return return_value;
   }
 
   return_value.x = id * TILE_WIDTH;

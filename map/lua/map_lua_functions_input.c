@@ -1,5 +1,7 @@
 #include "map_lua_functions.h"
 
+#include "../../input/input.h"
+
 int lua_input_is_button_pressed(lua_State* L)
 {
   int arg_count = lua_gettop(L);

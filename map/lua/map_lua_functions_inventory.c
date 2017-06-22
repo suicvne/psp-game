@@ -1,5 +1,7 @@
 #include "map_lua_functions.h"
 
+#include "../../player/inventory.h"
+
 int lua_inventory_get_inventory(lua_State* L)
 {
     if(player_inventory != NULL)

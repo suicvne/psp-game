@@ -3,6 +3,7 @@ Used for the player specific functions in Lua.
 */
 
 #include "map_lua_functions.h"
+#include "../../player/player.h"
 
 int lua_player_get_x(lua_State* L)
 {

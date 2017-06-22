@@ -33,6 +33,7 @@
 #include <math.h>
 
 #include "common.h"
+#include "player/player.h"
 #include "sprites/sprite.h"
 #include "vector/vector.h"
 #include "camera/camera.h"
@@ -206,7 +207,7 @@ int collides_with(const player_t* player, const sprite_t* sprite)
 
 tilemap_t* load_level(const char* dir, const char* filename)
 {
-  printf("loading file from '%s/%s'..\n", dir, filename);
+  printf("loading file from '%s/%s.bin'..\n", dir, filename);
   return tilemap_read_from_file(dir, filename);
 }
 
@@ -217,7 +218,12 @@ void update(tilemap_t* tilemap)
   if(kUpdate)
   {
     tilemap_update(tilemap, kCamera);
-    player_update(kPlayer);
+    player_update(kPlayer, tilemap);
+
+    /*if(tilemap_is_player_colliding(tilemap, kPlayer, kCamera))
+    {
+      printf("Collision!\n");
+    }*/
   }
 
   if(message_box_is_visible)
@@ -245,7 +251,7 @@ void draw(tilemap_t* tilemap)
   if(message_box_is_visible)
     message_box_draw();
 
-  inventory_draw();
+  //inventory_draw();
   //End do drawing in here
 
   #if PSP //present

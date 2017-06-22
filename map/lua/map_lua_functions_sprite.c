@@ -1,5 +1,7 @@
 #include "map_lua_functions.h"
 
+#include "../../sprites/sprite.h"
+
 int lua_sprite_create(lua_State* L)
 {
     int arg_count = lua_gettop(L);
