@@ -34,8 +34,7 @@ endif
 CFLAGS = -I$(SDL2INCLUDE) -I$(SDL2MIXERINCLUDE) -I$(SDL2IMAGEINCLUDE) -I$(SDL2TTFINCLUDE) -I$(LIBROCKLEVELINCLUDE) $(shell $(PKGCONFIG) --cflags lua5.2) -DSDL_VERS
 LIBS = -L./libs -lrocklevel $(shell $(PKGCONFIG) --libs sdl2) $(shell $(PKGCONFIG) --libs SDL2_ttf) $(shell $(PKGCONFIG) --libs SDL2_image) $(shell $(PKGCONFIG) --libs SDL2_mixer) $(shell $(PKGCONFIG) --libs lua5.2) -lm
 
-LOCAL_DEPS = sound/*.c graphics/*.c sprites/*.c input/*.c lib_extensions/*.c map/lua/*.c player/*.c message-box/*.c system/*.c *.c
-# Removed 6/22/17: map/*.c vector/*.c camera/*.c serialization/*.c
+LOCAL_DEPS = sound/*.c graphics/*.c sprites/*.c input/*.c camera/*.c map/*.c map/lua/*.c player/*.c serialization/*.c vector/*.c message-box/*.c system/*.c *.c
 # Removed 6/18/17: level-editor/ui/*.c level-editor/*.c
 
 compile:

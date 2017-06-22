@@ -14,7 +14,7 @@
 #include "../globals.h"
 #include "../graphics/rectangle.h"
 #include "../common.h"
-#include "../lib_extensions/camera.h"
+#include "../camera/camera.h"
 
 /**
 Contains various properties for holding for sprites

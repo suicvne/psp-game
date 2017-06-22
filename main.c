@@ -34,15 +34,15 @@
 
 #include "common.h"
 #include "sprites/sprite.h"
-#include <rocklevel/vector.h>
-#include <rocklevel/camera.h>
+#include "vector/vector.h"
+#include "camera/camera.h"
 #include "globals.h"
 #include "input/input.h"
 
-//#include "rocklevel/serialization_reader.h"
-//#include "rocklevel/serializer.h"
+#include "serialization/serialization_reader.h"
+#include "serialization/serializer.h"
 
-#include "lib_extensions/tilemap.h"
+#include "map/tilemap.h"
 
 #ifdef SDL_VERS
 #include "system/system_info.h"
@@ -77,7 +77,7 @@ int init_window()
   char* windowTitle = "alpha";
   kSdlWindow = SDL_CreateWindow(windowTitle,
     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-    kScreenWidth * 2, kScreenHeight * 2,
+    SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2,
     SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
   );
   if(kSdlWindow == NULL)
@@ -99,7 +99,7 @@ int init_renderer()
     SDL_Quit();
     return 1;
   }
-  SDL_RenderSetLogicalSize(kSdlRenderer, kScreenWidth, kScreenHeight);
+  SDL_RenderSetLogicalSize(kSdlRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);
   return 0;
 }
 
@@ -166,7 +166,7 @@ void initialize_globals(void)
 {
   sound_initialize(); //not a global but all of my other initialization is done here sooooo
 
-  kCamera = camera_create(0, 0, kScreenWidth, kScreenHeight);
+  kCamera = camera_create(0, 0);
   kPlayer = player_create();
   kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
   kInventory = sprite_create("res/inventory.png", SPRITE_TYPE_PNG);
@@ -207,10 +207,7 @@ int collides_with(const player_t* player, const sprite_t* sprite)
 tilemap_t* load_level(const char* dir, const char* filename)
 {
   printf("loading file from '%s/%s'..\n", dir, filename);
-  //return tilemap_read_from_file(dir, filename);
-  char buffer[32];
-  sprintf(buffer, "%s/%s", dir, filename);
-  return tilemap_read_from_file(buffer);
+  return tilemap_read_from_file(dir, filename);
 }
 
 void update(tilemap_t* tilemap)

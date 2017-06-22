@@ -1,7 +1,7 @@
 #include "globals.h"
 #include "sprites/sprite.h"
 #include "player/player.h"
-#include <rocklevel/camera.h>
+#include "camera/camera.h"
 #include "input/input.h"
 
 #ifdef PSP
@@ -12,9 +12,6 @@ int kQuit;
 int kLevelEditorMode;
 int kUpdate = 1;
 int kSkip = 0;
-
-int kScreenWidth = 480;
-int kScreenHeight = 272;
 
 struct player_t* kPlayer = NULL;
 //struct sprite_t* kTestEntity = NULL; //22x29 sprite on a 32x32 sheet

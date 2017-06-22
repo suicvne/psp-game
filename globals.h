@@ -21,9 +21,6 @@ extern int kLevelEditorMode;
 extern int kUpdate; //whether or not to update the game (useful for pause screens or message boxes)
 extern int kSkip; //mostly used for the PSP
 
-extern int kScreenWidth;
-extern int kScreenHeight;
-
 extern struct player_t* kPlayer;
 //extern struct sprite_t* kTestEntity; //22x29 sprite on a 32x32 sheet
 extern struct sprite_t* kForest;

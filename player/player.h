@@ -3,7 +3,7 @@
 
 #include "../sprites/sprite.h"
 #include "../input/input.h"
-#include <rocklevel/vector.h>
+#include "../vector/vector.h"
 #include "../globals.h"
 #include "inventory.h"
 #include <stdlib.h>

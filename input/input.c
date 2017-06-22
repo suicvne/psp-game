@@ -26,8 +26,8 @@ void get_scales(float* w, float* h)
   int ww, wh;
   SDL_GetWindowSize(kSdlWindow, &ww, &wh);
 
-  *w = ww / kScreenWidth;
-  *h = wh / kScreenHeight;
+  *w = ww / SCREEN_WIDTH;
+  *h = wh / SCREEN_HEIGHT;
 }
 
 vector_t input_mouse_to_world(camera_t* camera)
@@ -104,22 +104,22 @@ int input_is_button_just_pressed(INPUT_BUTTON_TYPES button_type)
   else if(button_type == INPUT_BUTTON_DUP)
   {
     if(input_current_frame.button_dpad_up && input_last_frame.button_dpad_up == 0)
-      return 1;
+      return 1; 
   }
   else if(button_type == INPUT_BUTTON_DDOWN)
   {
     if(input_current_frame.button_dpad_down && input_last_frame.button_dpad_down == 0)
-      return 1;
+      return 1; 
   }
   else if(button_type == INPUT_BUTTON_DLEFT)
   {
     if(input_current_frame.button_dpad_left && input_last_frame.button_dpad_left == 0)
-      return 1;
+      return 1; 
   }
   else if(button_type == INPUT_BUTTON_DRIGHT)
   {
     if(input_current_frame.button_dpad_right && input_last_frame.button_dpad_right == 0)
-      return 1;
+      return 1; 
   }
   else if(button_type == INPUT_BUTTON_ANGLE_INCREASE)
   {
@@ -188,7 +188,7 @@ void input_update()
       case SDLK_d: //right
         input_current_frame.analogue_input.x = 0;
         break;
-
+        
       }
       break;
     }
