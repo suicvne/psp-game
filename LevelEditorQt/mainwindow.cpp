@@ -84,18 +84,18 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             //ui->verticalScrollBar->setValue(ui->verticalScrollBar->value() + -fmin(ceil(dy / 4), 2));
             //ui->horizontalScrollBar->setValue(ui->horizontalScrollBar->value() + -fmin(ceil(dx / 4), 2));
             if(dx > 0)
-                dx = 32;
+                dx = 4;
             else if(dx < 0)
-                dx = -32;
+                dx = -4;
 
             if(dy > 0)
-                dy = 32;
+                dy = 4;
             else if(dy < 0)
-                dy = -32;
+                dy = -4;
             //std::cout << "mouse wheel: " << dx << ", " << dy << std::endl;
 
-            ui->verticalScrollBar->setValue(ui->verticalScrollBar->value() + (-dy / 8));
-            ui->horizontalScrollBar->setValue(ui->horizontalScrollBar->value() + (-dx / 8));
+            ui->verticalScrollBar->setValue(ui->verticalScrollBar->value() + (-dy));
+            ui->horizontalScrollBar->setValue(ui->horizontalScrollBar->value() + (-dx));
             return true;
         }
     }
