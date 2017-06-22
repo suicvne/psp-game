@@ -9,14 +9,14 @@ Defines common functions for the map's Lua interpreter.
 #ifndef ___MAP_LUA_FUNCTIONS_H___
 #define ___MAP_LUA_FUNCTIONS_H___
 
-#include "../tilemap.h"
+#include <rocklevel/tilemap.h>
+#include <rocklevel/vector.h>
+#include <rocklevel/camera.h>
 #include "../../sprites/sprite.h"
 #include "../../graphics/rectangle.h"
 #include "../../graphics/text.h"
 #include "../../player/player.h"
 #include "../../player/inventory.h"
-#include "../../vector/vector.h"
-#include "../../camera/camera.h"
 #include "../../globals.h"
 #include "../../message-box/message_box.h"
 

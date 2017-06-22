@@ -20,6 +20,12 @@ extern "C" {
 #define HEADER_1 'S'
 #define VERSION 04
 
+#ifdef LUA
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+#endif
+
 typedef struct tilemap_t {
 
   //Tiles will be stored in a single dimension array.
@@ -30,6 +36,10 @@ typedef struct tilemap_t {
   char* map_name;
   short surrounding_tile_id;
   char* tileset_path;
+
+  #ifdef LUA
+  lua_State* lua_state
+  #endif
 
 } tilemap_t;
 

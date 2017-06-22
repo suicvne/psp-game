@@ -111,9 +111,9 @@ void inventory_draw_hotbar()
         {
             sprite_draw_source(kInventory, x, inventory_starting_y, 32, 0, 32, 32); //selection
         }
-            
+
         vector_t item_location = inventory_get_item_sheet_location(i);
-           
+
         sprite_draw_source(kItems, x, inventory_starting_y, item_location.x, item_location.y, 32, 32);
     }
 }
@@ -128,7 +128,7 @@ void inventory_draw()
     {
         rectangle_t rect;
         rect.x = 0; rect.y = 0;
-        rect.w = SCREEN_WIDTH; rect.h = SCREEN_HEIGHT;
+        rect.w = kScreenWidth; rect.h = kScreenHeight;
 
         rectangle_draw_filled(&rect, RGBA(10, 10, 10, 200));
 
@@ -150,7 +150,7 @@ void inventory_draw_full()
 
             if(y > 0)
                 sprite_draw_source(kInventory, draw_x, draw_y, 0, 0, 32, 32); //back sprite
-            
+
             if(inventory_fullscreen_position.x == x && inventory_fullscreen_position.y == y)
             {
                 sprite_draw_source(kInventory, draw_x, draw_y, 32, 0, 32, 32); //selection sprite

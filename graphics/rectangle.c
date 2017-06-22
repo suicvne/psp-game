@@ -108,8 +108,8 @@ rectangle_t camera_player_to_world_rectangle(const camera_t* camera)
 rectangle_t camera_get_viewport(const camera_t* camera)
 {
   rectangle_t value;
-  value.w = SCREEN_WIDTH;
-  value.h = SCREEN_HEIGHT;
+  value.w = kScreenWidth;
+  value.h = kScreenHeight;
   value.x = -camera->x;
   value.y = -camera->y;
 

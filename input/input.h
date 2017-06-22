@@ -5,9 +5,9 @@ Mostly created for the sake of SDL
 #ifndef ___INPUT_H___
 #define ___INPUT_H___
 
-#include "../vector/vector.h"
+#include <rocklevel/vector.h>
 #include "../globals.h"
-#include "../camera/camera.h"
+#include "../lib_extensions/camera.h"
 #include <assert.h>
 
 #if PSP

@@ -2,8 +2,8 @@
 #define ___RECTANGLE___H___
 
 #include "../globals.h"
+#include "../lib_extensions/camera.h"
 #include "common.h"
-#include "../camera/camera.h"
 
 #if PSP
 #include <oslib/oslib.h>
