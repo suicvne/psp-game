@@ -201,7 +201,7 @@ void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   strcat(combined_path, cur_path);
   strcat(combined_path, to_append);
   */
-  char* new_path = "./map/?.lua";
+  char* new_path = "./res/lua/?.lua";
   printf("lua path is now %s\n", new_path);
   lua_pop(L, 1);
   lua_pushstring(L, new_path);

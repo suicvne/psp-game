@@ -77,6 +77,8 @@ private:
     QString currentLevelPath;
     bool initialSetupDone;
     bool isQuitting = false;
+
+
 };
 
 #endif // MAINWINDOW_H

@@ -1,8 +1,8 @@
 --[[
 
-  about script.lua
+  about <levelname>.lua
 
-  the current iteration of the engine supports executing a lua script in the same directory as the map as long as the file is named script.lua.
+  the current iteration of the engine will load and execute a lua script with the same name as the level filename if it finds one
   the engine's lua interpreter will execute 3 functions at certain times and will skip them if it can't find them or they don't exist.
 
   1. onLoad() - called when the map is loaded. do initialization here.
