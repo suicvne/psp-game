@@ -58,6 +58,8 @@ private slots:
 
     void on_actionClose_triggered();
 
+    void on_actionMinimize_triggered();
+
 private:
 
     bool eventFilter(QObject *watched, QEvent *event) override;

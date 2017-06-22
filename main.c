@@ -206,7 +206,7 @@ int collides_with(const player_t* player, const sprite_t* sprite)
 
 tilemap_t* load_level(const char* dir, const char* filename)
 {
-  printf("loading file from '%s'..", filename);
+  printf("loading file from '%s/%s'..\n", dir, filename);
   return tilemap_read_from_file(dir, filename);
 }
 
@@ -303,7 +303,7 @@ int main(int argc, char** argv)
     output_system_info(); //output system info to console for convenience sake
 
     kQuit = 0;
-    tilemap_t* tilemap_test = load_level("./map", "level.bin");
+    tilemap_t* tilemap_test = load_level("./res/maps", "level");
     printf("tilemap_test: %d x %d\n", tilemap_test->width, tilemap_test->height);
 
     #ifdef SDL_VERS

@@ -310,7 +310,9 @@ void MainWindow::closeEvent(QCloseEvent* event)
         quitBox.setDefaultButton(QMessageBox::Save);
         //quitBox.setParent(this);
         quitBox.setIcon(QMessageBox::Information);
+#ifdef __APPLE__
         quitBox.setWindowModality(Qt::WindowModal);
+#endif
         quitBox.setModal(true);
 
         int returnValue = quitBox.exec();
@@ -357,4 +359,9 @@ void MainWindow::on_verticalScrollBar_valueChanged(int value)
 void MainWindow::on_actionClose_triggered()
 {
     this->close();
+}
+
+void MainWindow::on_actionMinimize_triggered()
+{
+    this->showMinimized();
 }

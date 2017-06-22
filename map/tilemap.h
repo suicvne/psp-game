@@ -65,7 +65,7 @@ int min(int a, int b)
 }
 */
 
-int tilemap_load_lua_file(lua_State* L, const char* directory);
+int tilemap_load_lua_file(lua_State* L, const char* filename);
 tilemap_t* tilemap_create(int width, int height, int allocate_texture);
 void tilemap_destroy(tilemap_t* map);
 

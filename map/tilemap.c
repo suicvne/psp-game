@@ -1,17 +1,15 @@
 #include "tilemap.h"
 
-int tilemap_load_lua_file(lua_State* L, const char* directory)
+int tilemap_load_lua_file(lua_State* L, const char* filename)
 {
   if(kLevelEditorMode)
     return 0;
 
   int error;
 
-  char combined_filename[30];
-  sprintf(combined_filename, "%s/%s", directory, "script.lua");
-  if(serializer_get_file_size(combined_filename) > 0)
+  if(serializer_get_file_size(filename) > 0)
   {
-    error = luaL_loadfile(L, combined_filename);
+    error = luaL_loadfile(L, filename);
     return error;
   }
   else
@@ -210,11 +208,11 @@ int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t
 
 void camera_get_index_bounds(const camera_t* camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y)
 {
-  
+
   int half_map_width, half_map_height;
   half_map_width = ((tilemap->width * 32) / 2);
   half_map_height = ((tilemap->height * 32) / 2);
-  
+
 
   float corrected_x, corrected_y;
   corrected_x = -camera->x;
@@ -325,7 +323,9 @@ void tilemap_report_lua_errors(lua_State* L, int status)
 tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
 {
   char combined_filename[32];
-  sprintf(combined_filename, "%s/%s", directory, filename);
+  char combined_filename_lua[32];
+  sprintf(combined_filename, "%s/%s.bin", directory, filename);
+  sprintf(combined_filename_lua, "%s/%s.lua", directory, filename);
 
   int file_size = serializer_get_file_size(combined_filename);
   if(file_size > 0)
@@ -412,7 +412,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
         printf("finding scripts..\n");
         return_value->lua_state = luaL_newstate();
         luaL_openlibs(return_value->lua_state);
-        if(tilemap_load_lua_file(return_value->lua_state, directory) != 0) //non-zero means error
+        if(tilemap_load_lua_file(return_value->lua_state, combined_filename_lua) != 0) //non-zero means error
         {
           fprintf(stderr, "No Lua script assosciated with level. Freeing lua_state\n");
           lua_close(return_value->lua_state);
