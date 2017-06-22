@@ -33,6 +33,9 @@ void CustomOpenGLWidget::initializeGL()
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glBlendFunc (GL_ONE, GL_ONE);
+    glBlendFunc(GL_ONE, GL_ONE);
 
     this->main_texture = loadTexture(MainWindow::getResourcesDirectory() + "textures.png");
     if(this->main_texture == NULL)
@@ -49,7 +52,7 @@ void CustomOpenGLWidget::resizeGL(int w, int h)
 
 void CustomOpenGLWidget::paintGL()
 {
-    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     this->drawTilemap();
@@ -75,7 +78,7 @@ void CustomOpenGLWidget::setPlacingTileRotation(int rotation)
         placingTileRotation = rotation;
 }
 
-void CustomOpenGLWidget::placeTileAction()
+void CustomOpenGLWidget::placeTileAction(bool isSolid)
 {
     vector_t mouse = mouseToGame();
     int tx, ty;
@@ -92,6 +95,8 @@ void CustomOpenGLWidget::placeTileAction()
     int index = tx * currentTilemap->height + ty;
     currentTilemap->tiles[index].id = placingTileID;
     currentTilemap->tiles[index].angle = placingTileRotation;
+    if(isSolid)
+        currentTilemap->tiles[index].tile_type = TILE_TYPE_SOLID;
 }
 
 void CustomOpenGLWidget::moveCamera(float _x, float _y)
@@ -176,9 +181,61 @@ void CustomOpenGLWidget::drawTilemap()
                           TILE_HEIGHT, TILE_WIDTH, tile.angle, tile.id
             );
 
-            //TODO: camera, angles. not camera angles, this is a 2D game
+            if(this->drawCollisionMap)
+            {
+                if(tile.tile_type == TILE_TYPE_PASSABLE)
+                {
+                    drawColoredRectangle((x * TILE_WIDTH) + main_camera->x,
+                                         (y * TILE_WIDTH) + main_camera->y,
+                                         TILE_WIDTH, TILE_HEIGHT, 0.0f, 0.0f, .34f, 0.2f
+                                         );
+                }
+                else if(tile.tile_type == TILE_TYPE_SOLID)
+                {
+                    drawColoredRectangle((x * TILE_WIDTH) + main_camera->x,
+                                         (y * TILE_WIDTH) + main_camera->y,
+                                         TILE_WIDTH, TILE_HEIGHT, 1.0f, 0, 0, 0.2f
+                                         );
+                }
+            }
         }
+
     }
+}
+
+void CustomOpenGLWidget::setDrawCollisionMap(bool draw)
+{
+    this->drawCollisionMap = draw;
+}
+
+bool CustomOpenGLWidget::getDrawCollisionMap()
+{
+    return this->drawCollisionMap;
+}
+
+void CustomOpenGLWidget::drawColoredRectangle(float x, float y, float w, float h, float r, float g, float b, float a)
+{
+    //glShadeModel(GL_SMOOTH);
+    glBegin(GL_QUADS);
+
+
+    glColor4f(r, g, b, a);
+    glVertex2f(x, y);
+
+    glColor4f(r, g, b, a);
+    glVertex2f(x + w, y);
+
+    glColor4f(r, g, b, a);
+    glVertex2f(x + w, y + h);
+
+    glColor4f(r, g, b, a);
+    glVertex2f(x, y + h);
+
+    glEnd();
+
+    //glBlendFunc(GL_NONE, GL_NONE);
+    //glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+    glColor4f(1, 1, 1, 1);
 }
 
 void CustomOpenGLWidget::drawRectangle(float x, float y, float w, float h, int rotation, int sheet_id)
@@ -193,7 +250,6 @@ void CustomOpenGLWidget::drawRectangle(float x, float y, float w, float h, int r
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //disables filtering for scaling down
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //disables filtering for scaling up
-
 
     glBegin(GL_QUADS);
 
@@ -217,6 +273,7 @@ void CustomOpenGLWidget::drawRectangle(float x, float y, float w, float h, int r
         break;
     }
     glEnd();
+    glDisable(GL_TEXTURE_2D);
 
     glBindTexture(0, 0);
 }

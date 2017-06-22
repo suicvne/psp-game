@@ -34,6 +34,7 @@ public:
 
     void loadTestTextures();
     void drawRectangle(float x, float y, float w, float h);
+    void drawColoredRectangle(float x, float y, float w, float h, float r, float g, float b, float a);
     void drawRectangle(float x, float y, float w, float h, int rotation, int sheet_id);
     vector_t returnTileAreaByID(int id);
 
@@ -49,10 +50,13 @@ public:
     int getPlacingTileRotation();
     void setPlacingTileRotation(int rotation);
 
-    void placeTileAction();
+    void placeTileAction(bool isSolid = false);
 
     void moveCamera(float _x, float _y);
     void setCameraPosition(float x, float y);
+
+    void setDrawCollisionMap(bool draw);
+    bool getDrawCollisionMap();
 
 private:
     void drawTilemap();
@@ -72,6 +76,8 @@ private:
     //QOpenGLTexture* main_texture;
     gametexture* main_texture;
     tilemap_t* currentTilemap;
+
+    bool drawCollisionMap = false; //don't draw the collision map by default.
 
     int placingTileID = 0; //the ID of the tile we'll be placing
     int placingTileRotation = 0; //the rotation of the tile we'll be placing

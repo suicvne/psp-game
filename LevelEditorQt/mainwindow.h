@@ -60,6 +60,8 @@ private slots:
 
     void on_actionMinimize_triggered();
 
+    void on_checkBox_toggled(bool checked);
+
 private:
 
     bool eventFilter(QObject *watched, QEvent *event) override;

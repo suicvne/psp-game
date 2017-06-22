@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qApp->installEventFilter(this);
 
     //ui->gameDrawWidget->setFocus();
+    ui->collisionHintLabel->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -103,19 +104,22 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     {
         if(this->isActiveWindow())
         {
-            //if(ui->gameDrawWidget->rect().contains(QCursor::pos()))
-            if(ui->gameDrawWidget->underMouse())
-            {
-                ui->gameDrawWidget->placeTileAction();
-                setWindowModified(true);
-                return true;
-            }
-            else
-            {
-                //this->mousePressEvent((QMouseEvent*)event);
-                QWidget::eventFilter(watched, event);
-                return false;
-            }
+                if(ui->gameDrawWidget->underMouse())
+                {
+                    if(ui->gameDrawWidget->getDrawCollisionMap())
+                    {
+                        QMouseEvent* mouseEvent = (QMouseEvent*)event;
+                        ui->gameDrawWidget->placeTileAction((mouseEvent->button() == Qt::LeftButton));
+                        setWindowModified(true);
+                        return true;
+                    }
+                    else
+                    {
+                        ui->gameDrawWidget->placeTileAction();
+                        setWindowModified(true);
+                        return true;
+                    }
+                }
         }
         else
             return false;
@@ -338,6 +342,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
             break;
         case QMessageBox::Discard:
             //do nothing
+            event->accept();
             break;
         case QMessageBox::Cancel:
             event->ignore();
@@ -376,4 +381,11 @@ void MainWindow::on_actionClose_triggered()
 void MainWindow::on_actionMinimize_triggered()
 {
     this->showMinimized();
+}
+
+void MainWindow::on_checkBox_toggled(bool checked)
+{
+    ui->collisionHintLabel->setVisible(checked);
+    ui->gameDrawWidget->setDrawCollisionMap(checked);
+    ui->gameDrawWidget->update();
 }
