@@ -147,7 +147,7 @@
      <x>0</x>
      <y>0</y>
      <width>956</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -167,15 +167,7 @@
     <addaction name="actionAbout_2"/>
     <addaction name="actionAbout"/>
    </widget>
-   <widget class="QMenu" name="menuWindow">
-    <property name="title">
-     <string>Window</string>
-    </property>
-    <addaction name="actionMinimize"/>
-    <addaction name="actionClose"/>
-   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuWindow"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionOpen">

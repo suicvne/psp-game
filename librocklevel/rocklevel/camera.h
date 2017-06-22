@@ -6,7 +6,6 @@ extern "C" {
 #define ___CAMERA_H___
 
 #include "vector.h"
-#include <malloc/malloc.h>
 #include <stdlib.h> //abs
 #include <assert.h>
 
