@@ -16,14 +16,13 @@ v2 - appends the tileset filename after map_name
 #include "../common.h"
 #include "../camera/camera.h"
 #include "../sprites/sprite.h"
-//#include "../player/player.h"
 #include "../serialization/serializer.h"
 #include "../serialization/serialization_reader.h"
 #include "lua/map_lua_functions.h"
 
 #include <stdlib.h>
-//#include <malloc.h>
 #include <assert.h>
+
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>

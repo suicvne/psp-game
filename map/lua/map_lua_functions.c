@@ -189,35 +189,23 @@ void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   /**
   Setting path properly
   */
+#ifdef SDL_VERS //this is currently broken on the PSP for some reason
   lua_getglobal(L, "package");
-  lua_getfield(L, -1, "path");
-  const char* cur_path = lua_tostring(L, -1);
-  printf("lua cur_path: %s\n", cur_path);
-  /*const char* to_append = ";./map/?.lua"; //what to append
-
-  int combined_size = sizeof(char) * (strlen(cur_path) + strlen(to_append)) + 1;
-  char* combined_path = malloc(combined_size);
-  memset(combined_path, 0, combined_size);
-  strcat(combined_path, cur_path);
-  strcat(combined_path, to_append);
-  */
-  char* new_path = "./res/lua/?.lua";
-  printf("lua path is now %s\n", new_path);
-  lua_pop(L, 1);
-  lua_pushstring(L, new_path);
+  lua_pushstring(L, "res/lua/?.lua");
   lua_setfield(L, -2, "path");
   lua_pop(L, 1);
-
+#endif
   /**
   End Setting Path Properly
   */
 
-
+  printf("pushing tilemap to lua..\n");
   lua_pushlightuserdata(L, (void*)tilemap);
   lua_setglobal(L, "_current_tilemap");
 
   //TODO: rename these "general" functions
 
+  printf("registering functions for lua..\n");
   lua_register(L, "print", lua_map_print);
   lua_register(L, "draw_text", lua_map_draw_text);
   lua_register(L, "RGBA", lua_map_rgba);
@@ -270,6 +258,8 @@ void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
   //inventory
   lua_register(L, "inventory_get", lua_inventory_get_inventory);
   //end inventory
+  printf("all functions registered!\n");
+
 }
 
 

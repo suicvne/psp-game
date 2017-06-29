@@ -168,12 +168,12 @@ void initialize_globals(void)
   kInventory = sprite_create("res/inventory.png", SPRITE_TYPE_PNG);
   kItems = sprite_create("res/items.png", SPRITE_TYPE_PNG);
 
-  #ifdef PSP
+#ifdef PSP
   //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0
   kMainFont = oslLoadFontFile("res/hack.pgf"); //can't find the font in ppsspp on linux?
     oslIntraFontSetStyle(kMainFont, .4f, RGBA(255, 255, 255, 255), RGBA(0, 0, 0, 255), INTRAFONT_ALIGN_LEFT);
     oslSetFont(kMainFont);
-  #elif SDL_VERS
+#elif SDL_VERS
   kSdlFont = TTF_OpenFont("res/hack.ttf", 10);
   if(kSdlFont == NULL)
   {
@@ -181,7 +181,7 @@ void initialize_globals(void)
     sprintf(buffer, "Could not open font for reading: %s", TTF_GetError());
     report_fatal_error(buffer);
   }
-  #endif
+#endif
 }
 
 void destroy_globals(void)
