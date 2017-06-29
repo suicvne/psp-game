@@ -1,3 +1,7 @@
+# PSP
+EBOOT.PBP
+PARAM.SFO
+
 ### C++ ###
 # Compiled Object files
 *.slo
