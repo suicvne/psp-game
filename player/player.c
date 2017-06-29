@@ -83,7 +83,7 @@ void player_update(player_t* player, tilemap_t* tilemap)
 {
   float move_speed = 1;
   vector_t stickInput = input_current_frame.analogue_input;
-
+#ifndef OLD_MOVEMENT
   if(player->is_moving == 0)
   {
     player->main_sprite->currentframe = 0;
@@ -163,6 +163,7 @@ void player_update(player_t* player, tilemap_t* tilemap)
     if(player->move_timer <= 0)
       player->is_moving = 0;
   }
+#endif
 
 #ifdef OLD_MOVEMENT
   vector_t stickInput = input_current_frame.analogue_input;
