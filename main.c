@@ -1,21 +1,19 @@
 #ifdef PSP
-
 #include <pspkernel.h>
 #include <pspnet.h>
 #include <pspnet_inet.h>
 #include <pspnet_apctl.h>
 #include <pspctrl.h>
 #include <oslib/oslib.h>
+#endif
 
-#elif SDL_VERS
-
+#if SDL_VERS
 #define SDL_MAIN_HANDLED
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-
+#include "system/system_info.h"
 #endif
 
 #include "graphics/rectangle.h"
@@ -45,12 +43,9 @@
 
 #include "map/tilemap.h"
 
-#ifdef SDL_VERS
-#include "system/system_info.h"
-#endif
 
 #if PSP
-PSP_MODULE_INFO("Analogue Sample", 0, 1, 0);
+PSP_MODULE_INFO("Mini Rust", 0, 1, 0);
 PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
 PSP_HEAP_SIZE_KB(12 * 1024);
 
