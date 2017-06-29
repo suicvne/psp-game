@@ -41,7 +41,9 @@ typedef struct tilemap_t {
   char* map_name;
   short surrounding_tile_id;
   char* tileset_path;
+  char* foreground_tileset_path;
   sprite_t* tileset;
+  sprite_t* foreground_tileset; //the tileset for layer 2 aka foreground.
   lua_State* lua_state;
 
 } tilemap_t;
@@ -69,6 +71,10 @@ tilemap_t* tilemap_create(int width, int height, int allocate_texture);
 void tilemap_destroy(tilemap_t* map);
 
 void tilemap_update(tilemap_t* map, const camera_t* cam); //passing in the camera so I know what tiles I need to draw/update
+
+/**
+player is a global that is drawn inside of the tilemap_draw function for proper layering.
+*/
 void tilemap_draw(tilemap_t* map, const camera_t* cam);
 
 void camera_get_index_bounds(const camera_t* camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y);

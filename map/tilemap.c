@@ -1,5 +1,7 @@
 #include "tilemap.h"
 
+#include "../player/player.h"
+
 int tilemap_load_lua_file(lua_State* L, const char* filename)
 {
   if(kLevelEditorMode)
@@ -48,6 +50,7 @@ tilemap_t* tilemap_create(int width, int height, int allocate_texture)
     {
       int index = x * height + y;
       tilemap->tiles[index].id = 0;
+	  tilemap->tiles[index].id_layer2 = -1; //no secondary layer
       tilemap->tiles[index].angle = 0;
       tilemap->tiles[index].tile_type = TILE_TYPE_PASSABLE;
     }
@@ -57,6 +60,7 @@ tilemap_t* tilemap_create(int width, int height, int allocate_texture)
   tilemap->height = height;
 
   tilemap->tileset_path = "textures.png";
+  tilemap->foreground_tileset_path = NULL; //foreground tileset is purely optional
   char buffer[32];
   sprintf(buffer, "res/%s", tilemap->tileset_path);
   if(allocate_texture)
@@ -89,10 +93,14 @@ void tilemap_destroy(tilemap_t* map)
 
   #ifdef PSP
   free(map->tileset);
+  if(map->foreground_tileset != NULL)
+	  free(map->foreground_tileset);
   free(map->tiles);
   free(map);
   #else
   SDL_DestroyTexture(map->tileset->image);
+  if(map->tileset != NULL)
+	  SDL_DestroyTexture(map->foreground_tileset->image);
   #endif
 }
 
@@ -125,6 +133,7 @@ void tilemap_update(tilemap_t* map, const camera_t* cam)
 
 void tilemap_draw(tilemap_t* map, const camera_t* cam)
 {
+	int player_drawn = 0;
   //TODO: move player drawing into here for proper layering
   /*
   Get bounds for drawing
@@ -147,6 +156,7 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
       {
         tile_t tile = map->tiles[index];
         vector_t sheet_location = tile_get_location_by_id(tile.id);
+		vector_t sheet_location_2 = tile_get_location_by_id(tile.id_layer2);
         sprite_set_angle(map->tileset, tile.angle);
         if(tile.angle > 0)
         {
@@ -168,7 +178,22 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
           }
           sprite_set_center_point(map->tileset, cx, cy);
         }
+		//layer 1
         sprite_draw_camera_source(map->tileset, *cam, floor(x_iter * 32), floor(y_iter * 32), sheet_location.x, sheet_location.y, 32, 32);
+		
+		//player layer
+		//if(!player_drawn)
+		//{
+			sprite_draw(kPlayer->main_sprite);
+			player_drawn = 1;
+			//}
+		
+		//layer 2
+		if(sheet_location_2.x > -1) //x and y will both be -1 if layer 2 is to be skipped
+		{
+			sprite_draw_camera_source(map->tileset, *cam, floor(x_iter * 32), floor(y_iter * 32), sheet_location_2.x, sheet_location_2.y, 32, 32);
+		}
+		
         sprite_set_angle(map->tileset, 0);
         sprite_set_center_point(map->tileset, 0, 0);
       }

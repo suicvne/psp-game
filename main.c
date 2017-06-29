@@ -241,7 +241,7 @@ void draw(tilemap_t* tilemap)
   //Do drawing in here
 
   tilemap_draw(tilemap, kCamera);
-  sprite_draw(kPlayer->main_sprite);
+  //sprite_draw(kPlayer->main_sprite);
   text_render_text(tilemap->map_name, 10, 2);
   if(message_box_is_visible)
     message_box_draw();

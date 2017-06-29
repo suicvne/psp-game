@@ -15,6 +15,7 @@ typedef enum {
 
 typedef struct {
   short id;
+  short id_layer2; //the ID of the secondary block (layer 2)
   short angle;
   TILE_TYPE tile_type;
 } tile_t;
