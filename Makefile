@@ -5,7 +5,7 @@ OBJS = main.o sound/sound.o globals.o camera/camera.o player/inventory.o graphic
 
 INCDIR =
 CFLAGS = -O2 -g -G0 -Wall -DLUA_32BITS
-CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti -DPSP
+CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti -DPSP -DOLD_MOVEMENT
 ASFLAGS = $(CFLAGS)
 
 LIBDIR =

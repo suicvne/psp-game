@@ -164,7 +164,7 @@ void player_update(player_t* player, tilemap_t* tilemap)
       player->is_moving = 0;
   }
 
-  #ifdef OLD_MOVEMENT
+#ifdef OLD_MOVEMENT
   vector_t stickInput = input_current_frame.analogue_input;
   if(stickInput.x != 0.0f || stickInput.y != 0.0f)
   {
@@ -182,24 +182,26 @@ void player_update(player_t* player, tilemap_t* tilemap)
 
     float xtrajectory, ytrajectory;
 
-    #if SDL
+#if SDL
     if(kLevelEditorMode)
     {
-    #endif
+#endif
     //lol
       xtrajectory = -(PLAYER_SPEED * stickInput.x);
       ytrajectory = -(PLAYER_SPEED * stickInput.y);
-    #if SDL
+#if SDL
     }
     else
     {
       xtrajectory = -(PLAYER_SPEED * stickInput.x);
       ytrajectory = -(PLAYER_SPEED * stickInput.y);
     }
-    #endif
+#endif
 
     kCamera->x += xtrajectory;
     kCamera->y += ytrajectory;
+	
+	
 
     if(xtrajectory != 0.0f || ytrajectory != 0.0f)
     { sprite_update(player->main_sprite); }
@@ -207,7 +209,7 @@ void player_update(player_t* player, tilemap_t* tilemap)
   }
   else
     player->main_sprite->currentframe = 0;
-  #endif
+#endif
 }
 
 player_t* player_create()
