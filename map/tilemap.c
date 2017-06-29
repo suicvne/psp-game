@@ -412,7 +412,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       free(buffer);
 
       char temp[60];
-      sprintf(temp, "res/%s", tileset_path);
+      sprintf(temp, "./res/%s", tileset_path);
       return_value->tileset = sprite_create(temp, SPRITE_TYPE_PNG);
       //sprite_set_center_point(return_value->tileset, 256 / 2, 256 / 2);
       return_value->tileset->rectangle.w = 256;
@@ -430,6 +430,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
         printf("finding scripts..\n");
         return_value->lua_state = luaL_newstate();
         luaL_openlibs(return_value->lua_state);
+	printf("attempting to load tilemap from '%s'...\n", combined_filename_lua);
         if(tilemap_load_lua_file(return_value->lua_state, combined_filename_lua) != 0) //non-zero means error
         {
           fprintf(stderr, "No Lua script assosciated with level. Freeing lua_state\n");
@@ -442,8 +443,8 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
           lua_map_register_functions(return_value->lua_state, return_value);
 	  printf("lua pcall\n");
           int initError = lua_pcall(return_value->lua_state, 0, LUA_MULTRET, 0); //this call is necessary to "init" the script and index the globals i guess
-	  printf("lua pcall complete\n");
-          if(initError != 0)
+	  printf("lua pcall complete: %d\n", initError);
+          if(!initError)
           {
             lua_getglobal(return_value->lua_state, "onLoad");
             if(lua_isnil(return_value->lua_state, -1))

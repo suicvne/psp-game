@@ -164,13 +164,13 @@ void initialize_globals(void)
 
   kCamera = camera_create(0, 0);
   kPlayer = player_create();
-  kForest = sprite_create("res/forest.png", SPRITE_TYPE_PNG);
-  kInventory = sprite_create("res/inventory.png", SPRITE_TYPE_PNG);
-  kItems = sprite_create("res/items.png", SPRITE_TYPE_PNG);
+  kForest = sprite_create("./res/forest.png", SPRITE_TYPE_PNG);
+  kInventory = sprite_create("./res/inventory.png", SPRITE_TYPE_PNG);
+  kItems = sprite_create("./res/items.png", SPRITE_TYPE_PNG);
 
 #ifdef PSP
   //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0
-  kMainFont = oslLoadFontFile("res/hack.pgf"); //can't find the font in ppsspp on linux?
+  kMainFont = oslLoadFontFile("./res/hack.pgf"); //can't find the font in ppsspp on linux?
     oslIntraFontSetStyle(kMainFont, .4f, RGBA(255, 255, 255, 255), RGBA(0, 0, 0, 255), INTRAFONT_ALIGN_LEFT);
     oslSetFont(kMainFont);
 #elif SDL_VERS
