@@ -83,7 +83,52 @@ void player_update(player_t* player, tilemap_t* tilemap)
 {
   float move_speed = 1;
   vector_t stickInput = input_current_frame.analogue_input;
-#ifndef OLD_MOVEMENT
+  
+#ifdef OLD_MOVEMENT
+  if(stickInput.x != 0.0f || stickInput.y != 0.0f)
+  {
+    float magnitude = vector_magnitude(stickInput);
+
+    if(magnitude > DEADZONE)
+    {
+      player_update_animation_offset_by_vector(player, &stickInput);
+    }
+    else if(magnitude < DEADZONE)
+    {
+      stickInput.x = 0;
+      stickInput.y = 0;
+    }
+
+    float xtrajectory, ytrajectory;
+
+#if SDL
+    if(kLevelEditorMode)
+    {
+#endif
+    //lol
+      xtrajectory = -(PLAYER_SPEED * stickInput.x);
+      ytrajectory = -(PLAYER_SPEED * stickInput.y);
+#if SDL
+    }
+    else
+    {
+      xtrajectory = -(PLAYER_SPEED * stickInput.x);
+      ytrajectory = -(PLAYER_SPEED * stickInput.y);
+    }
+#endif
+
+    kCamera->x += xtrajectory;
+    kCamera->y += ytrajectory;
+	
+	
+
+    if(xtrajectory != 0.0f || ytrajectory != 0.0f)
+    { sprite_update(player->main_sprite); }
+
+  }
+  else
+    player->main_sprite->currentframe = 0;
+#else
   if(player->is_moving == 0)
   {
     player->main_sprite->currentframe = 0;
@@ -163,53 +208,6 @@ void player_update(player_t* player, tilemap_t* tilemap)
     if(player->move_timer <= 0)
       player->is_moving = 0;
   }
-#endif
-
-#ifdef OLD_MOVEMENT
-  vector_t stickInput = input_current_frame.analogue_input;
-  if(stickInput.x != 0.0f || stickInput.y != 0.0f)
-  {
-    float magnitude = vector_magnitude(stickInput);
-
-    if(magnitude > DEADZONE)
-    {
-      player_update_animation_offset(player, &stickInput);
-    }
-    else if(magnitude < DEADZONE)
-    {
-      stickInput.x = 0;
-      stickInput.y = 0;
-    }
-
-    float xtrajectory, ytrajectory;
-
-#if SDL
-    if(kLevelEditorMode)
-    {
-#endif
-    //lol
-      xtrajectory = -(PLAYER_SPEED * stickInput.x);
-      ytrajectory = -(PLAYER_SPEED * stickInput.y);
-#if SDL
-    }
-    else
-    {
-      xtrajectory = -(PLAYER_SPEED * stickInput.x);
-      ytrajectory = -(PLAYER_SPEED * stickInput.y);
-    }
-#endif
-
-    kCamera->x += xtrajectory;
-    kCamera->y += ytrajectory;
-	
-	
-
-    if(xtrajectory != 0.0f || ytrajectory != 0.0f)
-    { sprite_update(player->main_sprite); }
-
-  }
-  else
-    player->main_sprite->currentframe = 0;
 #endif
 }
 
