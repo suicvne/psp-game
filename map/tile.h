@@ -2,6 +2,7 @@
 #define ___TILE_H___
 
 #include "../vector/vector.h"
+#include "../player/player.h"
 
 #define TILE_WIDTH 32
 #define TILE_HEIGHT 32
@@ -21,6 +22,11 @@ typedef struct {
 } tile_t;
 
 vector_t tile_get_location_by_id(short id);
+
+/**
+the same as `tile_get_location_by_id` except it uses the width and height of the supplied sprite instead of the default values
+*/
+vector_t tile_get_location_by_id_given_sheet(short id, sprite_t* sprite);
 short tile_get_id_by_location(int x, int y);
 
 #endif //___TILE_H___

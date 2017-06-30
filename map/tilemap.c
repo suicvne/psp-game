@@ -282,6 +282,7 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
                   (sizeof(short)) + //VERSION
                   strlen(map->map_name) + //map name
                   strlen(map->tileset_path) + //tileset path
+					  //strlen(map->foreground_tileset_path) + //foreground tileset path
                   (sizeof(int) * 2) + // two ints for width and height
                   (sizeof(short) * total_tiles) +
                   (sizeof(char) * total_tiles) + // the tiles in this level *2 for their rotation value too.
@@ -296,6 +297,7 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
 
   serializer_write_string(buffer, &pointer, map->map_name);
   serializer_write_string(buffer, &pointer, map->tileset_path);
+//    serializer_write_string(buffer, &pointer, map->foreground_tileset_path);
 
   serializer_write_int(buffer, &pointer, map->width);
   serializer_write_int(buffer, &pointer, map->height);
@@ -303,6 +305,7 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
   for(i = 0; i < total_tiles; i++)
   {
     serializer_write_short(buffer, &pointer, map->tiles[i].id);
+//	    serializer_write_short(buffer, &pointer, map->tiles[i].id_layer2);
     switch(map->tiles[i].angle)
     {
     case 0:

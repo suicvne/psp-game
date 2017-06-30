@@ -411,7 +411,7 @@ void sprite_update(sprite_t* sprite)
   {
     sprite->elapsedticks = 0;
     sprite->currentframe++;
-    if(sprite->currentframe > sprite->frames - 1) //subtract one because it's index based
+    if(sprite->currentframe > (sprite->frames - 1)) //subtract one because it's index based
     {
       sprite->currentframe = 0;
     }
