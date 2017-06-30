@@ -29,7 +29,7 @@ v2 - appends the tileset filename after map_name
 
 #define HEADER_0 'M'
 #define HEADER_1 'S'
-#define VERSION 04
+#define VERSION 05
 
 typedef struct tilemap_t {
 
