@@ -205,10 +205,6 @@ int tilemap_verify_header(char* buffer, short version)
 
 tilemap_t* tilemap_read_from_file(const char* filename)
 {
-  //char combined_filename[32];
-  //sprintf(combined_filename, "%s/%s", directory, filename);
-  //char* combined_filename = filename;
-
   int file_size = serializer_get_file_size(filename);
   if(file_size > 0)
   {

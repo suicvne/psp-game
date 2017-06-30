@@ -2,7 +2,7 @@
 #define ___TILE_H___
 
 #include "../vector/vector.h"
-#include "../player/player.h"
+#include "../sprites/sprite.h"
 
 #define TILE_WIDTH 32
 #define TILE_HEIGHT 32

@@ -179,20 +179,20 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
         }
 		//layer 1
         sprite_draw_camera_source(map->tileset, *cam, floor(x_iter * 32), floor(y_iter * 32), sheet_location.x, sheet_location.y, 32, 32);
-		
+
 		//player layer
 		//if(!player_drawn)
 		//{
 			sprite_draw(kPlayer->main_sprite);
 			player_drawn = 1;
 			//}
-		
+
 		//layer 2
 		if(sheet_location_2.x > -1) //x and y will both be -1 if layer 2 is to be skipped
 		{
 			sprite_draw_camera_source(map->tileset, *cam, floor(x_iter * 32), floor(y_iter * 32), sheet_location_2.x, sheet_location_2.y, 32, 32);
 		}
-		
+
         sprite_set_angle(map->tileset, 0);
         sprite_set_center_point(map->tileset, 0, 0);
       }
@@ -281,59 +281,63 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
                   (sizeof(short)) + //VERSION
                   strlen(map->map_name) + //map name
                   strlen(map->tileset_path) + //tileset path
-					  //strlen(map->foreground_tileset_path) + //foreground tileset path
+				  strlen(map->foreground_tileset_path) + //foreground tileset path
                   (sizeof(int) * 2) + // two ints for width and height
-                  (sizeof(short) * total_tiles) +
+                  (sizeof(short) * total_tiles) + //id
+				  (sizeof(short) * total_tiles) + //id_layer2
                   (sizeof(char) * total_tiles) + // the tiles in this level *2 for their rotation value too.
                   (sizeof(char) * total_tiles); // for their collision values
 
   char* buffer = malloc(sizeof(char) * filesize);
-  int pointer = 0, i;
-  serializer_write_char(buffer, &pointer, HEADER_0);
-  serializer_write_char(buffer, &pointer, HEADER_1);
+    int pointer = 0, i;
+    serializer_write_char(buffer, &pointer, HEADER_0);
+    serializer_write_char(buffer, &pointer, HEADER_1);
 
-  serializer_write_short(buffer, &pointer, (short)VERSION);
+    serializer_write_short(buffer, &pointer, (short)VERSION);
 
-  serializer_write_string(buffer, &pointer, map->map_name);
-  serializer_write_string(buffer, &pointer, map->tileset_path);
-//    serializer_write_string(buffer, &pointer, map->foreground_tileset_path);
+    serializer_write_string(buffer, &pointer, map->map_name);
+    serializer_write_string(buffer, &pointer, map->tileset_path);
+    if(map->foreground_tileset_path == NULL)
+      serializer_write_string(buffer, &pointer, "NONE");
+    else
+      serializer_write_string(buffer, &pointer, map->foreground_tileset_path);
 
-  serializer_write_int(buffer, &pointer, map->width);
-  serializer_write_int(buffer, &pointer, map->height);
+    serializer_write_int(buffer, &pointer, map->width);
+    serializer_write_int(buffer, &pointer, map->height);
 
-  for(i = 0; i < total_tiles; i++)
-  {
-    serializer_write_short(buffer, &pointer, map->tiles[i].id);
-//	    serializer_write_short(buffer, &pointer, map->tiles[i].id_layer2);
-    switch(map->tiles[i].angle)
+    for(i = 0; i < total_tiles; i++)
     {
-    case 0:
-      serializer_write_char(buffer, &pointer, ((char)1));
-      break;
-    case 90:
-      serializer_write_char(buffer, &pointer, ((char)2));
-      break;
-    case 180:
-      serializer_write_char(buffer, &pointer, ((char)3));
-      break;
-    case 270:
-      serializer_write_char(buffer, &pointer, ((char)4));
-      break;
-    default:
-      serializer_write_char(buffer, &pointer, ((char)1)); //default to 0deg
-      break;
+      serializer_write_short(buffer, &pointer, map->tiles[i].id);
+      serializer_write_short(buffer, &pointer, map->tiles[i].id_layer2);
+      switch(map->tiles[i].angle)
+      {
+      case 0:
+        serializer_write_char(buffer, &pointer, ((char)1));
+        break;
+      case 90:
+        serializer_write_char(buffer, &pointer, ((char)2));
+        break;
+      case 180:
+        serializer_write_char(buffer, &pointer, ((char)3));
+        break;
+      case 270:
+        serializer_write_char(buffer, &pointer, ((char)4));
+        break;
+      default:
+        serializer_write_char(buffer, &pointer, ((char)1)); //default to 0deg
+        break;
+      }
+      serializer_write_char(buffer, &pointer, ((char)map->tiles[i].tile_type));
     }
-    serializer_write_char(buffer, &pointer, ((char)map->tiles[i].tile_type));
-  }
 
-  return serializer_write_to_file(buffer, filesize, filename);
+    return serializer_write_to_file(buffer, filesize, filename);
 }
 
 int tilemap_verify_header(char* buffer, short version)
 {
   char filler[32];
 
-  if(buffer[0] == HEADER_0 && buffer[1] == HEADER_1 && version == VERSION)
+  if(buffer[0] == HEADER_0 && buffer[1] == HEADER_1)
     return 1;
   else
   {
@@ -347,8 +351,13 @@ int tilemap_verify_header(char* buffer, short version)
     }
     else if(version != VERSION)
     {
-      sprintf(filler, "Version mismatch in level file. (got %d; expected %d)", version, VERSION);
-      report_fatal_error(filler);
+		if(version >= 4)
+			return 1;
+		else
+		{
+			sprintf(filler, "Version mismatch in level file. (got %d; expected %d)", version, VERSION);
+		  report_fatal_error(filler);
+  		}
     }
   }
   return 0;
@@ -389,6 +398,9 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
     {
       char* map_name = serializer_read_string(buffer, &pointer);
       char* tileset_path = serializer_read_string(buffer, &pointer);
+	  char* foreground_tileset_path = "NONE";
+	  if(version >= 5)
+		  foreground_tileset_path = serializer_read_string(buffer, &pointer);
       printf("tileset: %s\n", tileset_path);
       int width, height;
       width = serializer_read_int(buffer, &pointer);
@@ -397,6 +409,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       tilemap_t* return_value = tilemap_create(width, height, 0);
       return_value->map_name = map_name;
       return_value->tileset_path = tileset_path;
+	  return_value->foreground_tileset_path = foreground_tileset_path;
 
       int total_tiles = width * height;
       int i = 0;
@@ -404,6 +417,9 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       {
         //read shorts for tiles
         short id = serializer_read_short(buffer, &pointer);
+		short id_layer2 = -1;
+		if(version >= 5)
+			id_layer2 = serializer_read_short(buffer, &pointer);
         short angle = 0;
         unsigned char angle_char = serializer_read_char(buffer, &pointer);
         switch(angle_char)
@@ -430,6 +446,8 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
         }
         if(id >= 0)
           return_value->tiles[i].id = id;
+		if(id_layer2 > -1)
+			return_value->tiles[i].id_layer2 = id_layer2;
         if(angle >= 0 || angle <= 360)
           return_value->tiles[i].angle = angle;
 
@@ -441,12 +459,12 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       char temp[60];
       sprintf(temp, "./res/%s", tileset_path);
       return_value->tileset = sprite_create(temp, SPRITE_TYPE_PNG);
-      //sprite_set_center_point(return_value->tileset, 256 / 2, 256 / 2);
-      return_value->tileset->rectangle.w = 256;
-      return_value->tileset->rectangle.h = 256;
-      return_value->tileset->rectangle.x = 0;
-      return_value->tileset->rectangle.y = 0;
-      //sprite_set_center_point(return_value->tileset, 256 / 2, 256 / 2);
+	  //sprite create takes care of retrieving sizes now
+	  if(foreground_tileset_path != "NONE")
+	  {
+		sprintf(temp, "./res/%s", foreground_tileset_path);
+	  	return_value->foreground_tileset = sprite_create(temp, SPRITE_TYPE_PNG);
+  	  }
 
 
       /*
