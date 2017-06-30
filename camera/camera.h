@@ -10,8 +10,6 @@ extern const int SCREEN_HEIGHT;
 extern const int HALF_SCREEN_WIDTH;
 extern const int HALF_SCREEN_HEIGHT;
 
-extern int ORIGIN_X;
-extern int ORIGIN_Y;
 
 typedef struct camera_t {
 

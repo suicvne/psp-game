@@ -134,7 +134,6 @@ void tilemap_update(tilemap_t* map, const camera_t* cam)
 void tilemap_draw(tilemap_t* map, const camera_t* cam)
 {
 	int player_drawn = 0;
-  //TODO: move player drawing into here for proper layering
   /*
   Get bounds for drawing
   */

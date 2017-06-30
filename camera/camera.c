@@ -7,7 +7,6 @@ const int SCREEN_HEIGHT = 272;
 const int HALF_SCREEN_WIDTH = 240;
 const int HALF_SCREEN_HEIGHT = 136;
 
-
 camera_t* camera_create(int x, int y)
 {
   camera_t* return_value = malloc(sizeof(camera_t));
