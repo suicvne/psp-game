@@ -13,23 +13,24 @@ sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type)
 
   if(type == SPRITE_TYPE_PNG)
   {
-    #if PSP
+#if PSP
     sprite->image = oslLoadImageFilePNG(sprite_path, OSL_IN_RAM | OSL_SWIZZLED, OSL_PF_8888);
-    #else
+	sprite->rectangle.w = sprite->image->sizeX;
+	sprite->rectangle.h = sprite->image->sizeY;
+#else
     sprite->image = IMG_LoadTexture(kSdlRenderer, sprite_path);
+	SDL_QueryTexture(sprite->image, NULL, NULL, &sprite->rectangle.w, &sprite->rectangle.h);
+	
     if(sprite->image == NULL)
     {
       report_fatal_error(IMG_GetError());
     }
-    #endif
+#endif
     printf("png sprite with path '%s' has pointer value %p\n", sprite_path, (void*)sprite->image);
   }
   else if(type == SPRITE_TYPE_JPEG)
   {
-    #if PSP
-    sprite->image = oslLoadImageFileJPG(sprite_path, OSL_IN_RAM | OSL_SWIZZLED, OSL_PF_8888);
-    #endif
-    printf("jpeg sprite with path '%s' has pointer value %p\n", sprite_path, (void*)sprite->image);
+	  report_fatal_error("JPEG Sprite types are no longer supported!\n");
   }
   else
   {
