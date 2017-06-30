@@ -19,11 +19,13 @@ typedef enum {
 
 typedef struct {
   short id;
+  short id_layer2;
   short angle;
   TILE_TYPE tile_type;
 } tile_t;
 
 extern vector_t tile_get_location_by_id(short id);
+vector_t tile_get_location_by_id_given_size(short id, int width, int height);
 extern short tile_get_id_by_location(int x, int y);
 
 #endif //___TILE_H___

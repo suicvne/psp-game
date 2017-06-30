@@ -440,8 +440,8 @@ bool CustomOpenGLWidget::loadTilemap(QString file)
     if(loaded != NULL)
     {
         this->currentTilemap = loaded;
-        delete this->main_texture;
-        this->main_texture = loadTexture(MainWindow::getResourcesDirectory() + QString(this->currentTilemap->tileset_path));
+        //delete this->main_texture;
+        this->main_texture = loadTexture(MainWindow::getResourcesDirectory() + "/" + QString(this->currentTilemap->tileset_path));
         if(this->main_texture == NULL) //load failed
         {
             std::cout << "load failed of texture" << std::endl;

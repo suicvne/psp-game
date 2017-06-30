@@ -22,6 +22,30 @@ vector_t tile_get_location_by_id(short id)
   return return_value;
 }
 
+vector_t tile_get_location_by_id_given_size(short id, int width, int height)
+{
+    if(id == -1)
+    {
+        vector_t blank = { -1, -1 };
+        return blank;
+    }
+  vector_t return_value = { 0, 0 };
+  int max_tiles = (width * height) / (TILE_WIDTH * TILE_HEIGHT);
+  if(id > max_tiles)
+  {
+    return return_value;
+  }
+
+  return_value.x = id * TILE_WIDTH;
+  return_value.y = 0;
+  while(return_value.x >= width)
+  {
+    return_value.x -= width;
+    return_value.y += TILE_HEIGHT;
+  }
+  return return_value;
+}
+
 short tile_get_id_by_location(int x, int y)
 {
   if(x > SHEET_WIDTH || y > SHEET_WIDTH)

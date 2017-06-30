@@ -18,7 +18,7 @@ extern "C" {
 
 #define HEADER_0 'M'
 #define HEADER_1 'S'
-#define VERSION 04
+#define VERSION 05
 
 typedef struct tilemap_t {
 
@@ -30,6 +30,7 @@ typedef struct tilemap_t {
   char* map_name;
   short surrounding_tile_id;
   char* tileset_path;
+  char* foreground_tileset_path;
 
 } tilemap_t;
 
