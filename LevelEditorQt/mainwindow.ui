@@ -183,6 +183,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionNewLevel"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_As"/>
@@ -252,6 +253,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionNewLevel">
+   <property name="text">
+    <string>New Level</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
  </widget>

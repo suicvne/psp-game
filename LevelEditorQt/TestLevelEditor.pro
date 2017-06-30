@@ -44,10 +44,13 @@ INCLUDEPATH += ../librocklevel
 SOURCES += main.cpp\
         mainwindow.cpp \
     customopenglwidget.cpp \
-    gametexture.cpp
+    gametexture.cpp \
+    newleveldialog.cpp
 
 HEADERS  += mainwindow.h \
     customopenglwidget.h \
-    gametexture.h
+    gametexture.h \
+    newleveldialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    newleveldialog.ui

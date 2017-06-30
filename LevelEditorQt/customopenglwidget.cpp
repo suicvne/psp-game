@@ -37,7 +37,7 @@ void CustomOpenGLWidget::initializeGL()
     //glBlendFunc (GL_ONE, GL_ONE);
     glBlendFunc(GL_ONE, GL_ONE);
 
-    this->main_texture = loadTexture(MainWindow::getResourcesDirectory() + "textures.png");
+    this->main_texture = loadTexture(MainWindow::getResourcesDirectory() + "/textures.png");
     if(this->main_texture == NULL)
         qApp->exit(0);
 }

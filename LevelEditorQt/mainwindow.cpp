@@ -6,6 +6,8 @@
 
 #include <rocklevel/tilemap.h>
 
+#include "newleveldialog.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,19 +28,38 @@ MainWindow::~MainWindow()
 
 void MainWindow::OpenResourcesDirectory()
 {
-    if(!QDir(qApp->applicationDirPath() + "/res/").exists())
+    QDir containing(qApp->applicationDirPath());
+#if __APPLE__ //to exit the app bundle
+    containing.cdUp();
+    containing.cdUp();
+    containing.cdUp();
+#endif
+    QDir resDirectory(containing.absolutePath() + "/res/");
+    if(!QDir(resDirectory.absolutePath()).exists())
     {
         std::cout << "resource path didn't exist, making" << std::endl;
-        QDir().mkdir(qApp->applicationDirPath() + "/res/");
+        resDirectory.mkdir(resDirectory.absolutePath());
+        //std::cout << "path: " << containing.absolutePath().toStdString() << std::endl;
     }
+    else
+        std::cout << "resources path exists!" << std::endl;
 
-    QString path = QDir::toNativeSeparators(qApp->applicationDirPath() + "/res/");
-    QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+    //QString path = QDir::toNativeSeparators(qApp->applicationDirPath() + "/res/");
+
+    QDesktopServices::openUrl(QUrl::fromLocalFile(resDirectory.absolutePath()));
 }
 
 QString MainWindow::getResourcesDirectory()
 {
-    return QDir::toNativeSeparators(qApp->applicationDirPath() + "/res/");
+    QDir containing(qApp->applicationDirPath());
+#if __APPLE__
+    containing.cdUp();
+    containing.cdUp();
+    containing.cdUp();
+#endif
+    QDir resDirectory(containing.absolutePath() + "/res/");
+
+    return QDir::toNativeSeparators(resDirectory.absolutePath());
 }
 
 /*
@@ -388,4 +409,18 @@ void MainWindow::on_checkBox_toggled(bool checked)
     ui->collisionHintLabel->setVisible(checked);
     ui->gameDrawWidget->setDrawCollisionMap(checked);
     ui->gameDrawWidget->update();
+}
+
+void MainWindow::on_actionNew_triggered()
+{
+}
+
+void MainWindow::on_actionNewLevel_triggered()
+{
+    NewLevelDialog n(this);
+#ifdef __APPLE__
+    n.setModal(true);
+    n.setWindowModality(Qt::WindowModal);
+#endif
+    n.exec();
 }
