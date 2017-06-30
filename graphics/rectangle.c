@@ -1,5 +1,7 @@
 #include "rectangle.h"
 
+#include "../player/player.h"
+
 void rectangle_draw(const rectangle_t* rect, uint32_t color)
 {
     #if PSP
@@ -83,24 +85,34 @@ int rectangle_intersects(rectangle_t* a, rectangle_t* b)
   rectangle_update_bounds(a);
   rectangle_update_bounds(b);
 
-  if(
-    ((a->left < b->right) & (a->right > b->left))
-    &&
-    ((a->top < b->bottom) & (a->bottom > b->top))
-  )
-    return 1;
+  int x_overlap = (a->left < b->right) && (a->right > b->left);
+  int y_overlap = (a->top < b->bottom) && (a->bottom > b->top);
+  
+  if(x_overlap && y_overlap)
+	  return 1;
 
   return 0;
 }
 
 rectangle_t camera_player_to_world_rectangle(const camera_t* camera)
 {
+	vector_t player_pos = camera_player_to_world(camera);
+	rectangle_t value;
+	value.x = player_pos.x;
+	value.y = player_pos.y;
+	value.w = PLAYER_WIDTH;
+	value.h = PLAYER_HEIGHT;
+	
+	/*
   int ORIGIN_X, ORIGIN_Y;
   camera_get_player_origin(&ORIGIN_X, &ORIGIN_Y);
   //they can set w/h later tbh
   rectangle_t value;
-  value.x = -camera->x + ORIGIN_X - 16;
-  value.y = -camera->y + ORIGIN_Y - 16;
+  value.x = -camera->x + ORIGIN_X - (PLAYER_WIDTH / 4);
+  value.y = -camera->y + ORIGIN_Y - (PLAYER_HEIGHT / 4);
+  value.w = PLAYER_WIDTH;
+  value.h = PLAYER_HEIGHT;
+	*/
 
   return value;
 }

@@ -20,9 +20,9 @@ int tilemap_load_lua_file(lua_State* L, const char* filename)
 
 tile_t tilemap_get_tile_at(tilemap_t* tilemap, int x, int y)
 {
-  if(x > 0 && x < tilemap->width - 1)
+  if(x >= 0 && x < tilemap->width - 1)
   {
-    if(y > 0 && y < tilemap->height - 1)
+    if(y >= 0 && y < tilemap->height - 1)
     {
       return tilemap->tiles[x * tilemap->height + y];
     }
@@ -99,7 +99,7 @@ void tilemap_destroy(tilemap_t* map)
   free(map);
   #else
   SDL_DestroyTexture(map->tileset->image);
-  if(map->tileset != NULL)
+  if(map->foreground_tileset != NULL)
 	  SDL_DestroyTexture(map->foreground_tileset->image);
   #endif
 }

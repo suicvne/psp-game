@@ -32,7 +32,7 @@ ifeq ($(OS),OSX)
 endif
 
 
-CFLAGS = -I$(SDL2INCLUDE) -I$(SDL2MIXERINCLUDE) -I$(SDL2IMAGEINCLUDE) -I$(SDL2TTFINCLUDE) -I$(LIBROCKLEVELINCLUDE) $(shell $(PKGCONFIG) --cflags lua5.2) -DSDL_VERS
+CFLAGS = -I$(SDL2INCLUDE) -I$(SDL2MIXERINCLUDE) -I$(SDL2IMAGEINCLUDE) -I$(SDL2TTFINCLUDE) -I$(LIBROCKLEVELINCLUDE) $(shell $(PKGCONFIG) --cflags lua5.2) -DSDL_VERS -DOLD_MOVEMENT
 LIBS = $(shell $(PKGCONFIG) --libs sdl2) $(shell $(PKGCONFIG) --libs SDL2_ttf) $(shell $(PKGCONFIG) --libs SDL2_image) $(shell $(PKGCONFIG) --libs SDL2_mixer) $(shell $(PKGCONFIG) --libs lua5.2) -lm
 # Removed 6/22/17: -L./libs -lrocklevel 
 

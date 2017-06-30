@@ -119,8 +119,37 @@ void player_update(player_t* player, tilemap_t* tilemap)
 
     kCamera->x += xtrajectory;
     kCamera->y += ytrajectory;
+
+	rectangle_t player_rect = camera_player_to_world_rectangle(kCamera);
+	rectangle_update_bounds(&player_rect);
 	
+	int left_tile = player_rect.left / TILE_WIDTH;
+	int right_tile = player_rect.right / TILE_WIDTH;
+	int top_tile = player_rect.top / TILE_HEIGHT;
+	int bottom_tile = player_rect.bottom / TILE_HEIGHT;
 	
+	if(left_tile < 0) left_tile = 0;
+	if(right_tile > tilemap->width) right_tile = tilemap->width;
+	if(top_tile < 0) top_tile = 0;
+	if(bottom_tile > tilemap->height) bottom_tile = tilemap->height;
+	
+//	printf("l: %d, r: %d, t: %d, b: %d\n", left_tile, right_tile, top_tile, bottom_tile);
+
+	int collision = 0;
+	int i, j;
+	for(i = left_tile; i <= right_tile; i++)
+	{
+		for(j = top_tile; j <= bottom_tile; j++)
+		{
+			tile_t t = tilemap_get_tile_at(tilemap, i, j);
+			if(t.tile_type == TILE_TYPE_SOLID)
+			{
+				collision = 1;
+				kCamera->x -= xtrajectory;
+				kCamera->y -= ytrajectory;
+			}
+		}
+	}
 
     if(xtrajectory != 0.0f || ytrajectory != 0.0f)
     { sprite_update(player->main_sprite); }
