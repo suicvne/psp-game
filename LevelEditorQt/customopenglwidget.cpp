@@ -460,6 +460,21 @@ bool CustomOpenGLWidget::loadTilemap(QString file)
     return false;
 }
 
+void CustomOpenGLWidget::newTilemap(QString levelName, int width, int height, QString tilesetPath, QString tilesetPath2)
+{
+    tilemap_t* new_tilemap = tilemap_create(width, height, 0);
+    new_tilemap->tileset_path = (char*)tilesetPath.toStdString().c_str();
+    new_tilemap->map_name = (char*)levelName.toStdString().c_str();
+
+    //TODO: layer 2
+    if(new_tilemap != NULL)
+    {
+        tilemap_destroy(this->currentTilemap);
+        this->currentTilemap = new_tilemap;
+        this->main_texture = loadTexture(MainWindow::getResourcesDirectory() + "/" + QString(this->currentTilemap->tileset_path));
+    }
+}
+
 int CustomOpenGLWidget::getPlacingTileID()
 {
     return placingTileID;

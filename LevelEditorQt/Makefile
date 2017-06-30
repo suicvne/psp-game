@@ -51,12 +51,16 @@ OBJECTS_DIR   = ./
 SOURCES       = main.cpp \
 		mainwindow.cpp \
 		customopenglwidget.cpp \
-		gametexture.cpp moc_mainwindow.cpp
+		gametexture.cpp \
+		newleveldialog.cpp moc_mainwindow.cpp \
+		moc_newleveldialog.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		customopenglwidget.o \
 		gametexture.o \
-		moc_mainwindow.o
+		newleveldialog.o \
+		moc_mainwindow.o \
+		moc_newleveldialog.o
 DIST          = ../../../Qt/5.8/clang_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/5.8/clang_64/mkspecs/qdevice.pri \
 		../../../Qt/5.8/clang_64/mkspecs/features/device_config.prf \
@@ -224,10 +228,12 @@ DIST          = ../../../Qt/5.8/clang_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/5.8/clang_64/mkspecs/features/lex.prf \
 		TestLevelEditor.pro mainwindow.h \
 		customopenglwidget.h \
-		gametexture.h main.cpp \
+		gametexture.h \
+		newleveldialog.h main.cpp \
 		mainwindow.cpp \
 		customopenglwidget.cpp \
-		gametexture.cpp
+		gametexture.cpp \
+		newleveldialog.cpp
 QMAKE_TARGET  = Rock\ Level\ Editor
 DESTDIR       = 
 TARGET        = Rock\ Level\ Editor.app/Contents/MacOS/Rock\ Level\ Editor
@@ -236,7 +242,7 @@ TARGET        = Rock\ Level\ Editor.app/Contents/MacOS/Rock\ Level\ Editor
 first: all
 ####### Build rules
 
-$(TARGET): ui_mainwindow.h $(OBJECTS)  
+$(TARGET): ui_mainwindow.h ui_newleveldialog.h $(OBJECTS)  
 	@test -d Rock\ Level\ Editor.app/Contents/MacOS/ || mkdir -p Rock\ Level\ Editor.app/Contents/MacOS/
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
@@ -616,9 +622,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt/5.8/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h customopenglwidget.h gametexture.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp customopenglwidget.cpp gametexture.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h customopenglwidget.h gametexture.h newleveldialog.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindow.cpp customopenglwidget.cpp gametexture.cpp newleveldialog.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.ui newleveldialog.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -650,9 +656,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../../Qt/5.8/clang_64/mkspecs/features/data/dummy.cpp
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -pipe -stdlib=libc++ -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -mmacosx-version-min=10.9 $(EXPORT_QMAKE_XARCH_CFLAGS) -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h ../../../Qt/5.8/clang_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_newleveldialog.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_newleveldialog.cpp
 moc_mainwindow.cpp: ../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QListWidget \
@@ -662,11 +668,18 @@ moc_mainwindow.cpp: ../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMa
 		../../../Qt/5.8/clang_64/bin/moc
 	/Users/mike/Qt/5.8/clang_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/Users/mike/Qt/5.8/clang_64/mkspecs/macx-clang -I/Users/mike/git/psp-game/LevelEditorQt -I/Users/mike/git/psp-game/librocklevel -I/Users/mike/Qt/5.8/clang_64/lib/QtOpenGL.framework/Headers -I/Users/mike/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers -I/Users/mike/Qt/5.8/clang_64/lib/QtGui.framework/Headers -I/Users/mike/Qt/5.8/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -F/Users/mike/Qt/5.8/clang_64/lib mainwindow.h -o moc_mainwindow.cpp
 
+moc_newleveldialog.cpp: ../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QDialog \
+		../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
+		newleveldialog.h \
+		moc_predefs.h \
+		../../../Qt/5.8/clang_64/bin/moc
+	/Users/mike/Qt/5.8/clang_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/Users/mike/Qt/5.8/clang_64/mkspecs/macx-clang -I/Users/mike/git/psp-game/LevelEditorQt -I/Users/mike/git/psp-game/librocklevel -I/Users/mike/Qt/5.8/clang_64/lib/QtOpenGL.framework/Headers -I/Users/mike/Qt/5.8/clang_64/lib/QtWidgets.framework/Headers -I/Users/mike/Qt/5.8/clang_64/lib/QtGui.framework/Headers -I/Users/mike/Qt/5.8/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -F/Users/mike/Qt/5.8/clang_64/lib newleveldialog.h -o moc_newleveldialog.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h
+compiler_uic_make_all: ui_mainwindow.h ui_newleveldialog.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h
+	-$(DEL_FILE) ui_mainwindow.h ui_newleveldialog.h
 ui_mainwindow.h: mainwindow.ui \
 		../../../Qt/5.8/clang_64/bin/uic \
 		customopenglwidget.h \
@@ -694,6 +707,10 @@ ui_mainwindow.h: mainwindow.ui \
 		../librocklevel/rocklevel/vector.h \
 		../librocklevel/rocklevel/camera.h
 	/Users/mike/Qt/5.8/clang_64/bin/uic mainwindow.ui -o ui_mainwindow.h
+
+ui_newleveldialog.h: newleveldialog.ui \
+		../../../Qt/5.8/clang_64/bin/uic
+	/Users/mike/Qt/5.8/clang_64/bin/uic newleveldialog.ui -o ui_newleveldialog.h
 
 compiler_rez_source_make_all:
 compiler_rez_source_clean:
@@ -745,7 +762,10 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		../librocklevel/rocklevel/tilemap.h \
 		../librocklevel/rocklevel/tile.h \
 		../librocklevel/rocklevel/vector.h \
-		../librocklevel/rocklevel/camera.h
+		../librocklevel/rocklevel/camera.h \
+		newleveldialog.h \
+		../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QDialog \
+		../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qdialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 customopenglwidget.o: customopenglwidget.cpp customopenglwidget.h \
@@ -786,8 +806,24 @@ gametexture.o: gametexture.cpp gametexture.h \
 		../../../Qt/5.8/clang_64/lib/QtGui.framework/Headers/qimage.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gametexture.o gametexture.cpp
 
+newleveldialog.o: newleveldialog.cpp newleveldialog.h \
+		../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QDialog \
+		../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
+		ui_newleveldialog.h \
+		mainwindow.h \
+		../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
+		../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/QListWidget \
+		../../../Qt/5.8/clang_64/lib/QtWidgets.framework/Headers/qlistwidget.h \
+		../../../Qt/5.8/clang_64/lib/QtCore.framework/Headers/QDir \
+		../../../Qt/5.8/clang_64/lib/QtCore.framework/Headers/qdir.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o newleveldialog.o newleveldialog.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_newleveldialog.o: moc_newleveldialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_newleveldialog.o moc_newleveldialog.cpp
 
 ####### Install
 

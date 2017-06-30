@@ -42,6 +42,8 @@ public:
     gametexture* getMainTexture();
     bool loadTilemap(QString file);
 
+    void newTilemap(QString levelName, int width, int height, QString tilesetPath, QString tilesetPath2 = "");
+
     void setTileMapName(QString name);
 
     int getPlacingTileID();

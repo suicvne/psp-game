@@ -411,10 +411,6 @@ void MainWindow::on_checkBox_toggled(bool checked)
     ui->gameDrawWidget->update();
 }
 
-void MainWindow::on_actionNew_triggered()
-{
-}
-
 void MainWindow::on_actionNewLevel_triggered()
 {
     NewLevelDialog n(this);
@@ -422,5 +418,12 @@ void MainWindow::on_actionNewLevel_triggered()
     n.setModal(true);
     n.setWindowModality(Qt::WindowModal);
 #endif
-    n.exec();
+    if(n.exec() == QDialog::Accepted)
+    {
+        std::cout << "Accepted!" << std::endl;
+        std::cout << "Tileset: " << n.getTilesetPath().toStdString() << ", " << n.getLayer2Path().toStdString() << std::endl;
+
+        ui->gameDrawWidget->newTilemap(n.getLevelName(), n.getLevelWidth(), n.getLevelHeight(), n.getTilesetPath(), n.getLayer2Path());
+        populateTileList();
+    }
 }
