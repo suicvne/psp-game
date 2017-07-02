@@ -43,7 +43,7 @@ typedef struct tilemap_t {
   char* tileset_path;
   char* foreground_tileset_path;
   sprite_t* tileset;
-  sprite_t* foreground_tileset; //the tileset for layer 2 aka foreground.
+	  sprite_t* foreground_tileset; //the tileset for layer 2 aka foreground.
   lua_State* lua_state;
 
 } tilemap_t;

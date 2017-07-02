@@ -517,16 +517,13 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       char temp[60];
       sprintf(temp, "./res/%s", tileset_path);
       return_value->tileset = sprite_create(temp, SPRITE_TYPE_PNG);
+	  return_value->foreground_tileset = return_value->tileset;
 	  //sprite create takes care of retrieving sizes now
-	  if(foreground_tileset_path != "NONE")
+	  if(strcmp(foreground_tileset_path, "NONE") != 0)
 	  {
 		sprintf(temp, "./res/%s", foreground_tileset_path);
 	  	return_value->foreground_tileset = sprite_create(temp, SPRITE_TYPE_PNG);
   	  }
-	  else
-	  {
-		  return_value->foreground_tileset = sprite_create(temp, SPRITE_TYPE_PNG);
-	  }
 
 
       /*
