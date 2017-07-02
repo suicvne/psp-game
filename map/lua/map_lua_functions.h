@@ -50,6 +50,7 @@ int lua_map_get_width(lua_State* L);
 int lua_map_get_height(lua_State* L);
 
 int lua_map_set_tile(lua_State* L);
+int lua_map_set_tile_layer2(lua_State* L);
 int lua_map_get_tile(lua_State* L); //gets the ID
 
 /**

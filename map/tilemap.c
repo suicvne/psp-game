@@ -133,7 +133,7 @@ void tilemap_update(tilemap_t* map, const camera_t* cam)
 
 void tilemap_draw(tilemap_t* map, const camera_t* cam)
 {
-	int player_drawn = 0;
+  int player_drawn = 0;
   /*
   Get bounds for drawing
   */
@@ -141,9 +141,13 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
 
   camera_get_index_bounds(cam, map, &min_x, &max_x, &min_y, &max_y);
 
-  for(x_iter = zeroize(min_x); x_iter < min(max_x, map->width); x_iter++)
+  int delim_x, delim_y;
+  delim_x = min(max_x, map->width);
+  delim_y = min(max_y, map->height);
+  
+  for(x_iter = zeroize(min_x); x_iter < delim_x; x_iter++)
   {
-    for(y_iter = zeroize(min_y); y_iter < min(max_y, map->height); y_iter++)
+    for(y_iter = zeroize(min_y); y_iter < delim_y; y_iter++)
     {
       int index = x_iter * map->height + y_iter;
 
@@ -180,24 +184,78 @@ void tilemap_draw(tilemap_t* map, const camera_t* cam)
 		//layer 1
         sprite_draw_camera_source(map->tileset, *cam, floor(x_iter * 32), floor(y_iter * 32), sheet_location.x, sheet_location.y, 32, 32);
 
-		//player layer
-		//if(!player_drawn)
-		//{
-			sprite_draw(kPlayer->main_sprite);
-			player_drawn = 1;
-			//}
+		//printf("x: %d; x/2: %d\n", delim_x, (int)floor(delim_x / 2));
+		//printf("y: %d; y/2: %d\n", delim_y, (int)floor(delim_y / 2));
 
-		//layer 2
-		if(sheet_location_2.x > -1) //x and y will both be -1 if layer 2 is to be skipped
-		{
-			sprite_draw_camera_source(map->tileset, *cam, floor(x_iter * 32), floor(y_iter * 32), sheet_location_2.x, sheet_location_2.y, 32, 32);
-		}
+		int half_max_x, half_max_y;
+		half_max_x = (int)floor(delim_x / 2) + 2;
+		half_max_y = (int)floor(delim_y / 2) + 2;
 
         sprite_set_angle(map->tileset, 0);
         sprite_set_center_point(map->tileset, 0, 0);
       }
     }
   }
+  
+  sprite_draw(kPlayer->main_sprite);
+  
+  for(x_iter = zeroize(min_x); x_iter < delim_x; x_iter++)
+  {
+    for(y_iter = zeroize(min_y); y_iter < delim_y; y_iter++)
+    {
+        int index = x_iter * map->height + y_iter;
+
+        if(index < 0 || index > (map->height * map->width))
+        {
+          continue;
+        } //skip NULL tiles
+        else
+        {
+          tile_t tile = map->tiles[index];
+		  if(tile.id_layer2 == -1)
+			  continue; //skipping
+          vector_t sheet_location = tile_get_location_by_id(tile.id_layer2);
+          sprite_set_angle(map->foreground_tileset, tile.angle);
+          if(tile.angle > 0)
+          {
+            int cx, cy;
+            switch(tile.angle) //...i'm..not proud of this..
+            {
+              case 90:
+              cx = 0; cy = 32;
+              break;
+              case 180:
+              cx = 32; cy = 32;
+              break;
+              case 270:
+              cx = 32; cy = 0;
+              break;
+              default:
+              cx = 0; cy = 0;
+              break;
+            }
+            sprite_set_center_point(map->foreground_tileset, cx, cy);
+          }
+  		  //layer 2
+          sprite_draw_camera_source(map->foreground_tileset, *cam, floor(x_iter * 32), floor(y_iter * 32), sheet_location.x, sheet_location.y, 32, 32);
+	  	 }
+	}
+  }
+  
+  /*
+		//player layer
+		if(player_drawn == 0)
+		{
+			sprite_draw(kPlayer->main_sprite);
+			player_drawn = 1;	
+		}
+		//layer 2
+		if(sheet_location_2.x > -1) //x and y will both be -1 if layer 2 is to be skipped
+		{
+			//printf("draw layer2\n");
+			sprite_draw_camera_source(map->tileset, *cam, floor(x_iter * 32), floor(y_iter * 32), sheet_location_2.x, sheet_location_2.y, 32, 32);
+		}
+  */
 
   //oslSetAlpha(OSL_FX_ALPHA, RGBA(255, 127, 0, 255));
   //oslSetAlpha(OSL_FX_ALPHA, 255);
@@ -250,11 +308,11 @@ int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t
 
 void camera_get_index_bounds(const camera_t* camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y)
 {
-
+	/*
   int half_map_width, half_map_height;
   half_map_width = ((tilemap->width * 32) / 2);
   half_map_height = ((tilemap->height * 32) / 2);
-
+*/
 
   float corrected_x, corrected_y;
   corrected_x = -camera->x;
@@ -465,6 +523,10 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
 		sprintf(temp, "./res/%s", foreground_tileset_path);
 	  	return_value->foreground_tileset = sprite_create(temp, SPRITE_TYPE_PNG);
   	  }
+	  else
+	  {
+		  return_value->foreground_tileset = sprite_create(temp, SPRITE_TYPE_PNG);
+	  }
 
 
       /*

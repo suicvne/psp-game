@@ -35,6 +35,9 @@ function onLoad()
   );
 
   tilemap_set_tile(_current_tilemap, 32, 32, 4);
+  tilemap_set_tile_layer2(_current_tilemap, 64, 64, 2);
+  tilemap_set_tile_layer2(_current_tilemap, 6 * 32, 6 * 32, 2);
+  tilemap_set_tile_layer2(_current_tilemap, 9 * 32, 9 * 32, 2);
 
   print('created test npc');
 
