@@ -123,20 +123,30 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     }
     else if(event->type() == QEvent::MouseButtonPress)
     {
+        QMouseEvent* mouseEvent = (QMouseEvent*)event;
         if(this->isActiveWindow())
         {
                 if(ui->gameDrawWidget->underMouse())
                 {
                     if(ui->gameDrawWidget->getDrawCollisionMap())
                     {
-                        QMouseEvent* mouseEvent = (QMouseEvent*)event;
                         ui->gameDrawWidget->placeTileAction((mouseEvent->button() == Qt::LeftButton));
                         setWindowModified(true);
                         return true;
                     }
                     else
                     {
-                        ui->gameDrawWidget->placeTileAction();
+                        if(ui->layer1_Radio->isChecked())
+                        {
+                            ui->gameDrawWidget->placeTileAction();
+                        }
+                        else //layer 2
+                        {
+                            if(mouseEvent->button() == Qt::RightButton)
+                                ui->gameDrawWidget->placeTileAction(false, -1); //erasing
+                            else
+                                ui->gameDrawWidget->placeTileAction(false, 2);
+                        }
                         setWindowModified(true);
                         return true;
                     }
@@ -182,7 +192,7 @@ void MainWindow::on_gameDrawWidget_frameSwapped()
     }
 }
 
-void MainWindow::populateTileList()
+void MainWindow::populateTileList(int layer)
 {
     ui->listWidget->clear();
     for(int i = 0; i < (8*8); i++)
@@ -196,7 +206,11 @@ void MainWindow::populateTileList()
         rect.setWidth(TILE_WIDTH);
         rect.setHeight(TILE_HEIGHT);
 
-        QImage* atlas = ui->gameDrawWidget->getMainTexture()->toQImage();
+        QImage* atlas;
+        if(layer == 1)
+            atlas = ui->gameDrawWidget->getMainTexture()->toQImage();
+        else
+            atlas = ui->gameDrawWidget->getForegroundTexture()->toQImage(); //TODO
 
         test->setIcon(QIcon(QPixmap::fromImage(createSubImage(atlas, rect))));
     }
@@ -424,6 +438,23 @@ void MainWindow::on_actionNewLevel_triggered()
         std::cout << "Tileset: " << n.getTilesetPath().toStdString() << ", " << n.getLayer2Path().toStdString() << std::endl;
 
         ui->gameDrawWidget->newTilemap(n.getLevelName(), n.getLevelWidth(), n.getLevelHeight(), n.getTilesetPath(), n.getLayer2Path());
+        ui->levelNameTextBox->setText(n.getLevelName());
         populateTileList();
+    }
+}
+
+void MainWindow::on_layer2_Radio_toggled(bool checked)
+{
+    if(checked)
+    {
+        populateTileList(2); //layer 2
+    }
+}
+
+void MainWindow::on_layer1_Radio_toggled(bool checked)
+{
+    if(checked)
+    {
+        populateTileList(1);
     }
 }

@@ -19,6 +19,7 @@ CustomOpenGLWidget::CustomOpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
     //prepare placeholder tilemap
     currentTilemap = tilemap_create(32, 32, 0);
     this->main_texture = NULL; //lol this is probably a terrible idea
+    this->foreground_texture = NULL;
     //end prepare placeholder tilemap
 
     main_camera = camera_create(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -32,12 +33,12 @@ void CustomOpenGLWidget::initializeGL()
     glOrtho(0, 640, 480, 0, 1, -1);
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
     //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     //glBlendFunc (GL_ONE, GL_ONE);
     glBlendFunc(GL_ONE, GL_ONE);
 
     this->main_texture = loadTexture(MainWindow::getResourcesDirectory() + "/textures.png");
+    this->foreground_texture = loadTexture(MainWindow::getResourcesDirectory() + "/textures.png");
     if(this->main_texture == NULL)
         qApp->exit(0);
 }
@@ -52,7 +53,7 @@ void CustomOpenGLWidget::resizeGL(int w, int h)
 
 void CustomOpenGLWidget::paintGL()
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     this->drawTilemap();
@@ -78,7 +79,7 @@ void CustomOpenGLWidget::setPlacingTileRotation(int rotation)
         placingTileRotation = rotation;
 }
 
-void CustomOpenGLWidget::placeTileAction(bool isSolid)
+void CustomOpenGLWidget::placeTileAction(bool isSolid, int layer)
 {
     vector_t mouse = mouseToGame();
     int tx, ty;
@@ -90,10 +91,18 @@ void CustomOpenGLWidget::placeTileAction(bool isSolid)
     if(ty < 0 || ty > currentTilemap->height)
         return;
 
-    std::cout <<  "placing at " << tx << ", " << ty << std::endl;
+    if(layer == -1)
+        std::cout << "erasing layer 2" << std::endl;
+    else
+        std::cout <<  "placing at " << tx << ", " << ty << std::endl;
 
     int index = tx * currentTilemap->height + ty;
-    currentTilemap->tiles[index].id = placingTileID;
+    if(layer == 1)
+        currentTilemap->tiles[index].id = placingTileID;
+    else if(layer == 2)
+        currentTilemap->tiles[index].id_layer2 = placingTileID;
+    else if(layer == -1)
+        currentTilemap->tiles[index].id_layer2 = -1; //erasing
     currentTilemap->tiles[index].angle = placingTileRotation;
     if(isSolid)
         currentTilemap->tiles[index].tile_type = TILE_TYPE_SOLID;
@@ -180,9 +189,17 @@ void CustomOpenGLWidget::drawTilemap()
                           (y * TILE_WIDTH) + main_camera->y,
                           TILE_HEIGHT, TILE_WIDTH, tile.angle, tile.id
             );
+            if(tile.id_layer2 > -1)
+            {
+                drawRectangle((x * TILE_WIDTH) + main_camera->x,
+                              (y * TILE_WIDTH) + main_camera->y,
+                              TILE_HEIGHT, TILE_WIDTH, tile.angle, tile.id_layer2
+                );
+            }
 
             if(this->drawCollisionMap)
             {
+                glEnable(GL_BLEND);
                 if(tile.tile_type == TILE_TYPE_PASSABLE)
                 {
                     drawColoredRectangle((x * TILE_WIDTH) + main_camera->x,
@@ -197,6 +214,7 @@ void CustomOpenGLWidget::drawTilemap()
                                          TILE_WIDTH, TILE_HEIGHT, 1.0f, 0, 0, 0.2f
                                          );
                 }
+                glDisable(GL_BLEND);
             }
         }
 
@@ -433,6 +451,11 @@ gametexture* CustomOpenGLWidget::getMainTexture()
     return main_texture;
 }
 
+gametexture* CustomOpenGLWidget::getForegroundTexture()
+{
+    return foreground_texture;
+}
+
 bool CustomOpenGLWidget::loadTilemap(QString file)
 {
     tilemap_t* loaded = tilemap_read_from_file(file.toStdString().c_str());
@@ -442,6 +465,11 @@ bool CustomOpenGLWidget::loadTilemap(QString file)
         this->currentTilemap = loaded;
         //delete this->main_texture;
         this->main_texture = loadTexture(MainWindow::getResourcesDirectory() + "/" + QString(this->currentTilemap->tileset_path));
+
+        if(strcmp(loaded->foreground_tileset_path, "NONE") == 0)
+            this->foreground_texture = loadTexture(MainWindow::getResourcesDirectory() + "/" + QString(this->currentTilemap->tileset_path));
+        else
+            this->foreground_texture = loadTexture(MainWindow::getResourcesDirectory() + "/" + QString(this->currentTilemap->foreground_tileset_path));
         if(this->main_texture == NULL) //load failed
         {
             std::cout << "load failed of texture" << std::endl;
@@ -464,6 +492,10 @@ void CustomOpenGLWidget::newTilemap(QString levelName, int width, int height, QS
 {
     tilemap_t* new_tilemap = tilemap_create(width, height, 0);
     new_tilemap->tileset_path = (char*)tilesetPath.toStdString().c_str();
+    if(tilesetPath2 != "None")
+        new_tilemap->foreground_tileset_path = (char*)tilesetPath2.toStdString().c_str();
+    else
+        new_tilemap->foreground_tileset_path = (char*)QString("NONE").toStdString().c_str();
     new_tilemap->map_name = (char*)levelName.toStdString().c_str();
 
     //TODO: layer 2
@@ -472,6 +504,10 @@ void CustomOpenGLWidget::newTilemap(QString levelName, int width, int height, QS
         tilemap_destroy(this->currentTilemap);
         this->currentTilemap = new_tilemap;
         this->main_texture = loadTexture(MainWindow::getResourcesDirectory() + "/" + QString(this->currentTilemap->tileset_path));
+        if(strcmp(currentTilemap->foreground_tileset_path, "NONE") == 0)
+            this->foreground_texture = loadTexture(MainWindow::getResourcesDirectory() + "/" + QString(this->currentTilemap->tileset_path));
+        else
+            this->foreground_texture = loadTexture(MainWindow::getResourcesDirectory() + "/" + QString(this->currentTilemap->foreground_tileset_path));
     }
 }
 
@@ -480,7 +516,8 @@ int CustomOpenGLWidget::getPlacingTileID()
     return placingTileID;
 }
 
-void CustomOpenGLWidget::setPlacingTileID(int id)
+void CustomOpenGLWidget::setPlacingTileID(int id, int layer)
 {
+    placingTileLayer = layer;
     this->placingTileID = id;
 }

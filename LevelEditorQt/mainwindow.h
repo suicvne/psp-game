@@ -64,11 +64,15 @@ private slots:
 
     void on_actionNewLevel_triggered();
 
+    void on_layer2_Radio_toggled(bool checked);
+
+    void on_layer1_Radio_toggled(bool checked);
+
 private:
 
     bool eventFilter(QObject *watched, QEvent *event) override;
 
-    void populateTileList();
+    void populateTileList(int layer = 1);
 
     Ui::MainWindow *ui;
     void update();

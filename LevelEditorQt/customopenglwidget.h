@@ -40,6 +40,7 @@ public:
 
     tilemap_t* getCurrentTilemap();
     gametexture* getMainTexture();
+    gametexture* getForegroundTexture();
     bool loadTilemap(QString file);
 
     void newTilemap(QString levelName, int width, int height, QString tilesetPath, QString tilesetPath2 = "");
@@ -47,12 +48,12 @@ public:
     void setTileMapName(QString name);
 
     int getPlacingTileID();
-    void setPlacingTileID(int id);
+    void setPlacingTileID(int id, int layer = 1);
 
     int getPlacingTileRotation();
     void setPlacingTileRotation(int rotation);
 
-    void placeTileAction(bool isSolid = false);
+    void placeTileAction(bool isSolid = false, int layer = 1);
 
     void moveCamera(float _x, float _y);
     void setCameraPosition(float x, float y);
@@ -77,10 +78,12 @@ private:
     //QMatrix4x4 m_projection;
     //QOpenGLTexture* main_texture;
     gametexture* main_texture;
+    gametexture* foreground_texture;
     tilemap_t* currentTilemap;
 
     bool drawCollisionMap = false; //don't draw the collision map by default.
 
+    int placingTileLayer = 1;
     int placingTileID = 0; //the ID of the tile we'll be placing
     int placingTileRotation = 0; //the rotation of the tile we'll be placing
 };
