@@ -243,13 +243,13 @@ void player_update(player_t* player, tilemap_t* tilemap)
 player_t* player_create()
 {
   //TODO: redef originx and originy
-  int orgX = ((480 / 2) - (PLAYER_WIDTH / 2));;
-  int orgY = ((272 / 2) - (PLAYER_HEIGHT / 2));; //stop
+  int orgX = ((480 / 2) - (PLAYER_WIDTH / 2));
+  int orgY = ((272 / 2) - (PLAYER_HEIGHT / 2)); //stop
   //int ORIGIN_X = ((480 / 2) - (PLAYER_WIDTH / 2));
   //int ORIGIN_Y = ((272 / 2) - (PLAYER_HEIGHT / 2));
 
   player_t* player = malloc(sizeof(player_t));
-  player->main_sprite = sprite_create("res/ness.png", SPRITE_TYPE_PNG);
+  player->main_sprite = sprite_create("res/ness_rust.png", SPRITE_TYPE_PNG);
   player->main_sprite->rectangle.x = orgX; //center of the screen
   player->main_sprite->rectangle.y = orgY;
   player->main_sprite->rectangle.w = PLAYER_WIDTH;
@@ -267,9 +267,9 @@ player_t* player_create()
   player->speed_x = 0;
   player->speed_y = 0;
 
-  #ifdef PSP
+#ifdef PSP
   oslSetImageTileSize(player->main_sprite->image, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
-  #endif
+#endif
 
   inventory_create(); //to create the inventory and stuff
 

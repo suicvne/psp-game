@@ -31,6 +31,7 @@
 #include <math.h>
 
 #include "common.h"
+#include "player/item_db.h"
 #include "player/player.h"
 #include "sprites/sprite.h"
 #include "vector/vector.h"
@@ -293,6 +294,42 @@ int main(int argc, char** argv)
             report_fatal_error("level editor mode no longer supported.");
             break;
         }
+		if(strcmp("--test-db-write", argv[i]) == 0)
+		{
+			item_db_t* test_db = item_db_create_test_db();
+			
+			int i;
+			for(i = 0; i < MAX_ITEMS; i++)
+			{
+				if(test_db->items[i].id == -1)
+					break;
+				else
+					printf("%d %s: %s\n", test_db->items[i].id, test_db->items[i].name, test_db->items[i].description);
+			}
+			
+			if(item_db_write_to_file(test_db, "res/item.db") == 0)
+			{
+				printf("ok!\n");
+			}
+			else
+				printf("error writing to file!\n");
+			return 0;
+		}
+		if(strcmp("--test-db-read", argv[i]) == 0)
+		{
+			item_db_t* test_db = item_db_read_from_file("res/item.db");
+			
+			int i;
+			for(i = 0; i < MAX_ITEMS; i++)
+			{
+				if(test_db->items[i].id == -1)
+					break;
+				printf("%d %s: %s\n", test_db->items[i].id, test_db->items[i].name, test_db->items[i].description);
+			}
+			
+			printf("ok!\n");
+			return 0;
+		}
     }
 
 #if PSP

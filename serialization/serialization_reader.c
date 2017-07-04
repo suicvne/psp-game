@@ -1,5 +1,10 @@
 #include "serialization_reader.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+
 int serializer_get_file_size(const char* filename)
 {
   struct stat st;
