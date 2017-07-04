@@ -313,6 +313,8 @@ int main(int argc, char** argv)
 			}
 			else
 				printf("error writing to file!\n");
+			
+			item_db_destroy(test_db);
 			return 0;
 		}
 		if(strcmp("--test-db-read", argv[i]) == 0)
@@ -328,6 +330,7 @@ int main(int argc, char** argv)
 			}
 			
 			printf("ok!\n");
+			item_db_destroy(test_db);
 			return 0;
 		}
     }

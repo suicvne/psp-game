@@ -16,13 +16,30 @@ item_db_t* item_db_create()
 
 item_t item_db_get_item_by_id(item_db_t* db, short id)
 {
-	item_t lol = {-1, "null", "null"};
-	return lol;
+	if(db != NULL)
+	{
+		if(db->items[id].id == -1)
+		{
+			item_t null_item_lol = { -1, "null", "no description" };
+		}	
+		else
+			return db->items[id];
+	}
 }
 
 void item_db_destroy(item_db_t* db)
 {
+	int i = 0;
+	for(i = 0; i < MAX_ITEMS; i++)
+	{
+		if(db->items[i].name != NULL)
+			free(db->items[i].name);
+		if(db->items[i].description != NULL)
+			free(db->items[i].description);
+	}
 	
+	free(db);
+	db = NULL;
 }
 
 int item_db_write_to_file(item_db_t* db, const char* filename)
@@ -65,7 +82,11 @@ int item_db_write_to_file(item_db_t* db, const char* filename)
 	 	 }
 	 }
 	 
-	 return serializer_write_to_file(buffer, filesize, filename);
+	 int return_value = serializer_write_to_file(buffer, filesize, filename);
+	 
+	 free(buffer);
+	 
+	 return return_value;
 }
 
 int item_db_verify_header(char* buffer, short version, char* delim)
