@@ -171,6 +171,7 @@ item_db_t* item_db_read_from_file(const char* filename)
 				}
 			} while (id != -1);
 			
+			free(buffer);
 			return item_db;
 		}
 	}

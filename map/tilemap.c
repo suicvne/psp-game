@@ -388,7 +388,10 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
       serializer_write_char(buffer, &pointer, ((char)map->tiles[i].tile_type));
     }
 
-    return serializer_write_to_file(buffer, filesize, filename);
+	int return_value = serializer_write_to_file(buffer, filesize, filename);
+
+	free(buffer);
+	return return_value;
 }
 
 int tilemap_verify_header(char* buffer, short version)
@@ -572,6 +575,7 @@ tilemap_t* tilemap_read_from_file(const char* directory, const char* filename)
       /*
       End Lua
       */
+	  free(buffer);
       return return_value;
     }
     else
