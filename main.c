@@ -168,6 +168,7 @@ void initialize_globals(void)
   kForest = sprite_create("./res/forest.png", SPRITE_TYPE_PNG);
   kInventory = sprite_create("./res/inventory.png", SPRITE_TYPE_PNG);
   kItems = sprite_create("./res/items.png", SPRITE_TYPE_PNG);
+  kButtons = sprite_create("./res/buttons.png", SPRITE_TYPE_PNG);
 
 #ifdef PSP
   //kMainFont = oslLoadFontFile("flash0:/font/ltn0.pgf"); //ltn0

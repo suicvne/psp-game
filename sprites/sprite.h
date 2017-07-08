@@ -70,4 +70,6 @@ void sprite_draw_camera_factor_offset(sprite_t* sprite, const camera_t camera, f
 void sprite_draw_camera_pointer_factor_offset(sprite_t* sprite, const camera_t camera, int x, int y, float movement_factor, int x_offset, int y_offset);
 void sprite_update(sprite_t* sprite);
 
+vector_t sprite_get_location_by_index(sprite_t* sprite, int sprite_size, int index);
+
 #endif //__SPRITE_H__

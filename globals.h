@@ -26,6 +26,7 @@ extern struct player_t* kPlayer;
 extern struct sprite_t* kForest;
 extern struct sprite_t* kItems; //contains the sheet for the items
 extern struct sprite_t* kInventory; //contains the inventory sprites
+extern struct sprite_t* kButtons; //contains the button sprites
 extern struct camera_t* kCamera;
 //extern struct input_t* kInput;
 extern struct input_t* kInputLastFrame;

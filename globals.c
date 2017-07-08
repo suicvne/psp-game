@@ -20,6 +20,7 @@ struct sprite_t* kForest = NULL;
 struct camera_t* kCamera = NULL;
 struct sprite_t* kItems = NULL; //contains the sheet for the items
 struct sprite_t* kInventory = NULL; //contains the inventory sprites
+struct sprite_t* kButtons = NULL;
 //struct input_t* kInput = NULL;
 
 #ifdef PSP

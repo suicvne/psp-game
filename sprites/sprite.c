@@ -417,3 +417,32 @@ void sprite_update(sprite_t* sprite)
     }
   }
 }
+
+vector_t sprite_get_location_by_index(sprite_t* sprite, int sprite_size, int index)
+{
+	int width = sprite->rectangle.w;
+	int height = sprite->rectangle.h;
+	vector_t return_value = { 0, 0 };
+	if(width == height)
+	{
+	  if(id == -1)
+	  {
+		  return return_value;
+	  }
+	  
+	  int max_tiles = (width * height) / (sprite_size * sprite_size);
+	  if(id > max_tiles)
+	  {
+	    return return_value;
+	  }
+
+	  return_value.x = id * sprite_size;
+	  return_value.y = 0;
+	  while(return_value.x >= width)
+	  {
+	    return_value.x -= width;
+	    return_value.y += sprite_size;
+	  }
+	}
+	return return_value;
+}
