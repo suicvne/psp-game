@@ -425,18 +425,18 @@ vector_t sprite_get_location_by_index(sprite_t* sprite, int sprite_size, int ind
 	vector_t return_value = { 0, 0 };
 	if(width == height)
 	{
-	  if(id == -1)
+	  if(index == -1)
 	  {
 		  return return_value;
 	  }
 	  
 	  int max_tiles = (width * height) / (sprite_size * sprite_size);
-	  if(id > max_tiles)
+	  if(index > max_tiles)
 	  {
 	    return return_value;
 	  }
 
-	  return_value.x = id * sprite_size;
+	  return_value.x = index * sprite_size;
 	  return_value.y = 0;
 	  while(return_value.x >= width)
 	  {
