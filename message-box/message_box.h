@@ -25,8 +25,9 @@ typedef struct message_box_t {
 
 } message_box_t;
 
-extern message_box_t* message_box_queue;
-extern const int MESSAGE_BOX_MAX_QUEUE_SIZE;
+//extern message_box_t* message_box_queue;
+//extern const int MESSAGE_BOX_MAX_QUEUE_SIZE;
+extern const char *messages[20];
 
 extern const int MESSAGE_BOX_MAX_CHAR_LENGTH; //maximum characters per line for a message
 extern const int MESSAGE_BOX_MAX_LINES; //maximum lines per single message box
@@ -43,12 +44,10 @@ extern rectangle_t message_box_rectangle;
 
 extern char* message_box_message;
 
-/**
-creates a new message_box_t* and adds it to the queue
-*/
+
 void message_box_create(const char* message);
 
-void message_box_set_message(const char* message); //copies the specified message into the current message variable 
+void message_box_set_message(const char* message); //copies the specified message into the current message variable
 void message_box_set_visibility(int visible);
 
 void message_box_draw();

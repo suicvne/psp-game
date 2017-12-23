@@ -28,79 +28,7 @@ rectangle_t message_box_rectangle;
 int message_box_text_index = 0;
 
 char* message_box_message = "no.";
-/**
-Misc Constants / older variables
-*/
 
-#if 0
-int message_box_has_messages()
-{
-    int i;
-    for(i = 0; i < MESSAGE_BOX_MAX_QUEUE_SIZE; i++)
-    {
-        message_box_t box = message_box_queue[i];
-        if(box.shown)
-            return 1;
-    }
-
-    return 0;
-}
-
-void message_box_init_queue()
-{
-    int size = sizeof(message_box_t) * MESSAGE_BOX_MAX_QUEUE_SIZE;
-    message_box_queue = malloc(size);
-    memset(message_box_queue, 0, MESSAGE_BOX_MAX_QUEUE_SIZE); //zero off the array
-    printf("msg box queue init\n");
-}
-
-void message_box_queue_push(message_box_t message)
-{
-    if((message_box_queue_push_index + 1) > MESSAGE_BOX_MAX_QUEUE_SIZE)
-        return; //no overflows pls
-    printf("push\n");
-    printf("given: %s\n", message.message);
-    message_box_queue[message_box_queue_push_index] = message;
-    //memcpy(message_box_queue[message_box_queue_index], message, message_box_queue_index);
-    printf("good: %s\n", message_box_queue[message_box_queue_push_index].message);
-    message_box_queue_push_index++;
-}
-
-void message_box_queue_pop(int index)
-{
-    if(index > MESSAGE_BOX_MAX_QUEUE_SIZE)
-        return;
-    //reorder the array
-    int i;
-    for(i = index; i < MESSAGE_BOX_MAX_QUEUE_SIZE - 1; i++)
-    {
-        message_box_queue[i] = message_box_queue[i + 1];
-    }
-    message_box_queue_push_index--;
-}
-
-void message_box_create(const char* message)
-{
-    if(message_box_queue == NULL)
-        message_box_init_queue();
-
-
-    message_box_t message_box;
-
-    int size = sizeof(char) * strlen(message) + 1; //+ 1 for null
-    message_box.message = malloc(size);
-    memset(message_box.message, 0, size);
-    memcpy(message_box.message, message, strlen(message));
-
-    message_box.framecount = 0;
-    message_box.current_index = 0;
-    message_box.shown = 0;
-
-    printf("created message box with message '%s'\n", message_box.message);
-
-    message_box_queue_push(message_box);
-}
-#endif
 
 void message_box_set_message(const char* message)
 {
