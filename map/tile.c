@@ -1,4 +1,6 @@
 #include "tile.h"
+#include "../vector/vector.h"
+#include "../sprites/sprite.h"
 
 /**
 GunnerWolf at the Game Dev League Discord channel helped me out with this! Thank you <3

@@ -4,10 +4,9 @@
 #define ___VECTOR_H___
 
 #include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
 
-typedef struct {
+typedef struct _vector_t {
 
   float x, y;
 
@@ -24,7 +23,7 @@ static inline float fastsqrt(float c)
   #endif
 }
 
-float vector_magnitude(vector_t v);
-vector_t vector_add(vector_t a, vector_t b);
+float vector_magnitude(struct _vector_t v);
+struct _vector_t vector_add(struct _vector_t a, struct _vector_t b);
 
 #endif //___VECTOR_H___

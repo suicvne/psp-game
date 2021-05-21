@@ -1,8 +1,10 @@
 #include "map_lua_functions.h"
 
-#include "../tilemap.h"
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
 
-/*
+
 #include "../../sprites/sprite.h"
 #include "../../graphics/rectangle.h"
 #include "../../graphics/text.h"
@@ -12,11 +14,14 @@
 #include "../../camera/camera.h"
 #include "../../globals.h"
 #include "../../message-box/message_box.h"
-*/
+
+#include "../tilemap.h"
+
+
 
 lua_State* current_lua_state;
 
-int lua_map_print(lua_State* L)
+int lua_map_print(struct lua_State* L)
 {
   int arg_count = lua_gettop(L);
   int i;
@@ -28,7 +33,7 @@ int lua_map_print(lua_State* L)
   return 0;
 }
 
-int lua_map_draw_text(lua_State* L)
+int lua_map_draw_text(struct lua_State* L)
 {
   /*
   draw_text("text", x, y);
@@ -49,7 +54,7 @@ int lua_map_draw_text(lua_State* L)
   return 0;
 }
 
-int lua_map_rgba(lua_State* L)
+int lua_map_rgba(struct lua_State* L)
 {
   #ifdef PSP
   int arg_count = lua_gettop(L);
@@ -87,7 +92,7 @@ int lua_map_rgba(lua_State* L)
   // return 1;
 }
 
-int lua_map_draw_rect(lua_State* L)
+int lua_map_draw_rect(struct lua_State* L)
 {
   int arg_count = lua_gettop(L);
   if(arg_count < 5)
@@ -113,7 +118,7 @@ int lua_map_draw_rect(lua_State* L)
   return 0;
 }
 
-int lua_map_draw_rect_camera(lua_State* L)
+int lua_map_draw_rect_camera(struct lua_State* L)
 {
   int arg_count = lua_gettop(L);
   if(arg_count < 5)
@@ -139,7 +144,7 @@ int lua_map_draw_rect_camera(lua_State* L)
   return 0;
 }
 
-int lua_map_set_blending(lua_State* L)
+int lua_map_set_blending(struct lua_State* L)
 {
   #ifdef PSP
   if(lua_gettop(L) >= 1)
@@ -158,7 +163,7 @@ int lua_map_set_blending(lua_State* L)
   return 0;
 }
 
-int lua_map_test_blending(lua_State* L)
+int lua_map_test_blending(struct lua_State* L)
 {
   #ifdef PSP
   int color = lua_tonumber(L, 1);
@@ -167,7 +172,7 @@ int lua_map_test_blending(lua_State* L)
   return 0;
 }
 
-int lua_map_draw_sprite(lua_State* L)
+int lua_map_draw_sprite(struct lua_State* L)
 {
   //Should just pass the sprite pointer since x & y, etc. are handled by the sprite's rectangle parameter
   int arg_count = lua_gettop(L);
@@ -183,7 +188,7 @@ int lua_map_draw_sprite(lua_State* L)
   return 0;
 }
 
-void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
+void lua_map_register_functions(struct lua_State* L, tilemap_t* tilemap)
 {
   current_lua_state = L;
   
@@ -282,7 +287,7 @@ void lua_map_register_functions(lua_State* L, tilemap_t* tilemap)
 Tilemap functions
 */
 
-int lua_map_get_name(lua_State* L)
+int lua_map_get_name(struct lua_State* L)
 {
   if(lua_gettop(L) == 1)
   {
@@ -299,7 +304,7 @@ int lua_map_get_name(lua_State* L)
     return 0;
 }
 
-int lua_map_get_width(lua_State* L)
+int lua_map_get_width(struct lua_State* L)
 {
   if(lua_gettop(L) == 1)
   {
@@ -316,7 +321,7 @@ int lua_map_get_width(lua_State* L)
     return 0;
 }
 
-int lua_map_get_height(lua_State* L)
+int lua_map_get_height(struct lua_State* L)
 {
   if(lua_gettop(L) == 1)
   {
@@ -333,7 +338,7 @@ int lua_map_get_height(lua_State* L)
     return 0;
 }
 
-int lua_map_set_tile_layer2(lua_State* L)
+int lua_map_set_tile_layer2(struct lua_State* L)
 {
     if(lua_gettop(L) == 4)
     {
@@ -367,7 +372,7 @@ int lua_map_set_tile_layer2(lua_State* L)
       return 0;
 }
 
-int lua_map_set_tile(lua_State* L)
+int lua_map_set_tile(struct lua_State* L)
 {
   if(lua_gettop(L) == 4)
   {
@@ -401,7 +406,7 @@ int lua_map_set_tile(lua_State* L)
     return 0;
 }
 
-int lua_map_get_tile(lua_State* L) //gets the ID
+int lua_map_get_tile(struct lua_State* L) //gets the ID
 {
   if(lua_gettop(L) == 3) //tilemap, x, y
   {

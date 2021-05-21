@@ -1,5 +1,22 @@
 #include "tilemap.h"
 
+#include "tile.h"
+#include "../graphics/rectangle.h"
+#include "../globals.h"
+#include "../common.h"
+#include "../camera/camera.h"
+#include "../sprites/sprite.h"
+#include "../serialization/serializer.h"
+#include "../serialization/serialization_reader.h"
+#include "lua/map_lua_functions.h"
+
+#include <stdlib.h>
+#include <assert.h>
+
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+
 #include "../player/player.h"
 
 int tilemap_load_lua_file(lua_State* L, const char* filename)
@@ -396,7 +413,7 @@ int tilemap_write_to_file(const char* filename, tilemap_t* map)
 
 int tilemap_verify_header(char* buffer, short version)
 {
-  char filler[32];
+  char filler[128];
 
   if(buffer[0] == HEADER_0 && buffer[1] == HEADER_1)
     return 1;

@@ -1,5 +1,13 @@
 #include "text.h"
 
+#include "../globals.h"
+
+#include <SDL2/SDL_ttf.h>
+
+#if PSP
+#include <oslib/oslib.h>
+#endif
+
 #if SDL_VERS
 SDL_Color text_standard_text_color = { 255, 255, 255, 255 }; //white
 SDL_Color text_shadow_text_color = { 0, 0, 0, 255 }; //black

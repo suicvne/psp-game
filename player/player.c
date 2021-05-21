@@ -1,5 +1,19 @@
 #include "player.h"
 
+#include "../sprites/sprite.h"
+#include "../input/input.h"
+#include "../vector/vector.h"
+#include "../globals.h"
+#include "inventory.h"
+#include "../map/tilemap.h"
+#include <stdlib.h>
+#include <assert.h>
+
+#ifdef PSP
+#include <pspctrl.h>
+#endif
+
+
 const float DEADZONE = 0.5f;
 const int PLAYER_SPEED = 2;
 const int PLAYER_SPEED_EDITOR = 4;

@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "map_lua_functions.h": "c",
+        "player.h": "c"
+    }
+}

@@ -10,41 +10,29 @@ v2 - appends the tileset filename after map_name
 #ifndef ___TILEMAP_H___
 #define ___TILEMAP_H___
 
-#include "tile.h"
-#include "../graphics/rectangle.h"
-#include "../globals.h"
-#include "../common.h"
-#include "../camera/camera.h"
-#include "../sprites/sprite.h"
-#include "../serialization/serializer.h"
-#include "../serialization/serialization_reader.h"
-#include "lua/map_lua_functions.h"
-
-#include <stdlib.h>
-#include <assert.h>
-
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-
 #define HEADER_0 'M'
 #define HEADER_1 'S'
 #define VERSION 05
 
-typedef struct tilemap_t {
+struct _tile_t;
+struct _sprite_t;
+struct lua_State;
+
+
+typedef struct _tilemap_t {
 
   //Tiles will be stored in a single dimension array.
   //You can access objects by doing
   //tiles[x * h + y]
-  tile_t* tiles;
+  struct _tile_t* tiles;
   int width, height;
   char* map_name;
   short surrounding_tile_id;
   char* tileset_path;
   char* foreground_tileset_path;
-  sprite_t* tileset;
-	  sprite_t* foreground_tileset; //the tileset for layer 2 aka foreground.
-  lua_State* lua_state;
+  struct _sprite_t* tileset;
+	struct _sprite_t* foreground_tileset; //the tileset for layer 2 aka foreground.
+  struct lua_State* lua_state;
 
 } tilemap_t;
 
@@ -66,27 +54,32 @@ int min(int a, int b)
 }
 */
 
-int tilemap_load_lua_file(lua_State* L, const char* filename);
-tilemap_t* tilemap_create(int width, int height, int allocate_texture);
-void tilemap_destroy(tilemap_t* map);
+int tilemap_load_lua_file(struct lua_State* L, const char* filename);
+struct _tilemap_t* tilemap_create(int width, int height, int allocate_texture);
+void tilemap_destroy(struct _tilemap_t* map);
 
-void tilemap_update(tilemap_t* map, const camera_t* cam); //passing in the camera so I know what tiles I need to draw/update
+void tilemap_update(struct _tilemap_t* map, const struct camera_t* cam); //passing in the camera so I know what tiles I need to draw/update
 
 /**
 player is a global that is drawn inside of the tilemap_draw function for proper layering.
 */
-void tilemap_draw(tilemap_t* map, const camera_t* cam);
+void tilemap_draw(struct _tilemap_t* map, const struct camera_t* cam);
 
-void camera_get_index_bounds(const camera_t* camera, tilemap_t* tilemap, int* min_x, int* max_x, int* min_y, int* max_y);
+void camera_get_index_bounds(const struct camera_t* camera, 
+            struct _tilemap_t* tilemap, 
+            int* min_x, 
+            int* max_x, 
+            int* min_y, 
+            int* max_y);
 
 //int tilemap_is_player_colliding(tilemap_t* map, player_t* player, const camera_t* camera);
 
-void tilemap_report_lua_errors(lua_State* L, int status);
+void tilemap_report_lua_errors(struct lua_State* L, int status);
 
-int tilemap_write_to_file(const char* filename, tilemap_t* map);
+int tilemap_write_to_file(const char* filename, struct _tilemap_t* map);
 int tilemap_verify_header(char* header, short version);
-tilemap_t* tilemap_read_from_file(const char* directory, const char* filename);
+struct _tilemap_t* tilemap_read_from_file(const char* directory, const char* filename);
 
-tile_t tilemap_get_tile_at(tilemap_t* tilemap, int x, int y);
+struct _tile_t tilemap_get_tile_at(struct _tilemap_t* tilemap, int x, int y);
 
 #endif //___TILEMAP_H___

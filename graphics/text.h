@@ -1,18 +1,11 @@
 #ifndef ___TEXT_H___
 #define ___TEXT_H___
 
-#include "../globals.h"
-
 #if SDL_VERS
 
-#include <SDL2/SDL_ttf.h>
-
-extern SDL_Color text_standard_text_color;
-extern SDL_Color text_shadow_text_color;
-
-#elif PSP
-
-#include <oslib/oslib.h>
+struct SDL_Color;
+extern struct SDL_Color text_standard_text_color;
+extern struct SDL_Color text_shadow_text_color;
 
 #endif
 
