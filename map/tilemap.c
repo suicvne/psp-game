@@ -1,6 +1,7 @@
 #include "tilemap.h"
 
 #include "tile.h"
+#include "../vector/vector.h"
 #include "../graphics/rectangle.h"
 #include "../globals.h"
 #include "../common.h"
@@ -83,10 +84,10 @@ tilemap_t* tilemap_create(int width, int height, int allocate_texture)
   if(allocate_texture)
   {
     tilemap->tileset = sprite_create(buffer, SPRITE_TYPE_PNG);
-    tilemap->tileset->rectangle.w = 256;
-    tilemap->tileset->rectangle.h = 256;
-    tilemap->tileset->rectangle.x = 0;
-    tilemap->tileset->rectangle.y = 0;
+    tilemap->tileset->rectangle->w = 256;
+    tilemap->tileset->rectangle->h = 256;
+    tilemap->tileset->rectangle->x = 0;
+    tilemap->tileset->rectangle->y = 0;
     //sprite_set_center_point(tilemap->tileset, 256 / 2, 256 / 2);
   }
 

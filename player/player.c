@@ -1,10 +1,12 @@
 #include "player.h"
 
+#include "../graphics/rectangle.h"
 #include "../sprites/sprite.h"
 #include "../input/input.h"
 #include "../vector/vector.h"
 #include "../globals.h"
 #include "inventory.h"
+#include "../map/tile.h"
 #include "../map/tilemap.h"
 #include <stdlib.h>
 #include <assert.h>
@@ -264,10 +266,10 @@ player_t* player_create()
 
   player_t* player = malloc(sizeof(player_t));
   player->main_sprite = sprite_create("res/ness_rust.png", SPRITE_TYPE_PNG);
-  player->main_sprite->rectangle.x = orgX; //center of the screen
-  player->main_sprite->rectangle.y = orgY;
-  player->main_sprite->rectangle.w = PLAYER_WIDTH;
-  player->main_sprite->rectangle.h = PLAYER_HEIGHT;
+  player->main_sprite->rectangle->x = orgX; //center of the screen
+  player->main_sprite->rectangle->y = orgY;
+  player->main_sprite->rectangle->w = PLAYER_WIDTH;
+  player->main_sprite->rectangle->h = PLAYER_HEIGHT;
 
   player->main_sprite->frametime = PLAYER_SPEED * 2.5;
   player->main_sprite->frames = 2; //no animation, yet

@@ -3,6 +3,16 @@ Used for the player specific functions in Lua.
 */
 
 #include "map_lua_functions.h"
+
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+
+#include "../../globals.h"
+#include "../../vector/vector.h"
+#include "../../camera/camera.h"
+#include "../../sprites/sprite.h"
+
 #include "../../player/player.h"
 
 int lua_player_get_x(lua_State* L)

@@ -1,17 +1,15 @@
 #ifndef ___RECTANGLE___H___
 #define ___RECTANGLE___H___
 
-#include "../globals.h"
-#include "common.h"
-#include "../camera/camera.h"
-
 #if PSP
 #include <oslib/oslib.h>
 #elif SDL_VERS
 #include <SDL2/SDL.h>
 #endif
 
-typedef struct rectangle_t {
+struct _camera_t;
+
+typedef struct _rectangle_t {
   int w, h;
   int x, y;
 
@@ -20,7 +18,7 @@ typedef struct rectangle_t {
 } rectangle_t;
 
 #if SDL_VERS
-static inline SDL_Rect rectangle_to_sdl(const rectangle_t* rect)
+static inline SDL_Rect rectangle_to_sdl(const struct _rectangle_t* rect)
 {
   SDL_Rect return_value;
   return_value.x = rect->x;
@@ -32,16 +30,16 @@ static inline SDL_Rect rectangle_to_sdl(const rectangle_t* rect)
 }
 #endif
 
-void rectangle_draw(const rectangle_t* rect, uint32_t color);
-void rectangle_draw_filled(const rectangle_t* rect, uint32_t color);
+void rectangle_draw(const struct _rectangle_t* rect, uint32_t color);
+void rectangle_draw_filled(const struct _rectangle_t* rect, uint32_t color);
 
-void rectangle_draw_camera(const rectangle_t* rect, uint32_t color, const camera_t* camera);
-void rectangle_draw_filled_camera(const rectangle_t* rect, uint32_t color, const camera_t* camera);
+void rectangle_draw_camera(const struct _rectangle_t* rect, uint32_t color, const struct _camera_t* camera);
+void rectangle_draw_filled_camera(const struct _rectangle_t* rect, uint32_t color, const struct _camera_t* camera);
 
-void rectangle_update_bounds(rectangle_t* a);
-int rectangle_intersects(rectangle_t* a, rectangle_t* b);
+void rectangle_update_bounds(struct _rectangle_t* a);
+int rectangle_intersects(struct _rectangle_t* a, struct _rectangle_t* b);
 
-rectangle_t camera_player_to_world_rectangle(const camera_t* camera);
-rectangle_t camera_get_viewport(const camera_t* camera);
+struct _rectangle_t camera_player_to_world_rectangle(const struct _camera_t* camera);
+struct _rectangle_t camera_get_viewport(const struct _camera_t* camera);
 
 #endif //___RECTANGLE___H___

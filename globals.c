@@ -13,14 +13,14 @@ int kLevelEditorMode;
 int kUpdate = 1;
 int kSkip = 0;
 
-struct player_t* kPlayer = NULL;
+struct _player_t* kPlayer = NULL;
 //struct sprite_t* kTestEntity = NULL; //22x29 sprite on a 32x32 sheet
-struct sprite_t* kBackgroundSprite = NULL;
-struct sprite_t* kForest = NULL;
-struct camera_t* kCamera = NULL;
-struct sprite_t* kItems = NULL; //contains the sheet for the items
-struct sprite_t* kInventory = NULL; //contains the inventory sprites
-struct sprite_t* kButtons = NULL;
+struct _sprite_t* kBackgroundSprite = NULL;
+struct _sprite_t* kForest = NULL;
+struct _camera_t* kCamera = NULL;
+struct _sprite_t* kItems = NULL; //contains the sheet for the items
+struct _sprite_t* kInventory = NULL; //contains the inventory sprites
+struct _sprite_t* kButtons = NULL;
 //struct input_t* kInput = NULL;
 
 #ifdef PSP

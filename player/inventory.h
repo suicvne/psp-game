@@ -7,12 +7,7 @@ Inventory is tied to the player class!!!!!! Do not initialize this anywhere else
 #ifndef ___INVENTORY_H___
 #define ___INVENTORY_H___
 
-#include <stdlib.h>
-#include <assert.h>
-
-#include "../sprites/sprite.h"
-#include "../input/input.h"
-#include "../globals.h"
+struct _vector_t;
 
 #define BLANK 0
 #define GRASS_SEED 1
@@ -62,7 +57,7 @@ void inventory_draw_full(); //draws the full inventory on screen
 
 void inventory_update();
 
-vector_t inventory_get_item_sheet_location(int item);
+struct _vector_t inventory_get_item_sheet_location(int item);
 
 
 #endif //___INVENTORY_H___

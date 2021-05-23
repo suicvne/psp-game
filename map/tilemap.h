@@ -16,6 +16,7 @@ v2 - appends the tileset filename after map_name
 
 struct _tile_t;
 struct _sprite_t;
+struct _camera_t;
 struct lua_State;
 
 
@@ -58,14 +59,14 @@ int tilemap_load_lua_file(struct lua_State* L, const char* filename);
 struct _tilemap_t* tilemap_create(int width, int height, int allocate_texture);
 void tilemap_destroy(struct _tilemap_t* map);
 
-void tilemap_update(struct _tilemap_t* map, const struct camera_t* cam); //passing in the camera so I know what tiles I need to draw/update
+void tilemap_update(struct _tilemap_t* map, const struct _camera_t* cam); //passing in the camera so I know what tiles I need to draw/update
 
 /**
 player is a global that is drawn inside of the tilemap_draw function for proper layering.
 */
-void tilemap_draw(struct _tilemap_t* map, const struct camera_t* cam);
+void tilemap_draw(struct _tilemap_t* map, const struct _camera_t* cam);
 
-void camera_get_index_bounds(const struct camera_t* camera, 
+void camera_get_index_bounds(const struct _camera_t* camera, 
             struct _tilemap_t* tilemap, 
             int* min_x, 
             int* max_x, 

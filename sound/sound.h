@@ -7,16 +7,9 @@ A common file for playing sound effects during the game.
 #ifndef ___SOUND_H____
 #define ___SOUND_H____
 
-#include <stdio.h>
-#include <stdlib.h>
 
-#if PSP
-#include <oslib/oslib.h>
-#elif SDL_VERS
-#include <SDL2/SDL_mixer.h>
-#endif
 
-typedef enum {
+typedef enum _SOUND_EFFECT_TYPE {
 
     SOUND_EFFECT_TEXT,
 
@@ -26,7 +19,7 @@ typedef enum {
 
 } SOUND_EFFECT_TYPE;
 
-typedef struct {
+typedef struct _sound_effect_t {
 
     #if PSP
     OSL_SOUND* sound;

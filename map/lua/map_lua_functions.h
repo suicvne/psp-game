@@ -15,7 +15,7 @@ Defines common functions for the map's Lua interpreter.
 
 struct lua_State;
 
-struct tilemap_t;
+struct _tilemap_t;
 
 extern struct lua_State* current_lua_state;
 
@@ -27,7 +27,7 @@ Drawing functions
 int lua_map_print(struct lua_State* L);
 int lua_map_draw_text(struct lua_State* L);
 int lua_map_rgba(struct lua_State* L);
-void lua_map_register_functions(struct lua_State* L, struct tilemap_t* tilemap);
+void lua_map_register_functions(struct lua_State* L, struct _tilemap_t* tilemap);
 int lua_map_draw_rect(struct lua_State* L);
 int lua_map_draw_rect_camera(struct lua_State* L);
 

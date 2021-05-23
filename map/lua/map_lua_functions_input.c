@@ -1,5 +1,9 @@
 #include "map_lua_functions.h"
 
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+
 #include "../../input/input.h"
 
 int lua_input_is_button_pressed(lua_State* L)

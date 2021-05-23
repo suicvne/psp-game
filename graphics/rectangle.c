@@ -1,5 +1,8 @@
 #include "rectangle.h"
-
+#include "../globals.h"
+#include "common.h"
+#include "../camera/camera.h"
+#include "../vector/vector.h"
 #include "../player/player.h"
 
 void rectangle_draw(const rectangle_t* rect, uint32_t color)

@@ -1,5 +1,9 @@
 #include "map_lua_functions.h"
 
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+
 #include "../../player/inventory.h"
 
 int lua_inventory_get_inventory(lua_State* L)

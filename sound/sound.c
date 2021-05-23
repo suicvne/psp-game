@@ -1,5 +1,14 @@
 #include "sound.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
+#if PSP
+#include <oslib/oslib.h>
+#elif SDL_VERS
+#include <SDL2/SDL_mixer.h>
+#endif
+
 sound_effect_t** sound_effects;
 
 

@@ -1,5 +1,7 @@
 #include "camera.h"
-
+#include "../vector/vector.h"
+#include <stdlib.h> //abs
+#include <assert.h>
 #include "../player/player.h"
 
 const int SCREEN_WIDTH = 480;

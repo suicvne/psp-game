@@ -1,6 +1,11 @@
 #include "map_lua_functions.h"
 
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+
 #include "../../sprites/sprite.h"
+#include "../../graphics/rectangle.h"
 
 int lua_sprite_create(lua_State* L)
 {
@@ -50,8 +55,8 @@ int lua_sprite_set_position(lua_State* L)
 
         if(sprite != NULL)
         {
-            sprite->rectangle.x = x;
-            sprite->rectangle.y = y;
+            sprite->rectangle->x = x;
+            sprite->rectangle->y = y;
             return 0;
         }
     }
@@ -72,8 +77,8 @@ int lua_sprite_set_size(lua_State* L)
 
         if(sprite != NULL)
         {
-            sprite->rectangle.w = width;
-            sprite->rectangle.h = height;
+            sprite->rectangle->w = width;
+            sprite->rectangle->h = height;
             return 0;
         }
     }
@@ -129,7 +134,7 @@ int lua_sprite_get_x(lua_State* L)
 
         if(sprite != NULL)
         {
-            lua_pushnumber(L, sprite->rectangle.x);
+            lua_pushnumber(L, sprite->rectangle->x);
             return 1;
         }
     }
@@ -145,7 +150,7 @@ int lua_sprite_get_y(lua_State* L)
 
         if(sprite != NULL)
         {
-            lua_pushnumber(L, sprite->rectangle.y);
+            lua_pushnumber(L, sprite->rectangle->y);
             return 1;
         }
     }

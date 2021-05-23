@@ -44,6 +44,8 @@
 
 #include "map/tilemap.h"
 
+#include "player/inventory.h"
+
 
 #if PSP
 PSP_MODULE_INFO("Mini Rust", 0, 1, 0);

@@ -1,5 +1,13 @@
 #include "inventory.h"
 
+#include <stdlib.h>
+#include <assert.h>
+
+#include "../sprites/sprite.h"
+#include "../input/input.h"
+#include "../globals.h"
+#include "../graphics/rectangle.h"
+
 int* player_inventory;
 INVENTORY_MODE inventory_display_mode = INVENTORY_MODE_HOTBAR;
 int inventory_hotbar_index = 0;

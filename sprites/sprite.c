@@ -1,25 +1,40 @@
 #include "sprite.h"
 
+#ifdef PSP
+#include <oslib/oslib.h>
+#else
+
+#include <SDL2/SDL_image.h>
+
+#endif
+
+#include <assert.h>
+#include "../globals.h"
+#include "../vector/vector.h"
+#include "../graphics/rectangle.h"
+#include "../common.h"
+#include "../camera/camera.h"
+
 sprite_t* sprite_create(const char* sprite_path, SPRITE_TYPE type)
 {
   sprite_t* sprite = malloc(sizeof(sprite_t));
   sprite->frames = 0;
   sprite->currentframe = 0;
   sprite->yframeoffset = 0;
-  sprite->rectangle.x = 0;
-  sprite->rectangle.y = 0;
-  sprite->rectangle.w = 0;
-  sprite->rectangle.h = 0;
+  sprite->rectangle->x = 0;
+  sprite->rectangle->y = 0;
+  sprite->rectangle->w = 0;
+  sprite->rectangle->h = 0;
 
   if(type == SPRITE_TYPE_PNG)
   {
 #if PSP
     sprite->image = oslLoadImageFilePNG(sprite_path, OSL_IN_RAM | OSL_SWIZZLED, OSL_PF_8888);
-	sprite->rectangle.w = sprite->image->sizeX;
-	sprite->rectangle.h = sprite->image->sizeY;
+	sprite->rectangle->w = sprite->image->sizeX;
+	sprite->rectangle->h = sprite->image->sizeY;
 #else
     sprite->image = IMG_LoadTexture(kSdlRenderer, sprite_path);
-	SDL_QueryTexture(sprite->image, NULL, NULL, &sprite->rectangle.w, &sprite->rectangle.h);
+	SDL_QueryTexture(sprite->image, NULL, NULL, sprite->rectangle->w, sprite->rectangle->h);
 	
     if(sprite->image == NULL)
     {
@@ -95,12 +110,12 @@ void sprite_draw(sprite_t* sprite)
 
   //src x and src y from the sheet
   int sx, sy;
-  sx = (sprite->currentframe * sprite->rectangle.w);
-  sy = (sprite->yframeoffset * sprite->rectangle.h);
+  sx = (sprite->currentframe * sprite->rectangle->w);
+  sy = (sprite->yframeoffset * sprite->rectangle->h);
 
   #if PSP
   if(sprite->frames > 0)
-    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
+    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle->w, sprite->rectangle->h);
 
   oslDrawImageXY(sprite->image, sprite->rectangle.x, sprite->rectangle.y);
   #else
@@ -108,12 +123,12 @@ void sprite_draw(sprite_t* sprite)
   SDL_Rect src_rect;
   src_rect.x = sx;
   src_rect.y = sy;
-  src_rect.w = sprite->rectangle.w;
-  src_rect.h = sprite->rectangle.h;
+  src_rect.w = sprite->rectangle->w;
+  src_rect.h = sprite->rectangle->h;
 
   SDL_Rect dst_rect;
-  dst_rect.x = sprite->rectangle.x;
-  dst_rect.y = sprite->rectangle.y;
+  dst_rect.x = sprite->rectangle->x;
+  dst_rect.y = sprite->rectangle->y;
   dst_rect.w = src_rect.w;
   dst_rect.h = src_rect.h;
 
@@ -132,24 +147,24 @@ void sprite_draw(sprite_t* sprite)
 void sprite_draw_offset(sprite_t* sprite, int x_offset, int y_offset)
 {
   int sx, sy;
-  sx = (sprite->currentframe * sprite->rectangle.w);
-  sy = (sprite->yframeoffset * sprite->rectangle.h);
+  sx = (sprite->currentframe * sprite->rectangle->w);
+  sy = (sprite->yframeoffset * sprite->rectangle->h);
 
   #if PSP
   if(sprite->frames > 0)
-    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
+    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle->w, sprite->rectangle->h);
 
   oslDrawImageXY(sprite->image, sprite->rectangle.x + x_offset, sprite->rectangle.y + y_offset);
   #else
   SDL_Rect src_rect;
   src_rect.x = sx;
   src_rect.y = sy;
-  src_rect.w = sprite->rectangle.w;
-  src_rect.h = sprite->rectangle.h;
+  src_rect.w = sprite->rectangle->w;
+  src_rect.h = sprite->rectangle->h;
 
   SDL_Rect dst_rect;
-  dst_rect.x = sprite->rectangle.x + x_offset;
-  dst_rect.y = sprite->rectangle.y + y_offset;
+  dst_rect.x = sprite->rectangle->x + x_offset;
+  dst_rect.y = sprite->rectangle->y + y_offset;
   dst_rect.w = src_rect.w;
   dst_rect.h = src_rect.h;
 
@@ -171,12 +186,12 @@ void sprite_draw_camera(sprite_t* sprite, const camera_t camera)
 {
   //src x and src y from the sheet
   int sx, sy;
-  sx = (sprite->currentframe * sprite->rectangle.w);
-  sy = (sprite->yframeoffset * sprite->rectangle.h);
+  sx = (sprite->currentframe * sprite->rectangle->w);
+  sy = (sprite->yframeoffset * sprite->rectangle->h);
 
   #if PSP
   if(sprite->frames > 0)
-    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
+    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle->w, sprite->rectangle->h);
 
   oslDrawImageXY(
     sprite->image,
@@ -187,12 +202,12 @@ void sprite_draw_camera(sprite_t* sprite, const camera_t camera)
   SDL_Rect src_rect;
   src_rect.x = sx;
   src_rect.y = sy;
-  src_rect.w = sprite->rectangle.w;
-  src_rect.h = sprite->rectangle.h;
+  src_rect.w = sprite->rectangle->w;
+  src_rect.h = sprite->rectangle->h;
 
   SDL_Rect dst_rect;
-  dst_rect.x = sprite->rectangle.x + camera.x;
-  dst_rect.y = sprite->rectangle.y + camera.y;
+  dst_rect.x = sprite->rectangle->x + camera.x;
+  dst_rect.y = sprite->rectangle->y + camera.y;
   dst_rect.w = src_rect.w;
   dst_rect.h = src_rect.h;
 
@@ -292,12 +307,12 @@ void sprite_draw_camera_factor(sprite_t* sprite, const camera_t camera, float mo
 {
   //src x and src y from the sheet
   int sx, sy;
-  sx = (sprite->currentframe * sprite->rectangle.w);
-  sy = (sprite->yframeoffset * sprite->rectangle.h);
+  sx = (sprite->currentframe * sprite->rectangle->w);
+  sy = (sprite->yframeoffset * sprite->rectangle->h);
 
   #if PSP
   if(sprite->frames > 0)
-    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
+    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle->w, sprite->rectangle->h);
 
   oslDrawImageXY(sprite->image,
     sprite->rectangle.x + (camera.x * movement_factor),
@@ -307,12 +322,12 @@ void sprite_draw_camera_factor(sprite_t* sprite, const camera_t camera, float mo
   SDL_Rect src_rect;
   src_rect.x = sx;
   src_rect.y = sy;
-  src_rect.w = sprite->rectangle.w;
-  src_rect.h = sprite->rectangle.h;
+  src_rect.w = sprite->rectangle->w;
+  src_rect.h = sprite->rectangle->h;
 
   SDL_Rect dst_rect;
-  dst_rect.x = sprite->rectangle.x + (camera.x * movement_factor);
-  dst_rect.y = sprite->rectangle.y + (camera.y * movement_factor);
+  dst_rect.x = sprite->rectangle->x + (camera.x * movement_factor);
+  dst_rect.y = sprite->rectangle->y + (camera.y * movement_factor);
   dst_rect.w = src_rect.w;
   dst_rect.h = src_rect.h;
 
@@ -331,12 +346,12 @@ void sprite_draw_camera_factor_offset(sprite_t* sprite, const camera_t camera, f
 {
   //src x and src y from the sheet
   int sx, sy;
-  sx = (sprite->currentframe * sprite->rectangle.w);
-  sy = (sprite->yframeoffset * sprite->rectangle.h);
+  sx = (sprite->currentframe * sprite->rectangle->w);
+  sy = (sprite->yframeoffset * sprite->rectangle->h);
 
   #if PSP
   if(sprite->frames > 0)
-    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
+    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle->w, sprite->rectangle->h);
 
   oslDrawImageXY(sprite->image,
     sprite->rectangle.x + (camera.x * movement_factor) + x_offset,
@@ -346,12 +361,12 @@ void sprite_draw_camera_factor_offset(sprite_t* sprite, const camera_t camera, f
   SDL_Rect src_rect;
   src_rect.x = sx;
   src_rect.y = sy;
-  src_rect.w = sprite->rectangle.w;
-  src_rect.h = sprite->rectangle.h;
+  src_rect.w = sprite->rectangle->w;
+  src_rect.h = sprite->rectangle->h;
 
   SDL_Rect dst_rect;
-  dst_rect.x = sprite->rectangle.x + (camera.x * movement_factor) + x_offset;
-  dst_rect.y = sprite->rectangle.y + (camera.y * movement_factor) + y_offset;
+  dst_rect.x = sprite->rectangle->x + (camera.x * movement_factor) + x_offset;
+  dst_rect.y = sprite->rectangle->y + (camera.y * movement_factor) + y_offset;
   dst_rect.w = src_rect.w;
   dst_rect.h = src_rect.h;
 
@@ -369,12 +384,12 @@ void sprite_draw_camera_factor_offset(sprite_t* sprite, const camera_t camera, f
 void sprite_draw_camera_pointer_factor_offset(sprite_t* sprite, const camera_t camera, int x, int y, float movement_factor, int x_offset, int y_offset)
 {
   int sx, sy;
-  sx = (sprite->currentframe * sprite->rectangle.w);
-  sy = (sprite->yframeoffset * sprite->rectangle.h);
+  sx = (sprite->currentframe * sprite->rectangle->w);
+  sy = (sprite->yframeoffset * sprite->rectangle->h);
 
   #if PSP
   if(sprite->frames > 0)
-    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle.w, sprite->rectangle.h);
+    oslSetImageTileSize(sprite->image, sx, sy, sprite->rectangle->w, sprite->rectangle->h);
 
   oslDrawImageXY(sprite->image,
     x + (camera.x * movement_factor) + x_offset,
@@ -384,8 +399,8 @@ void sprite_draw_camera_pointer_factor_offset(sprite_t* sprite, const camera_t c
   SDL_Rect src_rect;
   src_rect.x = sx;
   src_rect.y = sy;
-  src_rect.w = sprite->rectangle.w;
-  src_rect.h = sprite->rectangle.h;
+  src_rect.w = sprite->rectangle->w;
+  src_rect.h = sprite->rectangle->h;
 
   SDL_Rect dst_rect;
   dst_rect.x = x + (camera.x * movement_factor) + x_offset;
@@ -420,8 +435,8 @@ void sprite_update(sprite_t* sprite)
 
 vector_t sprite_get_location_by_index(sprite_t* sprite, int sprite_size, int index)
 {
-	int width = sprite->rectangle.w;
-	int height = sprite->rectangle.h;
+	int width = sprite->rectangle->w;
+	int height = sprite->rectangle->h;
 	vector_t return_value = { 0, 0 };
 	if(width == height)
 	{

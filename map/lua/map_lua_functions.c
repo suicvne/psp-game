@@ -14,7 +14,7 @@
 #include "../../camera/camera.h"
 #include "../../globals.h"
 #include "../../message-box/message_box.h"
-
+#include "../tile.h"
 #include "../tilemap.h"
 
 
